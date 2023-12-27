@@ -100,6 +100,34 @@ function passStringToWasm0(arg, malloc, realloc) {
     WASM_VECTOR_LEN = offset;
     return ptr;
 }
+/**
+* Wrapper for `transliterate`.
+* @param {string} input
+* @param {number} from
+* @param {number} to
+* @returns {any}
+*/
+export function transliterate(input, from, to) {
+    const ptr0 = passStringToWasm0(input, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ret = wasm.transliterate(ptr0, len0, from, to);
+    return takeObject(ret);
+}
+
+/**
+* Wrapper for `detect`.
+*
+* `wasm_bindgen` struggles when returning optional types, so our default option here is just
+* Harvard-Kyoto.
+* @param {string} input
+* @returns {number}
+*/
+export function detect(input) {
+    const ptr0 = passStringToWasm0(input, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ret = wasm.detect(ptr0, len0);
+    return ret >>> 0;
+}
 
 let cachedInt32Memory0 = null;
 
@@ -120,71 +148,95 @@ function getInt32Memory0() {
 */
 export const Scheme = Object.freeze({
 /**
+* Balinese script.
+*
+* https://unicode.org/charts/PDF/U1B00.pdf
+*/
+Balinese:0,"0":"Balinese",
+/**
 * Bengali script.
 *
 * https://unicode.org/charts/PDF/U0980.pdf
 */
-Bengali:0,"0":"Bengali",
+Bengali:1,"1":"Bengali",
+/**
+* Burmese script.
+*
+* https://unicode.org/charts/PDF/U1000.pdf
+*/
+Burmese:2,"2":"Burmese",
 /**
 * Brahmi script.
 *
 * https://unicode.org/charts/PDF/U11000.pdf
 */
-Brahmi:1,"1":"Brahmi",
+Brahmi:3,"3":"Brahmi",
 /**
 * Devanagari script.
 *
 * https://unicode.org/charts/PDF/U0900.pdf
 */
-Devanagari:2,"2":"Devanagari",
+Devanagari:4,"4":"Devanagari",
 /**
 * Gujarati script.
 *
 * https://unicode.org/charts/PDF/U0A80.pdf
 */
-Gujarati:3,"3":"Gujarati",
+Gujarati:5,"5":"Gujarati",
 /**
 * Gurmukhi script.
 *
 * https://unicode.org/charts/PDF/U0A00.pdf
 */
-Gurmukhi:4,"4":"Gurmukhi",
+Gurmukhi:6,"6":"Gurmukhi",
 /**
 * Grantha script.
 *
 * http://www.unicode.org/charts/PDF/U11300.pdf
 */
-Grantha:5,"5":"Grantha",
+Grantha:7,"7":"Grantha",
+/**
+* Javanese script.
+*
+* https://unicode.org/charts/PDF/UA980.pdf
+*/
+Javanese:8,"8":"Javanese",
 /**
 * Kannada script.
 *
 * https://unicode.org/charts/PDF/U0C80.pdf
 */
-Kannada:6,"6":"Kannada",
+Kannada:9,"9":"Kannada",
 /**
 * Malayalam script.
 *
 * https://unicode.org/charts/PDF/U0D00.pdf
 */
-Malayalam:7,"7":"Malayalam",
+Malayalam:10,"10":"Malayalam",
 /**
-* Oriya script.
+* Odia script.
 *
 * https://unicode.org/charts/PDF/U0B00.pdf
 */
-Oriya:8,"8":"Oriya",
+Odia:11,"11":"Odia",
+/**
+* Sharada script.
+*
+* https://unicode.org/charts/PDF/U11180.pdf
+*/
+Sharada:12,"12":"Sharada",
 /**
 * Sinhala script.
 *
 * https://unicode.org/charts/PDF/U0D80.pdf
 */
-Sinhala:9,"9":"Sinhala",
+Sinhala:13,"13":"Sinhala",
 /**
 * Tamil script.
 *
 * https://unicode.org/charts/PDF/U0B80.pdf
 */
-Tamil:10,"10":"Tamil",
+Tamil:14,"14":"Tamil",
 /**
 * Tibetan script.
 *
@@ -193,87 +245,49 @@ Tamil:10,"10":"Tamil",
 *
 * https://unicode.org/charts/PDF/U0C00.pdf
 */
-Telugu:11,"11":"Telugu",
+Telugu:15,"15":"Telugu",
 /**
 * Harvard-Kyoto transliteration.
 *
 * TODO: find documentation link for HK.
 */
-HarvardKyoto:12,"12":"HarvardKyoto",
-/**
-* ITRANS transliteration.
-*
-* https://www.aczoom.com/itrans/online/itrans6/itrans-tables-unicode.pdf
-*/
-Itrans:13,"13":"Itrans",
+HarvardKyoto:16,"16":"HarvardKyoto",
 /**
 * IAST transliteration.
 *
 * TODO: find documentation link for IAST.
 */
-Iast:14,"14":"Iast",
+Iast:17,"17":"Iast",
+/**
+* ISO 19519 transliteration.
+*
+* TODO: find a free documentation link for ISO 19519.
+*/
+Iso19519:18,"18":"Iso19519",
+/**
+* ITRANS transliteration.
+*
+* https://www.aczoom.com/itrans/online/itrans6/itrans-tables-unicode.pdf
+*/
+Itrans:19,"19":"Itrans",
 /**
 * SLP1 transliteration.
 *
 * https://www.sanskritlibrary.org/pub/SLP1LiesAppendixB.pdf
 */
-Slp1:15,"15":"Slp1",
+Slp1:20,"20":"Slp1",
 /**
 * Velthuis transliteration.
 *
 * https://mirrors.mit.edu/CTAN/language/devanagari/velthuis/doc/manual.pdf
 */
-Velthuis:16,"16":"Velthuis", });
+Velthuis:21,"21":"Velthuis",
 /**
-* WebAssembly API for vidyut-prakriya.
+* WX transliteration.
 *
-* Within reason, we have tried to mimic a native JavaScript API. At some point, we wish to
-* support optional arguments, perhaps by using `Reflect`.
+* TODO: find documentation link for WX.
 */
-export class VidyutLipi {
-
-    static __wrap(ptr) {
-        const obj = Object.create(VidyutLipi.prototype);
-        obj.ptr = ptr;
-
-        return obj;
-    }
-
-    __destroy_into_raw() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-
-        return ptr;
-    }
-
-    free() {
-        const ptr = this.__destroy_into_raw();
-        wasm.__wbg_vidyutlipi_free(ptr);
-    }
-    /**
-    * Creates a new API manager.
-    *
-    * This constructor is not called `new` because `new` is a reserved word in JavaScript.
-    * @returns {VidyutLipi}
-    */
-    static init() {
-        const ret = wasm.vidyutlipi_init();
-        return VidyutLipi.__wrap(ret);
-    }
-    /**
-    * Wrapper for `transliterate`.
-    * @param {string} input
-    * @param {number} from
-    * @param {number} to
-    * @returns {any}
-    */
-    transliterate(input, from, to) {
-        const ptr0 = passStringToWasm0(input, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        const ret = wasm.vidyutlipi_transliterate(this.ptr, ptr0, len0, from, to);
-        return takeObject(ret);
-    }
-}
+Wx:22,"22":"Wx", });
 
 async function load(module, imports) {
     if (typeof Response === 'function' && module instanceof Response) {

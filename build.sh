@@ -14,7 +14,7 @@ popd
 
 mkdir -p vidyullekha
 cp ${CRATE}/vidyut-prakriya/www/index.html vidyullekha/index.html
-cp ${CRATE}/vidyut-prakriya/www/static/app.js static/vidyut-prakriya.js
+cp ${CRATE}/vidyut-prakriya/www/static/vidyut-prakriya-app.js static
 cp ${CRATE}/vidyut-prakriya/pkg/vidyut_prakriya_bg.wasm static/wasm
 cp ${CRATE}/vidyut-prakriya/pkg/vidyut_prakriya.js static/wasm
 cp ${CRATE}/vidyut-prakriya/data/dhatupatha.tsv static/data
@@ -25,10 +25,9 @@ popd
 
 mkdir -p vidyut-lipi
 cp ${CRATE}/vidyut-lipi/www/index.html vidyut-lipi/index.html
-cp ${CRATE}/vidyut-lipi/www/static/app.js static/vidyut-lipi.js
+cp ${CRATE}/vidyut-lipi/www/static/vidyut-lipi-app.js static
 cp ${CRATE}/vidyut-lipi/pkg/*.wasm static/wasm
 cp ${CRATE}/vidyut-lipi/pkg/*.js static/wasm
 
-echo "Complete. Please commit and deploy."
 echo ""
-echo "For now, please update absolute paths (e.g. to app.js) and manually test."
+echo "✅ Complete. Please commit and deploy."
