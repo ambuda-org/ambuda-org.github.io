@@ -160,21 +160,24 @@ Balinese:0,"0":"Balinese",
 */
 Bengali:1,"1":"Bengali",
 /**
-* Burmese script.
-*
-* https://unicode.org/charts/PDF/U1000.pdf
-*/
-Burmese:2,"2":"Burmese",
-/**
 * Brahmi script.
 *
 * https://unicode.org/charts/PDF/U11000.pdf
 */
-Brahmi:3,"3":"Brahmi",
+Brahmi:2,"2":"Brahmi",
+/**
+* Burmese script.
+*
+* https://unicode.org/charts/PDF/U1000.pdf
+*/
+Burmese:3,"3":"Burmese",
 /**
 * Devanagari script.
 *
 * https://unicode.org/charts/PDF/U0900.pdf
+* https://unicode.org/charts/PDF/UA8E0.pdf (Devanagari Extended)
+* https://unicode.org/charts/PDF/U11B00.pdf (Devanagari Extended-A)
+* https://unicode.org/charts/PDF/U1CD0.pdf (Vedic Extensions)
 */
 Devanagari:4,"4":"Devanagari",
 /**
@@ -184,17 +187,17 @@ Devanagari:4,"4":"Devanagari",
 */
 Gujarati:5,"5":"Gujarati",
 /**
-* Gurmukhi script.
-*
-* https://unicode.org/charts/PDF/U0A00.pdf
-*/
-Gurmukhi:6,"6":"Gurmukhi",
-/**
 * Grantha script.
 *
 * http://www.unicode.org/charts/PDF/U11300.pdf
 */
-Grantha:7,"7":"Grantha",
+Grantha:6,"6":"Grantha",
+/**
+* Gurmukhi script.
+*
+* https://unicode.org/charts/PDF/U0A00.pdf
+*/
+Gurmukhi:7,"7":"Gurmukhi",
 /**
 * Javanese script.
 *
@@ -226,17 +229,23 @@ Odia:11,"11":"Odia",
 */
 Sharada:12,"12":"Sharada",
 /**
+* Siddham script.
+*
+* https://unicode.org/charts/PDF/U11580.pdf
+*/
+Siddham:13,"13":"Siddham",
+/**
 * Sinhala script.
 *
 * https://unicode.org/charts/PDF/U0D80.pdf
 */
-Sinhala:13,"13":"Sinhala",
+Sinhala:14,"14":"Sinhala",
 /**
 * Tamil script.
 *
 * https://unicode.org/charts/PDF/U0B80.pdf
 */
-Tamil:14,"14":"Tamil",
+Tamil:15,"15":"Tamil",
 /**
 * Tibetan script.
 *
@@ -245,49 +254,57 @@ Tamil:14,"14":"Tamil",
 *
 * https://unicode.org/charts/PDF/U0C00.pdf
 */
-Telugu:15,"15":"Telugu",
+Telugu:16,"16":"Telugu",
+/**
+* Baraha transliteration.
+*
+* Documentation:
+* - https://baraha.com/help//Keyboards/dev-phonetic.htm (Baraha North)
+* - https://baraha.com/help/special-symbols.htm
+*/
+BarahaSouth:17,"17":"BarahaSouth",
 /**
 * Harvard-Kyoto transliteration.
 *
 * TODO: find documentation link for HK.
 */
-HarvardKyoto:16,"16":"HarvardKyoto",
+HarvardKyoto:18,"18":"HarvardKyoto",
 /**
 * IAST transliteration.
 *
 * TODO: find documentation link for IAST.
 */
-Iast:17,"17":"Iast",
+Iast:19,"19":"Iast",
 /**
 * ISO 19519 transliteration.
 *
 * TODO: find a free documentation link for ISO 19519.
 */
-Iso19519:18,"18":"Iso19519",
+Iso19519:20,"20":"Iso19519",
 /**
 * ITRANS transliteration.
 *
 * https://www.aczoom.com/itrans/online/itrans6/itrans-tables-unicode.pdf
 */
-Itrans:19,"19":"Itrans",
+Itrans:21,"21":"Itrans",
 /**
 * SLP1 transliteration.
 *
 * https://www.sanskritlibrary.org/pub/SLP1LiesAppendixB.pdf
 */
-Slp1:20,"20":"Slp1",
+Slp1:22,"22":"Slp1",
 /**
 * Velthuis transliteration.
 *
 * https://mirrors.mit.edu/CTAN/language/devanagari/velthuis/doc/manual.pdf
 */
-Velthuis:21,"21":"Velthuis",
+Velthuis:23,"23":"Velthuis",
 /**
 * WX transliteration.
 *
 * TODO: find documentation link for WX.
 */
-Wx:22,"22":"Wx", });
+Wx:24,"24":"Wx", });
 
 async function load(module, imports) {
     if (typeof Response === 'function' && module instanceof Response) {
