@@ -189,7 +189,9 @@ Gujarati:5,"5":"Gujarati",
 /**
 * Grantha script.
 *
-* http://www.unicode.org/charts/PDF/U11300.pdf
+* Documentation:
+* - http://www.unicode.org/charts/PDF/U11300.pdf
+* - https://unicode.org/L2/L2009/09372-grantha.pdf
 */
 Grantha:6,"6":"Grantha",
 /**
