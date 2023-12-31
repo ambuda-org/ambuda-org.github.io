@@ -179,63 +179,6 @@ function isLikeNone(x) {
     return x === undefined || x === null;
 }
 /**
-* The gender of some subanta.
-*/
-export const Linga = Object.freeze({
-/**
-* The masculine.
-*/
-Pum:0,"0":"Pum",
-/**
-* The feminine.
-*/
-Stri:1,"1":"Stri",
-/**
-* The neuter.
-*/
-Napumsaka:2,"2":"Napumsaka", });
-/**
-* The case ending of some subanta.
-*/
-export const Vibhakti = Object.freeze({
-/**
-* The first vibhakti . Sometimes called the *nominative case*.
-*/
-Prathama:0,"0":"Prathama",
-/**
-* The second vibhakti. Sometimes called the *accusative case*.
-*/
-Dvitiya:1,"1":"Dvitiya",
-/**
-* The third vibhakti. Sometimes called the *instrumental case*.
-*/
-Trtiya:2,"2":"Trtiya",
-/**
-* The fourth vibhakti. Sometimes called the *dative case*.
-*/
-Caturthi:3,"3":"Caturthi",
-/**
-* The fifth vibhakti. Sometimes called the *ablative case*.
-*/
-Panchami:4,"4":"Panchami",
-/**
-* The sixth vibhakti. Sometimes called the *genitive case*.
-*/
-Sasthi:5,"5":"Sasthi",
-/**
-* The seventh vibhakti. Sometimes called the *locative case*.
-*/
-Saptami:6,"6":"Saptami",
-/**
-* The first vibhakti used in the sense of *sambodhana*. Sometimes called the *vocative case*.
-*
-* *Sambodhana* is technically not a *vibhakti but rather an additional semantic condition
-* on the first vibhakti. But we felt that users would find it more convenient to have this
-* condition available on `Vibhakti` directly rather than have to define the *sambodhana*
-* condition separately.
-*/
-Sambodhana:7,"7":"Sambodhana", });
-/**
 * The complete list of ordinary krt-pratyayas.
 *
 * Rust's naming convention is to start enum values with capital letters. However, we allow mixed
@@ -651,6 +594,170 @@ zwran:100,"100":"zwran",
 * -aka
 */
 zvun:101,"101":"zvun", });
+/**
+* The gender of some subanta.
+*/
+export const Linga = Object.freeze({
+/**
+* The masculine.
+*/
+Pum:0,"0":"Pum",
+/**
+* The feminine.
+*/
+Stri:1,"1":"Stri",
+/**
+* The neuter.
+*/
+Napumsaka:2,"2":"Napumsaka", });
+/**
+* The case ending of some subanta.
+*/
+export const Vibhakti = Object.freeze({
+/**
+* The first vibhakti . Sometimes called the *nominative case*.
+*/
+Prathama:0,"0":"Prathama",
+/**
+* The second vibhakti. Sometimes called the *accusative case*.
+*/
+Dvitiya:1,"1":"Dvitiya",
+/**
+* The third vibhakti. Sometimes called the *instrumental case*.
+*/
+Trtiya:2,"2":"Trtiya",
+/**
+* The fourth vibhakti. Sometimes called the *dative case*.
+*/
+Caturthi:3,"3":"Caturthi",
+/**
+* The fifth vibhakti. Sometimes called the *ablative case*.
+*/
+Panchami:4,"4":"Panchami",
+/**
+* The sixth vibhakti. Sometimes called the *genitive case*.
+*/
+Sasthi:5,"5":"Sasthi",
+/**
+* The seventh vibhakti. Sometimes called the *locative case*.
+*/
+Saptami:6,"6":"Saptami",
+/**
+* The first vibhakti used in the sense of *sambodhana*. Sometimes called the *vocative case*.
+*
+* *Sambodhana* is technically not a *vibhakti but rather an additional semantic condition
+* on the first vibhakti. But we felt that users would find it more convenient to have this
+* condition available on `Vibhakti` directly rather than have to define the *sambodhana*
+* condition separately.
+*/
+Sambodhana:7,"7":"Sambodhana", });
+/**
+* Defines a *gaṇa*.
+*
+* The dhatus in the Dhatupatha are organized in ten large *gaṇa*s or classes. These gaṇas
+* add various properties to the dhatu, most notably the specific *vikaraṇa* (stem suffix) we use
+* before sarvadhatuka suffixes.
+*/
+export const Gana = Object.freeze({
+/**
+* The first gaṇa, whose first dhatu is `BU`.
+*/
+Bhvadi:0,"0":"Bhvadi",
+/**
+* The second gaṇa, whose first dhatu is `ad`.
+*/
+Adadi:1,"1":"Adadi",
+/**
+* The third gaṇa, whose first dhatu is `hu`.
+*/
+Juhotyadi:2,"2":"Juhotyadi",
+/**
+* The fourth gaṇa, whose first dhatu is `div`.
+*/
+Divadi:3,"3":"Divadi",
+/**
+* The fifth gaṇa, whose first dhatu is `su`.
+*/
+Svadi:4,"4":"Svadi",
+/**
+* The sixth gaṇa, whose first dhatu is `tud`.
+*/
+Tudadi:5,"5":"Tudadi",
+/**
+* The seventh gaṇa, whose first dhatu is `ruD`.
+*/
+Rudhadi:6,"6":"Rudhadi",
+/**
+* The eighth gaṇa, whose first dhatu is `tan`.
+*/
+Tanadi:7,"7":"Tanadi",
+/**
+* The ninth gaṇa, whose first dhatu is `krI`.
+*/
+Kryadi:8,"8":"Kryadi",
+/**
+* The tenth gaṇa, whose first dhatu is `cur`.
+*/
+Curadi:9,"9":"Curadi",
+/**
+* The kandvAdi gaṇa, whose first dhatu is `kaRqU`.
+*/
+Kandvadi:10,"10":"Kandvadi", });
+/**
+* One of the three common *sanAdi* pratyayas.
+*
+* The *sanAdi* pratyayas create new dhatus per 3.1.32. They are introduced in rules 3.1.7 -
+* 3.1.30, and since rule 3.1.7 contains the word "dhAtoH", they can be called Ardhadhatuka by
+* 3.4.114.
+*
+* Of the sanAdi pratyayas, most are added after either subantas or a handful of dhatus. But
+* three of these pratyayas are added after dhatus more generally: `san`, `yaN`, and `Ric`.
+*
+* For details on what these pratyayas mean and what kinds of words they produce, see the comments
+* below.
+*/
+export const Sanadi = Object.freeze({
+/**
+* `kAmyac`, which creates nAma-dhAtus per 3.1.9.
+*/
+kAmyac:0,"0":"kAmyac",
+/**
+* `kyaN`, which creates nAma-dhAtus per 3.1.11.
+*/
+kyaN:1,"1":"kyaN",
+/**
+* `kyac`, which creates nAma-dhAtus per 3.1.8.
+*/
+kyac:2,"2":"kyac",
+/**
+* `Nic`, which creates causal roots per 3.1.26.
+*
+* Examples: BAvayati, nAyayati.
+*/
+Ric:3,"3":"Ric",
+/**
+* `yaN`, which creates intensive roots per 3.1.22. For certain dhatus, the semantics are
+* instead "crooked movement" (by 3.1.23) or "contemptible" action (by 3.1.24).
+*
+* Examples: boBUyate, nenIyate.
+*
+* Constraints: can be used only if the dhatu starts with a consonant and has exactly one
+* vowel. If this constraint is violated, our APIs will return an `Error`.
+*/
+yaN:4,"4":"yaN",
+/**
+* `yaN`, with elision per 2.4.74. This is often listed separately due to its rarity and its
+* very different form.
+*
+* Examples: boBavIti, boBoti, nenayIti, neneti.
+*/
+yaNluk:5,"5":"yaNluk",
+/**
+* `san`, which creates desiderative roots per 3.1.7.
+*
+* Examples: buBUzati, ninIzati.
+*/
+san:6,"6":"san", });
 /**
 * The complete list of unadi-pratyayas.
 *
@@ -1898,6 +2005,115 @@ sya:307,"307":"sya",
 */
 syan:308,"308":"syan", });
 /**
+* The prayoga of some tinanta.
+*/
+export const Prayoga = Object.freeze({
+/**
+* Usage coreferent with the agent, e.g. "The horse *goes* to the village."
+*/
+Kartari:0,"0":"Kartari",
+/**
+* Usage coreferent with the object, e.g. "The village *is gone to* by the horse."
+*/
+Karmani:1,"1":"Karmani",
+/**
+* Usage without a referent, e.g. "*There is motion* by the horse to the village."
+* bhAve prayoga generally produces the same forms as karmani prayoga.
+*/
+Bhave:2,"2":"Bhave", });
+/**
+* The person of some tinanta.
+*/
+export const Purusha = Object.freeze({
+/**
+* The third person.
+*/
+Prathama:0,"0":"Prathama",
+/**
+* The second person.
+*/
+Madhyama:1,"1":"Madhyama",
+/**
+* The first person.
+*/
+Uttama:2,"2":"Uttama", });
+/**
+* The number of some tinanta or subanta.
+*/
+export const Vacana = Object.freeze({
+/**
+* The singular.
+*/
+Eka:0,"0":"Eka",
+/**
+* The dual.
+*/
+Dvi:1,"1":"Dvi",
+/**
+* The plural.
+*/
+Bahu:2,"2":"Bahu", });
+/**
+* The tense/mood of some tinanta.
+*/
+export const Lakara = Object.freeze({
+/**
+* Describes action in the present tense. Ssometimes called the *present indicative*.
+*/
+Lat:0,"0":"Lat",
+/**
+* Describes unwitnessed past action. Sometimes called the *perfect*.
+*/
+Lit:1,"1":"Lit",
+/**
+* Describes future action after the current day. Sometimes called the *periphrastic future*.
+*/
+Lut:2,"2":"Lut",
+/**
+* Describes general future action. Sometimes called the *simple future*.
+*/
+Lrt:3,"3":"Lrt",
+/**
+* The Vedic subjunctive. `vidyut-prakriya` currently has poor support for this lakara.
+*/
+Let:4,"4":"Let",
+/**
+* Describes commands. Sometimes called the *imperative*.
+*/
+Lot:5,"5":"Lot",
+/**
+* Describes past action before the current day. Sometimes called the *imperfect*.
+*/
+Lan:6,"6":"Lan",
+/**
+* Describes potential or hypothetical actions. Sometimes called the *optative*.
+*/
+VidhiLin:7,"7":"VidhiLin",
+/**
+* Describes wishes and prayers. Sometimes called the *benedictive*.
+*/
+AshirLin:8,"8":"AshirLin",
+/**
+* Describes general past action. Sometimes called the *aorist*.
+*/
+Lun:9,"9":"Lun",
+/**
+* Describes past counterfactuals ("would not have ..."). Sometimes called the *conditional*.
+*/
+Lrn:10,"10":"Lrn", });
+/**
+* The pada of some tinanta or krdanta.
+*/
+export const DhatuPada = Object.freeze({
+/**
+* Parasmaipada.
+*/
+Parasmai:0,"0":"Parasmai",
+/**
+* Atmanepada.
+*/
+Atmane:1,"1":"Atmane", });
+/**
 * The complete list of taddhita-pratyayas.
 *
 * Rust's naming convention is to start enum values with capital letters. However, we allow mixed
@@ -2594,222 +2810,6 @@ snaY:170,"170":"snaY",
 */
 ha:171,"171":"ha", });
 /**
-* Defines a *gaṇa*.
-*
-* The dhatus in the Dhatupatha are organized in ten large *gaṇa*s or classes. These gaṇas
-* add various properties to the dhatu, most notably the specific *vikaraṇa* (stem suffix) we use
-* before sarvadhatuka suffixes.
-*/
-export const Gana = Object.freeze({
-/**
-* The first gaṇa, whose first dhatu is `BU`.
-*/
-Bhvadi:0,"0":"Bhvadi",
-/**
-* The second gaṇa, whose first dhatu is `ad`.
-*/
-Adadi:1,"1":"Adadi",
-/**
-* The third gaṇa, whose first dhatu is `hu`.
-*/
-Juhotyadi:2,"2":"Juhotyadi",
-/**
-* The fourth gaṇa, whose first dhatu is `div`.
-*/
-Divadi:3,"3":"Divadi",
-/**
-* The fifth gaṇa, whose first dhatu is `su`.
-*/
-Svadi:4,"4":"Svadi",
-/**
-* The sixth gaṇa, whose first dhatu is `tud`.
-*/
-Tudadi:5,"5":"Tudadi",
-/**
-* The seventh gaṇa, whose first dhatu is `ruD`.
-*/
-Rudhadi:6,"6":"Rudhadi",
-/**
-* The eighth gaṇa, whose first dhatu is `tan`.
-*/
-Tanadi:7,"7":"Tanadi",
-/**
-* The ninth gaṇa, whose first dhatu is `krI`.
-*/
-Kryadi:8,"8":"Kryadi",
-/**
-* The tenth gaṇa, whose first dhatu is `cur`.
-*/
-Curadi:9,"9":"Curadi",
-/**
-* The kandvAdi gaṇa, whose first dhatu is `kaRqU`.
-*/
-Kandvadi:10,"10":"Kandvadi", });
-/**
-* One of the three common *sanAdi* pratyayas.
-*
-* The *sanAdi* pratyayas create new dhatus per 3.1.32. They are introduced in rules 3.1.7 -
-* 3.1.30, and since rule 3.1.7 contains the word "dhAtoH", they can be called Ardhadhatuka by
-* 3.4.114.
-*
-* Of the sanAdi pratyayas, most are added after either subantas or a handful of dhatus. But
-* three of these pratyayas are added after dhatus more generally: `san`, `yaN`, and `Ric`.
-*
-* For details on what these pratyayas mean and what kinds of words they produce, see the comments
-* below.
-*/
-export const Sanadi = Object.freeze({
-/**
-* `kAmyac`, which creates nAma-dhAtus per 3.1.9.
-*/
-kAmyac:0,"0":"kAmyac",
-/**
-* `kyaN`, which creates nAma-dhAtus per 3.1.11.
-*/
-kyaN:1,"1":"kyaN",
-/**
-* `kyac`, which creates nAma-dhAtus per 3.1.8.
-*/
-kyac:2,"2":"kyac",
-/**
-* `Nic`, which creates causal roots per 3.1.26.
-*
-* Examples: BAvayati, nAyayati.
-*/
-Ric:3,"3":"Ric",
-/**
-* `yaN`, which creates intensive roots per 3.1.22. For certain dhatus, the semantics are
-* instead "crooked movement" (by 3.1.23) or "contemptible" action (by 3.1.24).
-*
-* Examples: boBUyate, nenIyate.
-*
-* Constraints: can be used only if the dhatu starts with a consonant and has exactly one
-* vowel. If this constraint is violated, our APIs will return an `Error`.
-*/
-yaN:4,"4":"yaN",
-/**
-* `yaN`, with elision per 2.4.74. This is often listed separately due to its rarity and its
-* very different form.
-*
-* Examples: boBavIti, boBoti, nenayIti, neneti.
-*/
-yaNluk:5,"5":"yaNluk",
-/**
-* `san`, which creates desiderative roots per 3.1.7.
-*
-* Examples: buBUzati, ninIzati.
-*/
-san:6,"6":"san", });
-/**
-* The prayoga of some tinanta.
-*/
-export const Prayoga = Object.freeze({
-/**
-* Usage coreferent with the agent, e.g. "The horse *goes* to the village."
-*/
-Kartari:0,"0":"Kartari",
-/**
-* Usage coreferent with the object, e.g. "The village *is gone to* by the horse."
-*/
-Karmani:1,"1":"Karmani",
-/**
-* Usage without a referent, e.g. "*There is motion* by the horse to the village."
-* bhAve prayoga generally produces the same forms as karmani prayoga.
-*/
-Bhave:2,"2":"Bhave", });
-/**
-* The person of some tinanta.
-*/
-export const Purusha = Object.freeze({
-/**
-* The third person.
-*/
-Prathama:0,"0":"Prathama",
-/**
-* The second person.
-*/
-Madhyama:1,"1":"Madhyama",
-/**
-* The first person.
-*/
-Uttama:2,"2":"Uttama", });
-/**
-* The number of some tinanta or subanta.
-*/
-export const Vacana = Object.freeze({
-/**
-* The singular.
-*/
-Eka:0,"0":"Eka",
-/**
-* The dual.
-*/
-Dvi:1,"1":"Dvi",
-/**
-* The plural.
-*/
-Bahu:2,"2":"Bahu", });
-/**
-* The tense/mood of some tinanta.
-*/
-export const Lakara = Object.freeze({
-/**
-* Describes action in the present tense. Ssometimes called the *present indicative*.
-*/
-Lat:0,"0":"Lat",
-/**
-* Describes unwitnessed past action. Sometimes called the *perfect*.
-*/
-Lit:1,"1":"Lit",
-/**
-* Describes future action after the current day. Sometimes called the *periphrastic future*.
-*/
-Lut:2,"2":"Lut",
-/**
-* Describes general future action. Sometimes called the *simple future*.
-*/
-Lrt:3,"3":"Lrt",
-/**
-* The Vedic subjunctive. `vidyut-prakriya` currently has poor support for this lakara.
-*/
-Let:4,"4":"Let",
-/**
-* Describes commands. Sometimes called the *imperative*.
-*/
-Lot:5,"5":"Lot",
-/**
-* Describes past action before the current day. Sometimes called the *imperfect*.
-*/
-Lan:6,"6":"Lan",
-/**
-* Describes potential or hypothetical actions. Sometimes called the *optative*.
-*/
-VidhiLin:7,"7":"VidhiLin",
-/**
-* Describes wishes and prayers. Sometimes called the *benedictive*.
-*/
-AshirLin:8,"8":"AshirLin",
-/**
-* Describes general past action. Sometimes called the *aorist*.
-*/
-Lun:9,"9":"Lun",
-/**
-* Describes past counterfactuals ("would not have ..."). Sometimes called the *conditional*.
-*/
-Lrn:10,"10":"Lrn", });
-/**
-* The pada of some tinanta or krdanta.
-*/
-export const DhatuPada = Object.freeze({
-/**
-* Parasmaipada.
-*/
-Parasmai:0,"0":"Parasmai",
-/**
-* Atmanepada.
-*/
-Atmane:1,"1":"Atmane", });
-/**
 * WebAssembly API for vidyut-prakriya.
 *
 * Within reason, we have tried to mimic a native JavaScript API. At some point, we wish to
@@ -2936,11 +2936,11 @@ async function load(module, imports) {
 function getImports() {
     const imports = {};
     imports.wbg = {};
-    imports.wbg.__wbg_error_51d875a0547f9e36 = function(arg0, arg1) {
-        console.error(getStringFromWasm0(arg0, arg1));
-    };
     imports.wbg.__wbindgen_object_drop_ref = function(arg0) {
         takeObject(arg0);
+    };
+    imports.wbg.__wbg_error_51d875a0547f9e36 = function(arg0, arg1) {
+        console.error(getStringFromWasm0(arg0, arg1));
     };
     imports.wbg.__wbindgen_object_clone_ref = function(arg0) {
         const ret = getObject(arg0);
