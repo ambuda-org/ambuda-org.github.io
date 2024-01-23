@@ -704,14 +704,13 @@ Curadi:9,"9":"Curadi",
 */
 Kandvadi:10,"10":"Kandvadi", });
 /**
-* One of the three common *sanAdi* pratyayas.
+* A *sanAdi* pratyaya.
 *
 * The *sanAdi* pratyayas create new dhatus per 3.1.32. They are introduced in rules 3.1.7 -
 * 3.1.30, and since rule 3.1.7 contains the word "dhAtoH", they can be called Ardhadhatuka by
 * 3.4.114.
 *
-* Of the sanAdi pratyayas, most are added after either subantas or a handful of dhatus. But
-* three of these pratyayas are added after dhatus more generally: `san`, `yaN`, and `Ric`.
+* Any sanAdi-pratyayas not listed here are required by certain sutras and added by default.
 *
 * For details on what these pratyayas mean and what kinds of words they produce, see the comments
 * below.
@@ -719,20 +718,26 @@ Kandvadi:10,"10":"Kandvadi", });
 export const Sanadi = Object.freeze({
 /**
 * `kAmyac`, which creates nAma-dhAtus per 3.1.9.
+*
+* Examples: `putrakAmyati`
 */
 kAmyac:0,"0":"kAmyac",
 /**
 * `kyaN`, which creates nAma-dhAtus per 3.1.11.
+*
+* Examples: `SyenAyate`, `BfSAyate`
 */
 kyaN:1,"1":"kyaN",
 /**
 * `kyac`, which creates nAma-dhAtus per 3.1.8.
+*
+* Examples: `putrIyati`
 */
 kyac:2,"2":"kyac",
 /**
 * `Nic`, which creates causal roots per 3.1.26.
 *
-* Examples: BAvayati, nAyayati.
+* Examples: `BAvayati`, `nAyayati`.
 */
 Ric:3,"3":"Ric",
 /**
@@ -746,7 +751,7 @@ Ric:3,"3":"Ric",
 */
 yaN:4,"4":"yaN",
 /**
-* `yaN`, with elision per 2.4.74. This is often listed separately due to its rarity and its
+* `yaN`, with lopa per 2.4.74. This is often listed separately due to its rarity and its
 * very different form.
 *
 * Examples: boBavIti, boBoti, nenayIti, neneti.
@@ -769,1241 +774,1253 @@ san:6,"6":"san", });
 */
 export const Unadi = Object.freeze({
 /**
+* -a
+*/
+a:0,"0":"a",
+/**
 * -aknu
 */
-aknuc:0,"0":"aknuc",
+aknuc:1,"1":"aknuc",
 /**
 * -aNga
 */
-aNgac:1,"1":"aNgac",
+aNgac:2,"2":"aNgac",
 /**
 * -adAnu
 */
-radAnuk:2,"2":"radAnuk",
+radAnuk:3,"3":"radAnuk",
 /**
 * -a
 */
-ac:3,"3":"ac",
+ac:4,"4":"ac",
 /**
-* -aji
+* -aj
 */
-aji:4,"4":"aji",
+aji:5,"5":"aji",
 /**
 * -awa
 */
-awan:5,"5":"awan",
+awan:6,"6":"awan",
 /**
-* -awi
+* -aw
 */
-awi:6,"6":"awi",
+awi:7,"7":"awi",
 /**
 * -aWa
 */
-aWa:7,"7":"aWa",
+aWa:8,"8":"aWa",
 /**
 * -aRqa
 */
-aRqan:8,"8":"aRqan",
+aRqan:9,"9":"aRqan",
 /**
 * -ata
 */
-atac:9,"9":"atac",
+atac:10,"10":"atac",
 /**
 * -at
 */
-ati:10,"10":"ati",
+ati:11,"11":"ati",
 /**
 * -ati
 */
-ati_:11,"11":"ati_",
+ati_:12,"12":"ati_",
 /**
 * -atra
 */
-atran:12,"12":"atran",
+atran:13,"13":"atran",
 /**
 * -atri
 */
-atrin:13,"13":"atrin",
+atrin:14,"14":"atrin",
 /**
 * -aTa
 */
-aTa:14,"14":"aTa",
+aTa:15,"15":"aTa",
 /**
-* -adi
+* -ad
 */
-adi:15,"15":"adi",
+adi:16,"16":"adi",
 /**
 * -a
 */
-an:16,"16":"an",
+an:17,"17":"an",
 /**
 * -ani
 */
-ani:17,"17":"ani",
+ani:18,"18":"ani",
 /**
 * -anu
 */
-anuN:18,"18":"anuN",
+anuN:19,"19":"anuN",
 /**
 * -anya
 */
-anya:19,"19":"anya",
+anya:20,"20":"anya",
 /**
 * -anyu
 */
-anyuc:20,"20":"anyuc",
+anyuc:21,"21":"anyuc",
 /**
 * -apa
 */
-apa:21,"21":"apa",
+apa:22,"22":"apa",
 /**
 * -abaka
 */
-abaka:22,"22":"abaka",
-/**
-* -aba
-*/
-abac:23,"23":"abac",
-/**
-* -aBa
-*/
-aBac:24,"24":"aBac",
-/**
-* -ama
-*/
-ama:25,"25":"ama",
-/**
-* -ama (praTama)
-*/
-amac:26,"26":"amac",
+abaka:23,"23":"abaka",
 /**
 * -amba
 */
-ambaj:27,"27":"ambaj",
+ambac:24,"24":"ambac",
+/**
+* -aBa
+*/
+aBac:25,"25":"aBac",
+/**
+* -ama
+*/
+ama:26,"26":"ama",
+/**
+* -ama (praTama)
+*/
+amac:27,"27":"amac",
+/**
+* -amba
+*/
+ambaj:28,"28":"ambaj",
 /**
 * -ayu
 */
-ayu:28,"28":"ayu",
+ayu:29,"29":"ayu",
 /**
 * -ara
 */
-ara:29,"29":"ara",
+ara:30,"30":"ara",
 /**
 * -ara
 */
-aran:30,"30":"aran",
+aran:31,"31":"aran",
+/**
+* -ar
+*/
+aran_:32,"32":"aran_",
 /**
 * -aru
 */
-aru:31,"31":"aru",
+aru:33,"33":"aru",
 /**
 * -a
 */
-al:32,"32":"al",
+al:34,"34":"al",
 /**
 * -ala (maNgala)
 */
-alac:33,"33":"alac",
+alac:35,"35":"alac",
 /**
 * -ali
 */
-alic:34,"34":"alic",
+alic:36,"36":"alic",
 /**
 * -avi
 */
-avi:35,"35":"avi",
+avi:37,"37":"avi",
 /**
 * -a
 */
-asa:36,"36":"asa",
+asa:38,"38":"asa",
 /**
 * -asa
 */
-asac:37,"37":"asac",
+asac:39,"39":"asac",
 /**
 * -asAna
 */
-asAnac:38,"38":"asAnac",
+asAnac:40,"40":"asAnac",
 /**
-* -asi
+* -as
 */
-asi:39,"39":"asi",
+asi:41,"41":"asi",
 /**
 * -as (cetas)
 */
-asun:40,"40":"asun",
+asun:42,"42":"asun",
 /**
 * -A
 */
-A:41,"41":"A",
+A:43,"43":"A",
 /**
 * -Aka
 */
-Aka:42,"42":"Aka",
+Aka:44,"44":"Aka",
 /**
 * -AgU
 */
-AgUc:43,"43":"AgUc",
+AgUc:45,"45":"AgUc",
 /**
 * -Awa
 */
-Awac:44,"44":"Awac",
+Awac:46,"46":"Awac",
 /**
 * -ARaka
 */
-ARaka:45,"45":"ARaka",
+ARaka:47,"47":"ARaka",
 /**
 * -Atu
 */
-Atu:46,"46":"Atu",
+Atu:48,"48":"Atu",
 /**
 * -Atfka
 */
-Atfkan:47,"47":"Atfkan",
+Atfkan:49,"49":"Atfkan",
 /**
 * -Anaka
 */
-Anaka:48,"48":"Anaka",
+Anaka:50,"50":"Anaka",
 /**
 * -Ana
 */
-Anac:49,"49":"Anac",
+Anac:51,"51":"Anac",
 /**
 * -Anu
 */
-Anuk:50,"50":"Anuk",
+Anuk:52,"52":"Anuk",
 /**
 * -Anya
 */
-Anya:51,"51":"Anya",
+Anya:53,"53":"Anya",
 /**
 * -Ayya
 */
-Ayya:52,"52":"Ayya",
+Ayya:54,"54":"Ayya",
 /**
 * -Ara
 */
-Aran:53,"53":"Aran",
+Aran:55,"55":"Aran",
 /**
 * -Ala
 */
-Ala:54,"54":"Ala",
+Ala:56,"56":"Ala",
 /**
 * -Ala
 */
-Alac:55,"55":"Alac",
+Alac:57,"57":"Alac",
 /**
 * -Ala
 */
-AlaY:56,"56":"AlaY",
+AlaY:58,"58":"AlaY",
 /**
 * -AlIya
 */
-AlIyac:57,"57":"AlIyac",
+AlIyac:59,"59":"AlIyac",
 /**
 * -A
 */
-Asa:58,"58":"Asa",
+Asa:60,"60":"Asa",
 /**
-* -Asi
+* -As
 */
-Asi:59,"59":"Asi",
+Asi:61,"61":"Asi",
 /**
 * -i
 */
-i:60,"60":"i",
+i:62,"62":"i",
 /**
 * -ika
 */
-ikan:61,"61":"ikan",
+ikan:63,"63":"ikan",
 /**
-* -iji
+* -ij
 */
-iji:62,"62":"iji",
-/**
-* -i
-*/
-iY:63,"63":"iY",
+iji:64,"64":"iji",
 /**
 * -i
 */
-iR:64,"64":"iR",
+iY:65,"65":"iY",
+/**
+* -i
+*/
+iR:66,"66":"iR",
 /**
 * -ita
 */
-ita:65,"65":"ita",
+ita:67,"67":"ita",
 /**
 * -ita
 */
-itac:66,"66":"itac",
+itac:68,"68":"itac",
 /**
 * -ita
 */
-itan:67,"67":"itan",
+itan:69,"69":"itan",
 /**
-* -iti
+* -it
 */
-iti:68,"68":"iti",
+iti:70,"70":"iti",
 /**
 * -itnu
 */
-itnuc:69,"69":"itnuc",
+itnuc:71,"71":"itnuc",
 /**
 * -itra
 */
-itra:70,"70":"itra",
+itra:72,"72":"itra",
 /**
 * -itva
 */
-itvan:71,"71":"itvan",
+itvan:73,"73":"itvan",
 /**
 * -iTi
 */
-iTin:72,"72":"iTin",
+iTin:74,"74":"iTin",
 /**
 * -i
 */
-in_:73,"73":"in_",
+in_:75,"75":"in_",
 /**
 * -ina
 */
-inac:74,"74":"inac",
+inac:76,"76":"inac",
 /**
 * -ina
 */
-inaR:75,"75":"inaR",
+inaR:77,"77":"inaR",
 /**
 * -ina
 */
-inan:76,"76":"inan",
+inan:78,"78":"inan",
 /**
 * -in
 */
-ini:77,"77":"ini",
+ini:79,"79":"ini",
 /**
-* -imani
+* -iman
 */
-imanic:78,"78":"imanic",
+imanic:80,"80":"imanic",
 /**
-* -imani
+* -iman
 */
-imanin:79,"79":"imanin",
+imanin:81,"81":"imanin",
 /**
 * -ila
 */
-ilac:80,"80":"ilac",
+ilac:82,"82":"ilac",
 /**
 * -izWa
 */
-izWac:81,"81":"izWac",
+izWac:83,"83":"izWac",
 /**
 * -izWu
 */
-izWuc:82,"82":"izWuc",
+izWuc:84,"84":"izWuc",
 /**
 * -izRu
 */
-izRuc:83,"83":"izRuc",
+izRuc:85,"85":"izRuc",
 /**
 * -isa
 */
-isan:84,"84":"isan",
+isan:86,"86":"isan",
 /**
 * -is
 */
-isi:85,"85":"isi",
+isi:87,"87":"isi",
 /**
 * -is
 */
-isin:86,"86":"isin",
+isin:88,"88":"isin",
 /**
 * -I
 */
-I:87,"87":"I",
+I:89,"89":"I",
 /**
 * -Ika
 */
-Ikan:88,"88":"Ikan",
+Ikan:90,"90":"Ikan",
 /**
 * -Ici
 */
-Ici:89,"89":"Ici",
+Ici:91,"91":"Ici",
 /**
 * -Ida
 */
-Ida:90,"90":"Ida",
+Ida:92,"92":"Ida",
 /**
 * -Ira
 */
-Irac:91,"91":"Irac",
+Irac:93,"93":"Irac",
 /**
 * -Ira
 */
-Iran:92,"92":"Iran",
+Iran:94,"94":"Iran",
 /**
 * -Iza
 */
-Izan:93,"93":"Izan",
+Izan:95,"95":"Izan",
 /**
 * -u
 */
-u:94,"94":"u",
+u:96,"96":"u",
 /**
 * -uka
 */
-ukan:95,"95":"ukan",
+ukan:97,"97":"ukan",
 /**
 * -uqa
 */
-uqac:96,"96":"uqac",
+uqac:98,"98":"uqac",
 /**
 * -u
 */
-uR:97,"97":"uR",
+uR:99,"99":"uR",
 /**
-* -uti
+* -ut
 */
-uti:98,"98":"uti",
+uti:100,"100":"uti",
 /**
 * -utra
 */
-utra:99,"99":"utra",
+utra:101,"101":"utra",
 /**
 * -una
 */
-una:100,"100":"una",
+una:102,"102":"una",
 /**
 * -una
 */
-unan:101,"101":"unan",
+unan:103,"103":"unan",
 /**
-* -unasi
+* -unas
 */
-unasi:102,"102":"unasi",
+unasi:104,"104":"unasi",
 /**
 * -uni
 */
-uni:103,"103":"uni",
+uni:105,"105":"uni",
 /**
 * -unta
 */
-unta:104,"104":"unta",
+unta:106,"106":"unta",
 /**
 * -unti
 */
-unti:105,"105":"unti",
+unti:107,"107":"unti",
 /**
 * -uma
 */
-uma:106,"106":"uma",
+uma:108,"108":"uma",
 /**
 * -umBa
 */
-umBa:107,"107":"umBa",
+umBa:109,"109":"umBa",
 /**
 * -ura
 */
-urac:108,"108":"urac",
+urac:110,"110":"urac",
 /**
 * -ura
 */
-uran:109,"109":"uran",
+uran:111,"111":"uran",
+/**
+* -ur
+*/
+uran_:112,"112":"uran_",
 /**
 * -uri
 */
-urin:110,"110":"urin",
+urin:113,"113":"urin",
 /**
 * -ula
 */
-ulac:111,"111":"ulac",
+ulac:114,"114":"ulac",
 /**
 * -uli
 */
-uli:112,"112":"uli",
+uli:115,"115":"uli",
 /**
 * -uza
 */
-uzac:113,"113":"uzac",
+uzac:116,"116":"uzac",
 /**
 * -us (Danus)
 */
-usi:114,"114":"usi",
+usi:117,"117":"usi",
 /**
 * -U
 */
-U:115,"115":"U",
+U:118,"118":"U",
 /**
 * -Uka
 */
-Uka:116,"116":"Uka",
+Uka:119,"119":"Uka",
 /**
 * -Uka
 */
-UkaR:117,"117":"UkaR",
+UkaR:120,"120":"UkaR",
 /**
 * -UKa
 */
-UKa:118,"118":"UKa",
+UKa:121,"121":"UKa",
 /**
 * -UTa
 */
-UTan:119,"119":"UTan",
+UTan:122,"122":"UTan",
 /**
 * -Uma
 */
-Uma:120,"120":"Uma",
+Uma:123,"123":"Uma",
 /**
 * -U
 */
-Ur:121,"121":"Ur",
+Ur:124,"124":"Ur",
 /**
 * -Ura
 */
-Uran:122,"122":"Uran",
+Uran:125,"125":"Uran",
 /**
 * -Uza
 */
-Uzan:123,"123":"Uzan",
+Uzan:126,"126":"Uzan",
 /**
 * -f
 */
-f:124,"124":"f",
+f:127,"127":"f",
 /**
-* -fti
+* -ft
 */
-ftin:125,"125":"ftin",
+ftin:128,"128":"ftin",
 /**
 * -f
 */
-fn_:126,"126":"fn_",
+fn_:129,"129":"fn_",
 /**
 * -eRu
 */
-eRu:127,"127":"eRu",
+eRu:130,"130":"eRu",
 /**
 * -eRya
 */
-eRya:128,"128":"eRya",
+eRya:131,"131":"eRya",
 /**
 * -era
 */
-erak:129,"129":"erak",
+erak:132,"132":"erak",
 /**
 * -elima
 */
-elimac:130,"130":"elimac",
+elimac:133,"133":"elimac",
 /**
 * -ota
 */
-otac:131,"131":"otac",
+otac:134,"134":"otac",
 /**
 * -ora
 */
-oran:132,"132":"oran",
+oran:135,"135":"oran",
 /**
 * -ola
 */
-olac:133,"133":"olac",
+olac:136,"136":"olac",
 /**
 * -ka
 */
-ka:134,"134":"ka",
+ka:137,"137":"ka",
 /**
 * -ka
 */
-kak:135,"135":"kak",
+kak:138,"138":"kak",
 /**
 * -kaNkaRa
 */
-kaNkaRa:136,"136":"kaNkaRa",
+kaNkaRa:139,"139":"kaNkaRa",
 /**
 * -kaRa
 */
-kaRa:137,"137":"kaRa",
+kaRa:140,"140":"kaRa",
 /**
 * -katu
 */
-katu:138,"138":"katu",
+katu:141,"141":"katu",
 /**
 * -katni
 */
-katnic:139,"139":"katnic",
+katnic:142,"142":"katnic",
 /**
 * -katra
 */
-katra:140,"140":"katra",
+katra:143,"143":"katra",
 /**
 * -kTa
 */
-kTan:141,"141":"kTan",
+kTan:144,"144":"kTan",
 /**
 * -ka
 */
-kan:142,"142":"kan",
+kan:145,"145":"kan",
 /**
-* -kanasi
+* -anas
 */
-kanasi:143,"143":"kanasi",
+kanasi:146,"146":"kanasi",
 /**
-* -kani
+* -an
 */
-kanin:144,"144":"kanin",
+kanin:147,"147":"kanin",
 /**
 * -kanu
 */
-kanum:145,"145":"kanum",
+kanum:148,"148":"kanum",
 /**
 * -kanya
 */
-kanyan:146,"146":"kanyan",
+kanyan:149,"149":"kanyan",
 /**
 * -kanyu
 */
-kanyuc:147,"147":"kanyuc",
+kanyuc:150,"150":"kanyuc",
 /**
 * -kapa
 */
-kapa:148,"148":"kapa",
+kapa:151,"151":"kapa",
 /**
 * -kapa
 */
-kapan:149,"149":"kapan",
+kapan:152,"152":"kapan",
 /**
-* -kami
+* -am
 */
-kamin:150,"150":"kamin",
+kamin:153,"153":"kamin",
 /**
 * -kaya
 */
-kayan:151,"151":"kayan",
+kayan:154,"154":"kayan",
 /**
 * -kara
 */
-karan:152,"152":"karan",
+karan:155,"155":"karan",
 /**
 * -kala
 */
-kala:153,"153":"kala",
+kala:156,"156":"kala",
 /**
 * -kAku
 */
-kAku:154,"154":"kAku",
+kAku:157,"157":"kAku",
 /**
 * -kAla
 */
-kAlan:155,"155":"kAlan",
+kAlan:158,"158":"kAlan",
 /**
-* -kika
+* -ika
 */
-kikan:156,"156":"kikan",
+kikan:159,"159":"kikan",
 /**
 * -kita
 */
-kitac:157,"157":"kitac",
+kitac:160,"160":"kitac",
 /**
 * -kinda
 */
-kindac:158,"158":"kindac",
+kindac:161,"161":"kindac",
 /**
 * -kira
 */
-kirac:159,"159":"kirac",
+kirac:162,"162":"kirac",
 /**
 * -kizya
 */
-kizyan:160,"160":"kizyan",
+kizyan:163,"163":"kizyan",
 /**
 * -kIka
 */
-kIkac:161,"161":"kIkac",
+kIkac:164,"164":"kIkac",
 /**
 * -kIka
 */
-kIkan:162,"162":"kIkan",
+kIkan:165,"165":"kIkan",
 /**
 * -kIwa
 */
-kIwan:163,"163":"kIwan",
+kIwan:166,"166":"kIwan",
 /**
 * -ku
 */
-ku:164,"164":"ku",
+ku:167,"167":"ku",
 /**
 * -ku
 */
-kuk:165,"165":"kuk",
+kuk:168,"168":"kuk",
 /**
 * -kuka
 */
-kukan:166,"166":"kukan",
+kukan:169,"169":"kukan",
 /**
 * -kuza
 */
-kuzan:167,"167":"kuzan",
+kuzan:170,"170":"kuzan",
 /**
 * -kU
 */
-kU:168,"168":"kU",
+kU:171,"171":"kU",
 /**
 * -kta
 */
-kta:169,"169":"kta",
+kta:172,"172":"kta",
 /**
 * -ktnu
 */
-ktnu:170,"170":"ktnu",
+ktnu:173,"173":"ktnu",
 /**
 * -ktra
 */
-ktra:171,"171":"ktra",
+ktra:174,"174":"ktra",
 /**
 * -kTi
 */
-kTin:172,"172":"kTin",
+kTin:175,"175":"kTin",
 /**
 * -kna
 */
-kna:173,"173":"kna",
+kna:176,"176":"kna",
 /**
 * -kni
 */
-knin:174,"174":"knin",
+knin:177,"177":"knin",
 /**
 * -kmala
 */
-kmalan:175,"175":"kmalan",
+kmalan:178,"178":"kmalan",
 /**
-* -kyu
+* -ana
 */
-kyu:176,"176":"kyu",
+kyu:179,"179":"kyu",
 /**
-* -kyu
+* -ana
 */
-kyun:177,"177":"kyun",
+kyun:180,"180":"kyun",
 /**
 * -kra
 */
-kran:178,"178":"kran",
+kran:181,"181":"kran",
 /**
 * -krara
 */
-kraran:179,"179":"kraran",
+kraran:182,"182":"kraran",
 /**
 * -kri
 */
-kri:180,"180":"kri",
+kri:183,"183":"kri",
 /**
 * -kri
 */
-krin:181,"181":"krin",
+krin:184,"184":"krin",
 /**
-* -kruka
+* -ruka
 */
-krukan:182,"182":"krukan",
+krukan:185,"185":"krukan",
 /**
 * -kru
 */
-krun:183,"183":"krun",
+krun:186,"186":"krun",
 /**
 * -kla
 */
-kla:184,"184":"kla",
+kla:187,"187":"kla",
 /**
 * -kva
 */
-kvan:185,"185":"kvan",
+kvan:188,"188":"kvan",
 /**
-* -kvani
+* -van
 */
-kvanip:186,"186":"kvanip",
-/**
-* -kvi
-*/
-kvin:187,"187":"kvin",
+kvanip:189,"189":"kvanip",
 /**
 * -kvi
 */
-kvip:188,"188":"kvip",
+kvin:190,"190":"kvin",
 /**
-* -kvu
+* -
 */
-kvun:189,"189":"kvun",
+kvip:191,"191":"kvip",
+/**
+* -aka
+*/
+kvun:192,"192":"kvun",
 /**
 * -ksara
 */
-ksaran:190,"190":"ksaran",
+ksaran:193,"193":"ksaran",
 /**
 * -ksi
 */
-ksi:191,"191":"ksi",
+ksi:194,"194":"ksi",
 /**
 * -ksu
 */
-ksu:192,"192":"ksu",
+ksu:195,"195":"ksu",
 /**
 * -kseyya
 */
-kseyya:193,"193":"kseyya",
+kseyya:196,"196":"kseyya",
 /**
 * -ksna
 */
-ksna:194,"194":"ksna",
+ksna:197,"197":"ksna",
 /**
 * -Ka
 */
-Ka:195,"195":"Ka",
+Ka:198,"198":"Ka",
 /**
 * -ga
 */
-ga:196,"196":"ga",
+ga:199,"199":"ga",
 /**
 * -ga
 */
-gak:197,"197":"gak",
+gak:200,"200":"gak",
 /**
 * -ga
 */
-gaR:198,"198":"gaR",
+gaR:201,"201":"gaR",
 /**
 * -ga
 */
-gan:199,"199":"gan",
+gan:202,"202":"gan",
 /**
 * -GaTi
 */
-GaTin:200,"200":"GaTin",
+GaTin:203,"203":"GaTin",
 /**
 * -ca
 */
-caw:201,"201":"caw",
+caw:204,"204":"caw",
 /**
 * -catu
 */
-catu:202,"202":"catu",
+catu:205,"205":"catu",
 /**
-* -ci
+* -c
 */
-cik:203,"203":"cik",
+cik:206,"206":"cik",
 /**
 * -Ja
 */
-Jac:204,"204":"Jac",
+Jac:207,"207":"Jac",
 /**
 * -Ji
 */
-Jic:205,"205":"Jic",
+Jic:208,"208":"Jic",
 /**
 * -Yu
 */
-YuR:206,"206":"YuR",
+YuR:209,"209":"YuR",
 /**
 * -wa
 */
-wa:207,"207":"wa",
+wa:210,"210":"wa",
 /**
 * -wa
 */
-wan:208,"208":"wan",
+wan:211,"211":"wan",
 /**
 * -wiza
 */
-wizac:209,"209":"wizac",
+wizac:212,"212":"wizac",
 /**
 * -Wa
 */
-Wa:210,"210":"Wa",
+Wa:213,"213":"Wa",
 /**
 * -qa
 */
-qa:211,"211":"qa",
+qa:214,"214":"qa",
 /**
 * -qau
 */
-qau:212,"212":"qau",
+qau:215,"215":"qau",
 /**
-* -qa
+* -ra
 */
-qaw:213,"213":"qaw",
+qraw:216,"216":"qraw",
 /**
 * -qati
 */
-qati:214,"214":"qati",
+qati:217,"217":"qati",
 /**
 * -avat
 */
-qavatu:215,"215":"qavatu",
+qavatu:218,"218":"qavatu",
 /**
-* -qimi
+* -qim
 */
-qimi:216,"216":"qimi",
+qimi:219,"219":"qimi",
 /**
 * -quta
 */
-qutac:217,"217":"qutac",
+qutac:220,"220":"qutac",
 /**
 * -qu
 */
-qun:218,"218":"qun",
+qun:221,"221":"qun",
 /**
-* -qumsu
+* -ums
 */
-qumsun:219,"219":"qumsun",
+qumsun:222,"222":"qumsun",
 /**
-* -qU
+* -U
 */
-qU:220,"220":"qU",
+qU:223,"223":"qU",
 /**
-* -qE
+* -E
 */
-qE:221,"221":"qE",
+qE:224,"224":"qE",
 /**
 * -Es
 */
-qEsi:222,"222":"qEsi",
+qEsi:225,"225":"qEsi",
 /**
-* -qo
+* -o
 */
-qo:223,"223":"qo",
+qo:226,"226":"qo",
 /**
-* -qosi
+* -os
 */
-qosi:224,"224":"qosi",
+qosi:227,"227":"qosi",
 /**
-* -qO
+* -O
 */
-qO:225,"225":"qO",
+qO:228,"228":"qO",
 /**
 * -qri
 */
-qri:226,"226":"qri",
+qri:229,"229":"qri",
 /**
 * -Qa
 */
-Qa:227,"227":"Qa",
+Qa:230,"230":"Qa",
 /**
 * -Ritra
 */
-Ritran:228,"228":"Ritran",
+Ritran:231,"231":"Ritran",
 /**
 * -Ru
 */
-Ru:229,"229":"Ru",
+Ru:232,"232":"Ru",
 /**
 * -Ruka
 */
-Rukan:230,"230":"Rukan",
+Rukan:233,"233":"Rukan",
 /**
 * -ta
 */
-ta:231,"231":"ta",
+ta:234,"234":"ta",
 /**
 * -taka
 */
-takan:232,"232":"takan",
+takan:235,"235":"takan",
 /**
 * -ta
 */
-tan:233,"233":"tan",
+tan:236,"236":"tan",
 /**
 * -tana
 */
-tanan:234,"234":"tanan",
+tanan:237,"237":"tanan",
 /**
 * -taSa
 */
-taSan:235,"235":"taSan",
+taSan:238,"238":"taSan",
 /**
-* -taSasu
+* -taSas
 */
-taSasun:236,"236":"taSasun",
+taSasun:239,"239":"taSasun",
 /**
 * -ti
 */
-ti:237,"237":"ti",
+ti:240,"240":"ti",
 /**
 * -tika
 */
-tikan:238,"238":"tikan",
+tikan:241,"241":"tikan",
 /**
 * -tu
 */
-tu:239,"239":"tu",
+tu:242,"242":"tu",
 /**
 * -tu
 */
-tun:240,"240":"tun",
+tun:243,"243":"tun",
 /**
 * -tf
 */
-tfc:241,"241":"tfc",
+tfc:244,"244":"tfc",
 /**
 * -tf
 */
-tfn:242,"242":"tfn",
+tfn:245,"245":"tfn",
 /**
 * -tna
 */
-tnaR:243,"243":"tnaR",
+tnaR:246,"246":"tnaR",
 /**
 * -tyu
 */
-tyuk:244,"244":"tyuk",
+tyuk:247,"247":"tyuk",
 /**
 * -tra
 */
-tra:245,"245":"tra",
+tra:248,"248":"tra",
 /**
 * -tra
 */
-tran:246,"246":"tran",
+tran:249,"249":"tran",
 /**
 * -tri
 */
-trin:247,"247":"trin",
+trin:250,"250":"trin",
 /**
 * -tri
 */
-trip:248,"248":"trip",
+trip:251,"251":"trip",
 /**
 * -tva
 */
-tvan:249,"249":"tvan",
+tvan:252,"252":"tvan",
 /**
 * -Ta
 */
-Tak:250,"250":"Tak",
+Tak:253,"253":"Tak",
 /**
 * -da
 */
-da:251,"251":"da",
+da:254,"254":"da",
 /**
 * -da
 */
-dan:252,"252":"dan",
+dan:255,"255":"dan",
 /**
 * -Du
 */
-Duk:253,"253":"Duk",
+Duk:256,"256":"Duk",
 /**
 * -na
 */
-na:254,"254":"na",
+na:257,"257":"na",
 /**
 * -na
 */
-nak:255,"255":"nak",
+nak:258,"258":"nak",
 /**
 * -ni
 */
-ni:256,"256":"ni",
+ni:259,"259":"ni",
 /**
 * -nu
 */
-nu:257,"257":"nu",
+nu:260,"260":"nu",
 /**
 * -pa
 */
-pa:258,"258":"pa",
+pa:261,"261":"pa",
 /**
 * -pAsa
 */
-pAsa:259,"259":"pAsa",
+pAsa:262,"262":"pAsa",
 /**
 * -Pa
 */
-Pak:260,"260":"Pak",
+Pak:263,"263":"Pak",
 /**
 * -ba
 */
-ban:261,"261":"ban",
+ban:264,"264":"ban",
 /**
 * -Ba
 */
-Ba:262,"262":"Ba",
+Ba:265,"265":"Ba",
 /**
 * -Ba
 */
-Ban:263,"263":"Ban",
+Ban:266,"266":"Ban",
 /**
 * -ma
 */
-mak:264,"264":"mak",
+mak:267,"267":"mak",
 /**
 * -madi
 */
-madik:265,"265":"madik",
+madik:268,"268":"madik",
 /**
 * -ma
 */
-man:266,"266":"man",
+man:269,"269":"man",
 /**
 * -man
 */
-mani:267,"267":"mani",
+mani:270,"270":"mani",
 /**
 * -man
 */
-maniR:268,"268":"maniR",
+maniR:271,"271":"maniR",
 /**
 * -man
 */
-manin:269,"269":"manin",
+manin:272,"272":"manin",
 /**
 * -mi
 */
-mi:270,"270":"mi",
+mi:273,"273":"mi",
 /**
 * -mi
 */
-min:271,"271":"min",
+min:274,"274":"min",
 /**
 * -mu
 */
-muk:272,"272":"muk",
+muk:275,"275":"muk",
 /**
 * -ya
 */
-ya:273,"273":"ya",
+ya:276,"276":"ya",
 /**
 * -ya
 */
-yak:274,"274":"yak",
+yak:277,"277":"yak",
 /**
 * -ya
 */
-yat:275,"275":"yat",
+yat:278,"278":"yat",
 /**
 * -yatu
 */
-yatuc:276,"276":"yatuc",
+yatuc:279,"279":"yatuc",
 /**
 * -yu
 */
-yuk:277,"277":"yuk",
+yuk:280,"280":"yuk",
 /**
-* -yu
+* -ana
 */
-yuc:278,"278":"yuc",
+yuc:281,"281":"yuc",
 /**
-* -yu
+* -ana
 */
-yun:279,"279":"yun",
-/**
-* -ra
-*/
-ra:280,"280":"ra",
+yun:282,"282":"yun",
 /**
 * -ra
 */
-rak:281,"281":"rak",
+ra:283,"283":"ra",
 /**
 * -ra
 */
-ran:282,"282":"ran",
+rak:284,"284":"rak",
+/**
+* -ra
+*/
+ran:285,"285":"ran",
 /**
 * -ru
 */
-ru:283,"283":"ru",
+ru:286,"286":"ru",
 /**
 * -la
 */
-lak:284,"284":"lak",
+lak:287,"287":"lak",
 /**
 * -va
 */
-va:285,"285":"va",
+va:288,"288":"va",
 /**
 * -va
 */
-vaR:286,"286":"vaR",
+vaR:289,"289":"vaR",
 /**
 * -va
 */
-van:287,"287":"van",
+van:290,"290":"van",
 /**
-* -vani
+* -van
 */
-vanip:288,"288":"vanip",
+vanip:291,"291":"vanip",
 /**
 * -vara
 */
-varaw:289,"289":"varaw",
+varaw:292,"292":"varaw",
 /**
 * -vala
 */
-valaY:290,"290":"valaY",
+valaY:293,"293":"valaY",
 /**
 * -vAla
 */
-vAlac:291,"291":"vAlac",
+vAlac:294,"294":"vAlac",
 /**
 * -vAla
 */
-vAlan:292,"292":"vAlan",
+vAlan:295,"295":"vAlan",
 /**
 * -vi
 */
-vin:293,"293":"vin",
+vin:296,"296":"vin",
 /**
-* -vu
+* -aka
 */
-vun:294,"294":"vun",
+vun:297,"297":"vun",
 /**
 * -Sa
 */
-Sak:295,"295":"Sak",
+Sak:298,"298":"Sak",
 /**
 * -Su
 */
-Sun:296,"296":"Sun",
+Sun:299,"299":"Sun",
 /**
 * -Sva
 */
-SvaR:297,"297":"SvaR",
+SvaR:300,"300":"SvaR",
 /**
 * -ziva
 */
-zivan:298,"298":"zivan",
+zivan:301,"301":"zivan",
 /**
 * -zwra
 */
-zwran:299,"299":"zwran",
+zwran:302,"302":"zwran",
 /**
 * -zvara
 */
-zvarac:300,"300":"zvarac",
+zvarac:303,"303":"zvarac",
 /**
 * -sa
 */
-sa:301,"301":"sa",
+sa:304,"304":"sa",
 /**
 * -sa
 */
-san:302,"302":"san",
+san:305,"305":"san",
 /**
 * -sara
 */
-sara:303,"303":"sara",
+sara:306,"306":"sara",
 /**
 * -sika
 */
-sikan:304,"304":"sikan",
+sikan:307,"307":"sikan",
 /**
 * -sTa
 */
-sTan:305,"305":"sTan",
+sTan:308,"308":"sTan",
 /**
 * -sma
 */
-sman:306,"306":"sman",
+sman:309,"309":"sman",
 /**
 * -sya
 */
-sya:307,"307":"sya",
+sya:310,"310":"sya",
 /**
 * -sya
 */
-syan:308,"308":"syan", });
+syan:311,"311":"syan", });
 /**
 * The prayoga of some tinanta.
 */

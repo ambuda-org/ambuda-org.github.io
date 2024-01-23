@@ -1,6 +1,6 @@
 import init, { Chandas } from "/static/wasm/vidyut_chandas.js";
 
-const vrttas = fetch("/static/data/vrtta.tsv").then(resp => resp.text());
+const vrttas = fetch("/static/data/meters.tsv").then(resp => resp.text());
 
 const App = () => ({
   // The tab to display.

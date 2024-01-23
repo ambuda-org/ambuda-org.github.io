@@ -219,7 +219,7 @@ export class Chandas {
 }
 /**
 */
-export class Match {
+export class MatchResult {
 
     __destroy_into_raw() {
         const ptr = this.ptr;
@@ -230,7 +230,7 @@ export class Match {
 
     free() {
         const ptr = this.__destroy_into_raw();
-        wasm.__wbg_match_free(ptr);
+        wasm.__wbg_matchresult_free(ptr);
     }
 }
 

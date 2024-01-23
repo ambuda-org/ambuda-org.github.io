@@ -278,11 +278,11 @@ HarvardKyoto:18,"18":"HarvardKyoto",
 */
 Iast:19,"19":"Iast",
 /**
-* ISO 19519 transliteration.
+* ISO 15919 transliteration.
 *
-* TODO: find a free documentation link for ISO 19519.
+* TODO: find a free documentation link for ISO 15919.
 */
-Iso19519:20,"20":"Iso19519",
+Iso15919:20,"20":"Iso15919",
 /**
 * ITRANS transliteration.
 *
