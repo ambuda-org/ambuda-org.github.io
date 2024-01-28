@@ -150,163 +150,219 @@ export const Scheme = Object.freeze({
 /**
 * Balinese script.
 *
-* https://unicode.org/charts/PDF/U1B00.pdf
+* Docs: <https://unicode.org/charts/PDF/U1B00.pdf>
 */
 Balinese:0,"0":"Balinese",
 /**
 * Bengali script.
 *
-* https://unicode.org/charts/PDF/U0980.pdf
+* Docs: <https://unicode.org/charts/PDF/U0980.pdf>
 */
 Bengali:1,"1":"Bengali",
 /**
 * Brahmi script.
 *
-* https://unicode.org/charts/PDF/U11000.pdf
+* Docs: <https://unicode.org/charts/PDF/U11000.pdf>
 */
 Brahmi:2,"2":"Brahmi",
 /**
 * Burmese script.
 *
-* https://unicode.org/charts/PDF/U1000.pdf
+* Docs: <https://unicode.org/charts/PDF/U1000.pdf>
 */
 Burmese:3,"3":"Burmese",
 /**
+* Cham script.
+*
+* <https://unicode.org/charts/PDF/UAA00.pdf>
 * Devanagari script.
 *
-* https://unicode.org/charts/PDF/U0900.pdf
-* https://unicode.org/charts/PDF/UA8E0.pdf (Devanagari Extended)
-* https://unicode.org/charts/PDF/U11B00.pdf (Devanagari Extended-A)
-* https://unicode.org/charts/PDF/U1CD0.pdf (Vedic Extensions)
+* Docs:
+* - <https://unicode.org/charts/PDF/U0900.pdf>
+* - <https://unicode.org/charts/PDF/UA8E0.pdf> (Devanagari Extended)
+* - <https://unicode.org/charts/PDF/U11B00.pdf> (Devanagari Extended-A)
+* - <https://unicode.org/charts/PDF/U1CD0.pdf> (Vedic Extensions)
 */
 Devanagari:4,"4":"Devanagari",
 /**
 * Gujarati script.
 *
-* https://unicode.org/charts/PDF/U0A80.pdf
+* Docs: <https://unicode.org/charts/PDF/U0A80.pdf>
 */
 Gujarati:5,"5":"Gujarati",
 /**
 * Grantha script.
 *
-* Documentation:
-* - http://www.unicode.org/charts/PDF/U11300.pdf
-* - https://unicode.org/L2/L2009/09372-grantha.pdf
+* Docs:
+* - <http://www.unicode.org/charts/PDF/U11300.pdf>
+* - <https://unicode.org/L2/L2009/09372-grantha.pdf>
 */
 Grantha:6,"6":"Grantha",
 /**
 * Gurmukhi script.
 *
-* https://unicode.org/charts/PDF/U0A00.pdf
+* Docs: <https://unicode.org/charts/PDF/U0A00.pdf>
 */
 Gurmukhi:7,"7":"Gurmukhi",
 /**
 * Javanese script.
 *
-* https://unicode.org/charts/PDF/UA980.pdf
+* Docs: <https://unicode.org/charts/PDF/UA980.pdf>
 */
 Javanese:8,"8":"Javanese",
 /**
 * Kannada script.
 *
-* https://unicode.org/charts/PDF/U0C80.pdf
+* Docs: <https://unicode.org/charts/PDF/U0C80.pdf>
 */
 Kannada:9,"9":"Kannada",
 /**
+* Khmer script.
+*
+* <https://unicode.org/charts/PDF/U1780.pdf>
+*/
+Khmer:10,"10":"Khmer",
+/**
 * Malayalam script.
 *
-* https://unicode.org/charts/PDF/U0D00.pdf
+* Docs: <https://unicode.org/charts/PDF/U0D00.pdf>
 */
-Malayalam:10,"10":"Malayalam",
+Malayalam:11,"11":"Malayalam",
+/**
+* Modi script.
+*
+* <https://unicode.org/charts/PDF/U11600.pdf>
+*/
+Modi:12,"12":"Modi",
+/**
+* Lao script.
+*
+* Documentation:
+* - <https://unicode.org/charts/PDF/U0E80.pdf>
+* - <https://www.unicode.org/wg2/docs/n4861-17106r-lao-for-pali.pdf>
+* Newa script.
+*
+* <https://unicode.org/charts/PDF/U11400.pdf>
+*/
+Newa:13,"13":"Newa",
 /**
 * Odia script.
 *
-* https://unicode.org/charts/PDF/U0B00.pdf
+* Docs: <https://unicode.org/charts/PDF/U0B00.pdf>
 */
-Odia:11,"11":"Odia",
+Odia:14,"14":"Odia",
+/**
+* Saurashtra script.
+*
+* Docs: <https://www.unicode.org/charts/PDF/UA880.pdf>
+*/
+Saurashtra:15,"15":"Saurashtra",
 /**
 * Sharada script.
 *
-* https://unicode.org/charts/PDF/U11180.pdf
+* Docs: <https://unicode.org/charts/PDF/U11180.pdf>
 */
-Sharada:12,"12":"Sharada",
+Sharada:16,"16":"Sharada",
 /**
 * Siddham script.
 *
-* https://unicode.org/charts/PDF/U11580.pdf
+* Docs: <https://unicode.org/charts/PDF/U11580.pdf>
 */
-Siddham:13,"13":"Siddham",
+Siddham:17,"17":"Siddham",
 /**
 * Sinhala script.
 *
-* https://unicode.org/charts/PDF/U0D80.pdf
+* Docs: <https://unicode.org/charts/PDF/U0D80.pdf>
 */
-Sinhala:14,"14":"Sinhala",
+Sinhala:18,"18":"Sinhala",
 /**
 * Tamil script.
 *
-* https://unicode.org/charts/PDF/U0B80.pdf
+* Docs: <https://unicode.org/charts/PDF/U0B80.pdf>
 */
-Tamil:15,"15":"Tamil",
+Tamil:19,"19":"Tamil",
+/**
+* Telugu script.
+*
+* Docs: <https://unicode.org/charts/PDF/U0C00.pdf>
+*/
+Telugu:20,"20":"Telugu",
+/**
+* Thai script.
+*
+* <https://unicode.org/charts/PDF/U0E00.pdf>
+*/
+Thai:21,"21":"Thai",
 /**
 * Tibetan script.
 *
-* https://unicode.org/charts/PDF/U0F00.pdf
-* Telugu script.
+* **Status: buggy and partial.**
 *
-* https://unicode.org/charts/PDF/U0C00.pdf
+* Docs: <https://unicode.org/charts/PDF/U0F00.pdf>
 */
-Telugu:16,"16":"Telugu",
+Tibetan:22,"22":"Tibetan",
+/**
+* Tirhuta script.
+*
+* Docs: <https://www.unicode.org/charts/PDF/U11480.pdf>
+*/
+Tirhuta:23,"23":"Tirhuta",
 /**
 * Baraha transliteration.
 *
-* Documentation:
-* - https://baraha.com/help//Keyboards/dev-phonetic.htm (Baraha North)
-* - https://baraha.com/help/special-symbols.htm
+* Docs:
+* - <https://baraha.com/help//Keyboards/dev-phonetic.htm> (Baraha North)
+* - <https://baraha.com/help/special-symbols.htm>
 */
-BarahaSouth:17,"17":"BarahaSouth",
+BarahaSouth:24,"24":"BarahaSouth",
 /**
 * Harvard-Kyoto transliteration.
 *
 * TODO: find documentation link for HK.
 */
-HarvardKyoto:18,"18":"HarvardKyoto",
+HarvardKyoto:25,"25":"HarvardKyoto",
 /**
 * IAST transliteration.
 *
 * TODO: find documentation link for IAST.
 */
-Iast:19,"19":"Iast",
+Iast:26,"26":"Iast",
 /**
 * ISO 15919 transliteration.
 *
 * TODO: find a free documentation link for ISO 15919.
 */
-Iso15919:20,"20":"Iso15919",
+Iso15919:27,"27":"Iso15919",
 /**
-* ITRANS transliteration.
+* ITRANS 5.3 transliteration.
 *
-* https://www.aczoom.com/itrans/online/itrans6/itrans-tables-unicode.pdf
+* Docs:
+* - https://www.aczoom.com/itrans/ (official ITRANS site for version 5.3)
+* - https://www.aczoom.com/itrans/html/dvng/node3.html (DEVNAG table)
+* - http://www.sanskritweb.net/itrans/itmanual2003.pdf (Itranslator 2003 manual)
+*
+* ITRANS appears in various versions, some of which conflict with each other. Version 5.3
+* seems to be the most widely used, and it is supported by software like Itranslator 2003.
 */
-Itrans:21,"21":"Itrans",
+Itrans:28,"28":"Itrans",
 /**
 * SLP1 transliteration.
 *
-* https://www.sanskritlibrary.org/pub/SLP1LiesAppendixB.pdf
+* Docs: <https://www.sanskritlibrary.org/pub/SLP1LiesAppendixB.pdf>
 */
-Slp1:22,"22":"Slp1",
+Slp1:29,"29":"Slp1",
 /**
 * Velthuis transliteration.
 *
-* https://mirrors.mit.edu/CTAN/language/devanagari/velthuis/doc/manual.pdf
+* Docs: <https://mirrors.mit.edu/CTAN/language/devanagari/velthuis/doc/manual.pdf>
 */
-Velthuis:23,"23":"Velthuis",
+Velthuis:30,"30":"Velthuis",
 /**
 * WX transliteration.
 *
 * TODO: find documentation link for WX.
 */
-Wx:24,"24":"Wx", });
+Wx:31,"31":"Wx", });
 
 async function load(module, imports) {
     if (typeof Response === 'function' && module instanceof Response) {
