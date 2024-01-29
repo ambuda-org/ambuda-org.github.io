@@ -19,7 +19,7 @@ import init, { transliterate, detect, Scheme } from "/static/wasm/vidyut_lipi.js
 
 let CHEAT_SHEET = [
   "a A i I u U R RR lR lRR e ai o au aM aH",
-  "ka kha ga gha Na ca cha ja jha Ja",
+  "ka kha ga gha Ga ca cha ja jha Ja",
   "Ta Tha Da Dha Na ta tha da dha na",
   "pa pha ba bha ma ya ra la va",
   "za Sa sa ha La kSa jJa",
