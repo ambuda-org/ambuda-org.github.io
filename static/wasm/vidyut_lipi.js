@@ -472,7 +472,9 @@ Slp1:47,"47":"Slp1",
 /**
 * Velthuis transliteration.
 *
-* Docs: <https://mirrors.mit.edu/CTAN/language/devanagari/velthuis/doc/manual.pdf>
+* Docs:
+* - <https://mirrors.mit.edu/CTAN/language/devanagari/velthuis/doc/manual.pdf> (Devanagari)
+* - <https://ctan.math.illinois.edu/language/bengali/pandey/doc/bengdoc.pdf> (Bengali)
 */
 Velthuis:48,"48":"Velthuis",
 /**
