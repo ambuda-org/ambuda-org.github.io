@@ -18,7 +18,7 @@
  *   hacky way if that fixes the problem.
  */
 
-import init, { BaseKrt, Vidyut as VidyutWasm, Gana, Lakara, Prayoga, Purusha, Vacana, DhatuPada, Sanadi, Linga, Vibhakti } from "/static/wasm/vidyut_prakriya.js";
+import init, { BaseKrt, Vidyut as VidyutWasm, Lakara, Prayoga, Purusha, Vacana, DhatuPada, Sanadi, Linga, Vibhakti } from "/static/wasm/vidyut_prakriya.js";
 
 // ===================================================
 // vidyut-prakriya
@@ -36,64 +36,96 @@ function parseSutras(tsv) {
 const sutras = fetch("/static/data/sutrapatha.tsv").then(resp => resp.text()).then(text => parseSutras(text));
 const varttikas = fetch("/static/data/varttikas.tsv").then(resp => resp.text()).then(text => parseSutras(text));
 
-// Parse a dhatupatha string into separate objects.
-function parseDhatus(text) {
-    let dhatus = [];
-    text.split(/\r?\n/).forEach((line) => {
-        const [code, upadesha, artha] = line.split(/\t/);
-        if (!!code && code !== 'code') {
-            dhatus.push({
-                code,
-                upadesha,
-                upadeshaQuery: removeSlpSvaras(upadesha),
-                artha
-            });
-        }
-    });
-    return dhatus;
-}
-
 class Vidyut {
     // Call `init()` before calling this so that you initialize the WASM environment.
     constructor(dhatupatha) {
         this.wasm = VidyutWasm.init(dhatupatha);
-        this.dhatus = parseDhatus(dhatupatha);
+        this.dhatus = this.parseDhatus(dhatupatha);
         console.log("Constructed Vidyut.");
     }
 
-
-    deriveTinantas(tinanta) {
-        // For argument order, see wasm.rs.
-        return this.wasm.deriveTinantas(
-            tinanta.dhatu.code,
-            tinanta.lakara,
-            tinanta.prayoga,
-            tinanta.purusha,
-            tinanta.vacana,
-            tinanta.pada,
-            tinanta.sanadi || null,
-            tinanta.upasarga || null,
-        );
+    // Parse a dhatupatha string into separate objects.
+    parseDhatus(tsvText) {
+        let dhatus = [];
+        tsvText.split(/\r?\n/).forEach((line) => {
+            const [code, upadesha, artha] = line.split(/\t/);
+            // Ignore TSV header, which is just the string "code".
+            if (!!code && code !== 'code') {
+                let normalDhatu = "";
+                if (upadesha !== "-") {
+                    // TODO: more than 1? for now, just take the first.
+                    normalDhatu = this.wasm.deriveDhatus(code)[0].text
+                }
+                dhatus.push({
+                    code,
+                    upadesha,
+                    upadeshaNoSvaras: removeSlpSvaras(upadesha),
+                    normalDhatu,
+                    artha
+                });
+            }
+        });
+        return dhatus;
     }
 
-    deriveSubantas(subanta) {
-        // For argument order, see wasm.rs.
-        return this.wasm.deriveSubantas(
-            subanta.pratipadika,
-            subanta.linga,
-            subanta.vibhakti,
-            subanta.vacana,
-        );
+    /**
+     * Derives all tinantas that match the input conditions.
+     *
+     * dhatu: an object contain the key `code` pointing to an entry in `this.dhatus.`
+     * lakara: a `Lakara`
+     * purusha: a `Purusha`
+     * vacana: a `Vacana`
+     * pada: a `DhatuPada`
+     * sanadi: a list of strings. Valid values are "san", "Ric", "yaN", and "yaNluk".
+     * upasargas: a list of strings. For the upasarga "A", pass "AN".
+     */
+    deriveTinantas({ dhatu, lakara, prayoga, purusha, vacana, pada, sanadi = [], upasarga = [] }) {
+        return this.wasm.deriveTinantas({
+            code: dhatu.code,
+            lakara: Lakara[lakara],
+            prayoga: Prayoga[prayoga],
+            purusha: Purusha[purusha],
+            vacana: Vacana[vacana],
+            pada: DhatuPada[pada],
+            sanadi,
+            upasarga,
+        });
     }
 
-    deriveKrdantas(krdanta) {
+    /**
+     * Derives all subantas that match the input conditions.
+     *
+     * pratipadika: an object containing the keys `text` and `linga`.
+     * linga: a `Linga`
+     * vibhakti: a `Vibhakti`
+     * vacana: a `Vacana`
+     */
+    deriveSubantas({ pratipadika, linga, vibhakti, vacana }) {
         // For argument order, see wasm.rs.
-        return this.wasm.deriveKrdantas(
-            krdanta.dhatu.code,
-            krdanta.krt,
-            krdanta.sanadi || null,
-            krdanta.upasarga || null,
-        )
+        return this.wasm.deriveSubantas({
+            pratipadika: pratipadika,
+            linga: Linga[linga],
+            vibhakti: Vibhakti[vibhakti],
+            vacana: Vacana[vacana],
+        });
+    }
+
+    /**
+     * Derives all krdantas that match the input conditions.
+     *
+     * dhatu: an object contain the key `code` pointing to an entry in `this.dhatus.`
+     * krt: a `Krt`
+     * sanadi: a list of strings. Valid values are "san", "Ric", "yaN", and "yaNluk".
+     * upasargas: a list of strings. For the upasarga "A", pass "AN".
+     */
+    deriveKrdantas({ dhatu, krt, sanadi = [], upasarga = [] }) {
+        // For argument order, see wasm.rs.
+        return this.wasm.deriveKrdantas({
+            code: dhatu.code,
+            krt: BaseKrt[krt],
+            sanadi,
+            upasarga,
+        })
     }
 }
 
@@ -227,7 +259,7 @@ const App = () => ({
             this.upasarga = upasarga;
         }
         if (sanadi) {
-            this.sanadi = parseInt(sanadi);
+            this.sanadi = sanadi;
         }
         if (dhatuCode) {
             this.setActiveDhatu(dhatuCode);
@@ -315,14 +347,16 @@ const App = () => ({
     /** A filtered list of dhatus according to a user query. */
     filteredDhatus() {
         if (this.dhatuFilter !== null) {
-            let filter = Sanscript.t(this.dhatuFilter, 'devanagari', 'slp1');
-            let hkFilter = Sanscript.t(this.dhatuFilter, 'hk', 'slp1');
+            let slpQuery = Sanscript.t(this.dhatuFilter, 'devanagari', 'slp1');
+            let hkQuery = Sanscript.t(this.dhatuFilter, 'hk', 'slp1');
             return this.dhatus.filter(d =>
-                d.code.includes(filter)
-                || d.upadeshaQuery.includes(filter)
-                || d.artha.includes(filter)
-                || d.upadeshaQuery.includes(hkFilter)
-                || d.artha.includes(hkFilter)
+                d.code.includes(slpQuery)
+                || d.upadeshaNoSvaras.includes(slpQuery)
+                || d.artha.includes(slpQuery)
+                || d.normalDhatu.includes(slpQuery)
+                || d.upadeshaNoSvaras.includes(hkQuery)
+                || d.artha.includes(hkQuery)
+                || d.normalDhatu.includes(hkQuery)
             );
         } else {
             return this.dhatus;
@@ -331,10 +365,10 @@ const App = () => ({
 
     filteredSupPratipadikas() {
         if (this.supFilter !== null) {
-            const slpFilter = Sanscript.t(this.supFilter, 'devanagari', 'slp1');
-            const hkFilter = Sanscript.t(this.supFilter, 'hk', 'slp1');
+            const slpQuery = Sanscript.t(this.supFilter, 'devanagari', 'slp1');
+            const hkQuery = Sanscript.t(this.supFilter, 'hk', 'slp1');
             return this.supPratipadikas().filter(s =>
-                s.text.includes(slpFilter) || s.text.includes(hkFilter)
+                s.text.includes(slpQuery) || s.text.includes(hkQuery)
             );
         } else {
             return this.supPratipadikas();
@@ -445,7 +479,7 @@ const App = () => ({
             }
             let text = Sanscript.t(removeSlpSvaras(term.text), 'slp1', this.script);
             if (term.wasChanged) {
-              text = `<span class="text-red-700">${text}</span>`
+                text = `<span class="text-red-700">${text}</span>`
             }
             res += text;
         })
@@ -532,104 +566,104 @@ const App = () => ({
 
     supPratipadikas() {
         return [
-            {text: "a", linga: Linga.Pum},
-            {text: "deva", linga: Linga.Pum},
-            {text: "rAma", linga: Linga.Pum},
-            {text: "sarva", linga: Linga.Pum},
-            {text: "viSva", linga: Linga.Pum},
-            {text: "i", linga: Linga.Pum},
-            {text: "kavi", linga: Linga.Pum},
-            {text: "hari", linga: Linga.Pum},
-            {text: "kavi", linga: Linga.Pum},
-            {text: "hari", linga: Linga.Pum},
-            {text: "saKi", linga: Linga.Pum},
-            {text: "pati", linga: Linga.Pum},
-            {text: "tri", linga: Linga.Pum},
-            {text: "u", linga: Linga.Pum},
-            {text: "SamBu", linga: Linga.Pum},
-            {text: "guru", linga: Linga.Pum},
-            {text: "krozwu", linga: Linga.Pum},
-            {text: "hUhU", linga: Linga.Pum},
-            {text: "pitf", linga: Linga.Pum},
-            {text: "jAmAtf", linga: Linga.Pum},
-            {text: "BrAtf", linga: Linga.Pum},
-            {text: "go", linga: Linga.Pum},
-            {text: "rE", linga: Linga.Pum},
-            {text: "glO", linga: Linga.Pum},
-            {text: "janO", linga: Linga.Pum},
-            {text: "rAjan", linga: Linga.Pum},
-            {text: "yajvan", linga: Linga.Pum},
-            {text: "aryaman", linga: Linga.Pum},
-            {text: "brahman", linga: Linga.Pum},
-            {text: "SarNgin", linga: Linga.Pum},
-            {text: "Atman", linga: Linga.Pum},
-            {text: "guRin", linga: Linga.Pum},
-            {text: "Svan", linga: Linga.Pum},
-            {text: "paTin", linga: Linga.Pum},
-            {text: "yaSasvin", linga: Linga.Pum},
-            {text: "pUzan", linga: Linga.Pum},
-            {text: "yuvan", linga: Linga.Pum},
-            {text: "maTin", linga: Linga.Pum},
-            {text: "arvan", linga: Linga.Pum},
-            {text: "fBukzin", linga: Linga.Pum},
-            {text: "ftvij", linga: Linga.Pum},
-            {text: "tyad", linga: Linga.Pum},
-            {text: "tad", linga: Linga.Pum},
-            {text: "yad", linga: Linga.Pum},
-            {text: "etad", linga: Linga.Pum},
-            {text: "yuzmad", linga: Linga.Pum},
-            {text: "asmad", linga: Linga.Pum},
-            {text: "kim", linga: Linga.Pum},
-            {text: "idam", linga: Linga.Pum},
-            {text: "adas", linga: Linga.Pum},
+            { text: "a", linga: Linga.Pum },
+            { text: "deva", linga: Linga.Pum },
+            { text: "rAma", linga: Linga.Pum },
+            { text: "sarva", linga: Linga.Pum },
+            { text: "viSva", linga: Linga.Pum },
+            { text: "i", linga: Linga.Pum },
+            { text: "kavi", linga: Linga.Pum },
+            { text: "hari", linga: Linga.Pum },
+            { text: "kavi", linga: Linga.Pum },
+            { text: "hari", linga: Linga.Pum },
+            { text: "saKi", linga: Linga.Pum },
+            { text: "pati", linga: Linga.Pum },
+            { text: "tri", linga: Linga.Pum },
+            { text: "u", linga: Linga.Pum },
+            { text: "SamBu", linga: Linga.Pum },
+            { text: "guru", linga: Linga.Pum },
+            { text: "krozwu", linga: Linga.Pum },
+            { text: "hUhU", linga: Linga.Pum },
+            { text: "pitf", linga: Linga.Pum },
+            { text: "jAmAtf", linga: Linga.Pum },
+            { text: "BrAtf", linga: Linga.Pum },
+            { text: "go", linga: Linga.Pum },
+            { text: "rE", linga: Linga.Pum },
+            { text: "glO", linga: Linga.Pum },
+            { text: "janO", linga: Linga.Pum },
+            { text: "rAjan", linga: Linga.Pum },
+            { text: "yajvan", linga: Linga.Pum },
+            { text: "aryaman", linga: Linga.Pum },
+            { text: "brahman", linga: Linga.Pum },
+            { text: "SarNgin", linga: Linga.Pum },
+            { text: "Atman", linga: Linga.Pum },
+            { text: "guRin", linga: Linga.Pum },
+            { text: "Svan", linga: Linga.Pum },
+            { text: "paTin", linga: Linga.Pum },
+            { text: "yaSasvin", linga: Linga.Pum },
+            { text: "pUzan", linga: Linga.Pum },
+            { text: "yuvan", linga: Linga.Pum },
+            { text: "maTin", linga: Linga.Pum },
+            { text: "arvan", linga: Linga.Pum },
+            { text: "fBukzin", linga: Linga.Pum },
+            { text: "ftvij", linga: Linga.Pum },
+            { text: "tyad", linga: Linga.Pum },
+            { text: "tad", linga: Linga.Pum },
+            { text: "yad", linga: Linga.Pum },
+            { text: "etad", linga: Linga.Pum },
+            { text: "yuzmad", linga: Linga.Pum },
+            { text: "asmad", linga: Linga.Pum },
+            { text: "kim", linga: Linga.Pum },
+            { text: "idam", linga: Linga.Pum },
+            { text: "adas", linga: Linga.Pum },
 
-            {text: "u", linga: Linga.Stri},
-            {text: "tad", linga: Linga.Stri},
-            {text: "yad", linga: Linga.Stri},
-            {text: "etad", linga: Linga.Stri},
-            {text: "kim", linga: Linga.Stri},
-            {text: "idam", linga: Linga.Stri},
-            {text: "adas", linga: Linga.Stri},
-            {text: "svasf", linga: Linga.Stri},
-            {text: "mAtf", linga: Linga.Stri},
-            {text: "duhitf", linga: Linga.Stri},
-            {text: "go", linga: Linga.Stri},
-            {text: "dyo", linga: Linga.Stri},
-            {text: "rE", linga: Linga.Stri},
-            {text: "nO", linga: Linga.Stri},
+            { text: "u", linga: Linga.Stri },
+            { text: "tad", linga: Linga.Stri },
+            { text: "yad", linga: Linga.Stri },
+            { text: "etad", linga: Linga.Stri },
+            { text: "kim", linga: Linga.Stri },
+            { text: "idam", linga: Linga.Stri },
+            { text: "adas", linga: Linga.Stri },
+            { text: "svasf", linga: Linga.Stri },
+            { text: "mAtf", linga: Linga.Stri },
+            { text: "duhitf", linga: Linga.Stri },
+            { text: "go", linga: Linga.Stri },
+            { text: "dyo", linga: Linga.Stri },
+            { text: "rE", linga: Linga.Stri },
+            { text: "nO", linga: Linga.Stri },
 
-            {text: "Pala", linga: Linga.Napumsaka},
-            {text: "puzpa", linga: Linga.Napumsaka},
-            {text: "sarva", linga: Linga.Napumsaka},
-            {text: "viSva", linga: Linga.Napumsaka},
-            {text: "eka", linga: Linga.Napumsaka},
-            {text: "pUrva", linga: Linga.Napumsaka},
-            {text: "para", linga: Linga.Napumsaka},
-            {text: "avara", linga: Linga.Napumsaka},
-            {text: "dakziRa", linga: Linga.Napumsaka},
-            {text: "uttara", linga: Linga.Napumsaka},
-            {text: "apara", linga: Linga.Napumsaka},
-            {text: "aDara", linga: Linga.Napumsaka},
-            {text: "hfdaya", linga: Linga.Napumsaka},
-            {text: "asTi", linga: Linga.Napumsaka},
-            {text: "sakTi", linga: Linga.Napumsaka},
-            {text: "akzi", linga: Linga.Napumsaka},
-            {text: "maDu", linga: Linga.Napumsaka},
-            {text: "ambu", linga: Linga.Napumsaka},
-            {text: "vasu", linga: Linga.Napumsaka},
-            {text: "aSru", linga: Linga.Napumsaka},
-            {text: "laGu", linga: Linga.Napumsaka},
-            {text: "bahu", linga: Linga.Napumsaka},
-            {text: "vastu", linga: Linga.Napumsaka},
-            {text: "pIlu", linga: Linga.Napumsaka},
-            {text: "sAnu", linga: Linga.Napumsaka},
-            {text: "yakft", linga: Linga.Napumsaka},
-            {text: "tad", linga: Linga.Napumsaka},
-            {text: "yad", linga: Linga.Napumsaka},
-            {text: "etad", linga: Linga.Napumsaka},
-            {text: "kim", linga: Linga.Napumsaka},
-            {text: "idam", linga: Linga.Napumsaka},
-            {text: "adas", linga: Linga.Napumsaka},
+            { text: "Pala", linga: Linga.Napumsaka },
+            { text: "puzpa", linga: Linga.Napumsaka },
+            { text: "sarva", linga: Linga.Napumsaka },
+            { text: "viSva", linga: Linga.Napumsaka },
+            { text: "eka", linga: Linga.Napumsaka },
+            { text: "pUrva", linga: Linga.Napumsaka },
+            { text: "para", linga: Linga.Napumsaka },
+            { text: "avara", linga: Linga.Napumsaka },
+            { text: "dakziRa", linga: Linga.Napumsaka },
+            { text: "uttara", linga: Linga.Napumsaka },
+            { text: "apara", linga: Linga.Napumsaka },
+            { text: "aDara", linga: Linga.Napumsaka },
+            { text: "hfdaya", linga: Linga.Napumsaka },
+            { text: "asTi", linga: Linga.Napumsaka },
+            { text: "sakTi", linga: Linga.Napumsaka },
+            { text: "akzi", linga: Linga.Napumsaka },
+            { text: "maDu", linga: Linga.Napumsaka },
+            { text: "ambu", linga: Linga.Napumsaka },
+            { text: "vasu", linga: Linga.Napumsaka },
+            { text: "aSru", linga: Linga.Napumsaka },
+            { text: "laGu", linga: Linga.Napumsaka },
+            { text: "bahu", linga: Linga.Napumsaka },
+            { text: "vastu", linga: Linga.Napumsaka },
+            { text: "pIlu", linga: Linga.Napumsaka },
+            { text: "sAnu", linga: Linga.Napumsaka },
+            { text: "yakft", linga: Linga.Napumsaka },
+            { text: "tad", linga: Linga.Napumsaka },
+            { text: "yad", linga: Linga.Napumsaka },
+            { text: "etad", linga: Linga.Napumsaka },
+            { text: "kim", linga: Linga.Napumsaka },
+            { text: "idam", linga: Linga.Napumsaka },
+            { text: "adas", linga: Linga.Napumsaka },
         ];
     },
 
@@ -706,8 +740,8 @@ const App = () => ({
         }
 
         const dhatu = this.activeDhatu;
-        const upasarga = this.upasarga;
-        const sanadi = this.sanadi;
+        const upasarga = this.upasarga ? [this.upasarga] : [];
+        const sanadi = this.sanadi ? [this.sanadi] : [];
 
         let ret = [];
         const krts = Object.values(BaseKrt).filter(Number.isInteger);
@@ -749,10 +783,9 @@ const App = () => ({
         const lakaras = Object.values(Lakara).filter(Number.isInteger);
         const tinPadas = Object.values(DhatuPada).filter(Number.isInteger);
         const prayoga = this.prayoga !== null ? this.prayoga : Prayoga.Kartari;
-        const sanadi = this.sanadi || null;;
-        const upasarga = this.upasarga || null;;
+        const upasarga = this.upasarga ? [this.upasarga] : [];
+        const sanadi = this.sanadi ? [this.sanadi] : [];
 
-        console.log("createAllTinantas", prayoga, this.sanadi, upasarga);
         let results = [];
         for (const lakara in lakaras) {
             let laResults = {
