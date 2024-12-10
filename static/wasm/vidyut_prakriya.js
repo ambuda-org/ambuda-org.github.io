@@ -360,7 +360,7 @@ export const BaseKrt = Object.freeze({
     /**
      * -ruka (BIruka)
      */
-    kruka: 40, "40": "kruka",
+    krukan: 40, "40": "krukan",
     /**
      * -luka (BIluka)
      */
