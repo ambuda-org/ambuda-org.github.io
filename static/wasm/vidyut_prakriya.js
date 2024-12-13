@@ -194,7 +194,7 @@ function isLikeNone(x) {
  * Rust's naming convention is to start enum values with capital letters. However, we allow mixed
  * case explicitly here so that we can name pratyayas more concisely with SLP1. Doing so helps us
  * distinguish between pratyayas like `naN` and `nan`.
- * @enum {0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55 | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63 | 64 | 65 | 66 | 67 | 68 | 69 | 70 | 71 | 72 | 73 | 74 | 75 | 76 | 77 | 78 | 79 | 80 | 81 | 82 | 83 | 84 | 85 | 86 | 87 | 88 | 89 | 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97 | 98 | 99 | 100 | 101 | 102}
+ * @enum {0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55 | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63 | 64 | 65 | 66 | 67 | 68 | 69 | 70 | 71 | 72 | 73 | 74 | 75 | 76 | 77 | 78 | 79 | 80 | 81 | 82 | 83 | 84 | 85 | 86 | 87 | 88 | 89 | 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97 | 98 | 99 | 100 | 101 | 102 | 103 | 104 | 105 | 106 | 107 | 108 | 109 | 110 | 111 | 112 | 113 | 114 | 115 | 116 | 117 | 118 | 119}
  */
 export const BaseKrt = Object.freeze({
     /**
@@ -214,401 +214,469 @@ export const BaseKrt = Object.freeze({
      */
     aR: 3, "3": "aR",
     /**
+     * -aDyE
+     */
+    aDyE: 4, "4": "aDyE",
+    /**
+     * -aDyE
+     */
+    aDyEn: 5, "5": "aDyEn",
+    /**
      * -at (jarat)
      */
-    atfn: 4, "4": "atfn",
+    atfn: 6, "6": "atfn",
     /**
      * -aTu (vepaTu). Allowed only for dhatus that are `qvit`.
      */
-    aTuc: 5, "5": "aTuc",
+    aTuc: 7, "7": "aTuc",
     /**
      * -ani
      */
-    ani: 6, "6": "ani",
+    ani: 8, "8": "ani",
     /**
      * -anIya (gamanIya, BavanIya, ...)
      */
-    anIyar: 7, "7": "anIyar",
+    anIyar: 9, "9": "anIyar",
     /**
      * -a
      */
-    ap: 8, "8": "ap",
+    ap: 10, "10": "ap",
+    /**
+     * -ase
+     */
+    ase: 11, "11": "ase",
+    /**
+     * -ase
+     */
+    asen: 12, "12": "asen",
     /**
      * -Alu
      */
-    Aluc: 9, "9": "Aluc",
+    Aluc: 13, "13": "Aluc",
     /**
      * -Aru
      */
-    Aru: 10, "10": "Aru",
+    Aru: 14, "14": "Aru",
     /**
      * -ika
      */
-    ika: 11, "11": "ika",
+    ika: 15, "15": "ika",
     /**
      * -ikavaka
      */
-    ikavaka: 12, "12": "ikavaka",
+    ikavaka: 16, "16": "ikavaka",
     /**
      * -itra
      */
-    itra: 13, "13": "itra",
+    itra: 17, "17": "itra",
     /**
      * -in. The trailing `_` is to avoid colliding with Rust's `in` keyword.
      */
-    in_: 14, "14": "in_",
+    in_: 18, "18": "in_",
     /**
      * -in
      */
-    ini: 15, "15": "ini",
+    ini: 19, "19": "ini",
     /**
      * -izRu (alaMkarizRu, prajanizRu, ...)
      */
-    izRuc: 16, "16": "izRuc",
+    izRuc: 20, "20": "izRuc",
     /**
      * -u (yuyutsu, Bikzu, ...)
      */
-    u: 17, "17": "u",
+    u: 21, "21": "u",
     /**
      * -uka
      */
-    ukaY: 18, "18": "ukaY",
+    ukaY: 22, "22": "ukaY",
     /**
      * -Uka
      */
-    Uka: 19, "19": "Uka",
+    Uka: 23, "23": "Uka",
     /**
      * -a
      */
-    ka: 20, "20": "ka",
+    ka: 24, "24": "ka",
     /**
      * -a
      */
-    kaY: 21, "21": "kaY",
+    kaY: 25, "25": "kaY",
+    /**
+     * -aDyE
+     */
+    kaDyE: 26, "26": "kaDyE",
+    /**
+     * -aDyE
+     */
+    kaDyEn: 27, "27": "kaDyEn",
     /**
      * -am
      */
-    kamul: 22, "22": "kamul",
+    kamul: 28, "28": "kamul",
     /**
      * -as (visfpaH, ...)
      */
-    kasun: 23, "23": "kasun",
+    kasun: 29, "29": "kasun",
     /**
      * -a
      */
-    kap: 24, "24": "kap",
+    kap: 30, "30": "kap",
+    /**
+     * -ase
+     */
+    kase: 31, "31": "kase",
+    /**
+     * -ase
+     */
+    kasen: 32, "32": "kasen",
     /**
      * -Ana (cakrARa, ...)
      */
-    kAnac: 25, "25": "kAnac",
+    kAnac: 33, "33": "kAnac",
     /**
      * -i (udaDi, ...)
      */
-    ki: 26, "26": "ki",
+    ki: 34, "34": "ki",
     /**
      * -i
      */
-    kin: 27, "27": "kin",
+    kin: 35, "35": "kin",
     /**
      * -ura (BaNgura, ...)
      */
-    kurac: 28, "28": "kurac",
+    kurac: 36, "36": "kurac",
     /**
      * -elima (pacelima, ...)
      */
-    kelimar: 29, "29": "kelimar",
+    kelimar: 37, "37": "kelimar",
     /**
      * -ta (gata, bhUta, ...)
      */
-    kta: 30, "30": "kta",
+    kta: 38, "38": "kta",
     /**
      * -tavat (gatavat, bhUtavat, ...)
      */
-    ktavatu: 31, "31": "ktavatu",
+    ktavatu: 39, "39": "ktavatu",
     /**
      * -ti
      */
-    ktic: 32, "32": "ktic",
+    ktic: 40, "40": "ktic",
     /**
      * -ti
      */
-    ktin: 33, "33": "ktin",
+    ktin: 41, "41": "ktin",
     /**
      * -tri
      */
-    ktri: 34, "34": "ktri",
+    ktri: 42, "42": "ktri",
     /**
      * -tvA (gatvA, bhUtva, ...)
      */
-    ktvA: 35, "35": "ktvA",
+    ktvA: 43, "43": "ktvA",
     /**
      * -nu
      */
-    knu: 36, "36": "knu",
+    knu: 44, "44": "knu",
     /**
      * -mara
      */
-    kmarac: 37, "37": "kmarac",
+    kmarac: 45, "45": "kmarac",
     /**
      * -ya
      */
-    kyap: 38, "38": "kyap",
+    kyap: 46, "46": "kyap",
     /**
      * -ru (BIru)
      */
-    kru: 39, "39": "kru",
+    kru: 47, "47": "kru",
     /**
      * -ruka (BIruka)
      */
-    krukan: 40, "40": "krukan",
+    krukan: 48, "48": "krukan",
     /**
      * -luka (BIluka)
      */
-    klukan: 41, "41": "klukan",
+    klukan: 49, "49": "klukan",
     /**
      * -van
      */
-    kvanip: 42, "42": "kvanip",
+    kvanip: 50, "50": "kvanip",
     /**
      * -vara
      */
-    kvarap: 43, "43": "kvarap",
+    kvarap: 51, "51": "kvarap",
     /**
      * -vas
      */
-    kvasu: 44, "44": "kvasu",
+    kvasu: 52, "52": "kvasu",
     /**
      * -snu (glAsnu, jizRu, ...)
      */
-    ksnu: 45, "45": "ksnu",
+    ksnu: 53, "53": "ksnu",
     /**
      * (empty suffix)
      */
-    kvin: 46, "46": "kvin",
+    kvin: 54, "54": "kvin",
     /**
      * (empty suffix)
      */
-    kvip: 47, "47": "kvip",
+    kvip: 55, "55": "kvip",
     /**
      * -a (priyaMvada, vaSaMvada)
      */
-    Kac: 48, "48": "Kac",
+    Kac: 56, "56": "Kac",
     /**
      * -a
      */
-    KaS: 49, "49": "KaS",
+    KaS: 57, "57": "KaS",
     /**
      * -a (Izatkara, duzkara, sukara, ...)
      */
-    Kal: 50, "50": "Kal",
+    Kal: 58, "58": "Kal",
     /**
      * -izRu
      */
-    KizRuc: 51, "51": "KizRuc",
+    KizRuc: 59, "59": "KizRuc",
     /**
      * -uka
      */
-    KukaY: 52, "52": "KukaY",
+    KukaY: 60, "60": "KukaY",
     /**
      * -ana
      */
-    Kyun: 53, "53": "Kyun",
+    Kyun: 61, "61": "Kyun",
     /**
      * -a
      */
-    Ga: 54, "54": "Ga",
+    Ga: 62, "62": "Ga",
     /**
      * -a
      */
-    GaY: 55, "55": "GaY",
+    GaY: 63, "63": "GaY",
     /**
      * -in
      */
-    GinuR: 56, "56": "GinuR",
+    GinuR: 64, "64": "GinuR",
     /**
      * -ura
      */
-    Gurac: 57, "57": "Gurac",
+    Gurac: 65, "65": "Gurac",
     /**
      * -van
      */
-    Nvanip: 58, "58": "Nvanip",
+    Nvanip: 66, "66": "Nvanip",
     /**
      * -Ana
      */
-    cAnaS: 59, "59": "cAnaS",
+    cAnaS: 67, "67": "cAnaS",
+    /**
+     * -ana
+     */
+    Yyuw: 68, "68": "Yyuw",
     /**
      * -a
      */
-    wa: 60, "60": "wa",
+    wa: 69, "69": "wa",
     /**
      * -a
      */
-    wak: 61, "61": "wak",
+    wak: 70, "70": "wak",
     /**
      * -a
      */
-    qa: 62, "62": "qa",
+    qa: 71, "71": "qa",
     /**
      * -ara,
      */
-    qara: 63, "63": "qara",
+    qara: 72, "72": "qara",
     /**
      * -u
      */
-    qu: 64, "64": "qu",
+    qu: 73, "73": "qu",
     /**
      * -a
      */
-    Ra: 65, "65": "Ra",
+    Ra: 74, "74": "Ra",
     /**
      * -am
      */
-    Ramul: 66, "66": "Ramul",
+    Ramul: 75, "75": "Ramul",
     /**
      * -in
      */
-    Rini: 67, "67": "Rini",
+    Rini: 76, "76": "Rini",
     /**
      * -ya
      */
-    Ryat: 68, "68": "Ryat",
+    Ryat: 77, "77": "Ryat",
     /**
      * -ana
      */
-    Ryuw: 69, "69": "Ryuw",
+    Ryuw: 78, "78": "Ryuw",
     /**
      * (empty)
      */
-    Rvi: 70, "70": "Rvi",
+    Rvi: 79, "79": "Rvi",
     /**
      * -aka
      */
-    Rvuc: 71, "71": "Rvuc",
+    Rvuc: 80, "80": "Rvuc",
     /**
      * -aka
      */
-    Rvul: 72, "72": "Rvul",
+    Rvul: 81, "81": "Rvul",
+    /**
+     * -tave
+     */
+    taveN: 82, "82": "taveN",
+    /**
+     * -tave
+     */
+    taven: 83, "83": "taven",
+    /**
+     * -tavE
+     */
+    tavE: 84, "84": "tavE",
     /**
      * -tavya (gantavya, bhavitavya, ...)
      */
-    tavya: 73, "73": "tavya",
+    tavya: 85, "85": "tavya",
     /**
      * -tavya
      */
-    tavyat: 74, "74": "tavyat",
+    tavyat: 86, "86": "tavyat",
     /**
      * -tum (gantum, bhavitum, ...)
      */
-    tumun: 75, "75": "tumun",
+    tumun: 87, "87": "tumun",
     /**
      * -tf (gantA, bhavitA, ...)
      */
-    tfc: 76, "76": "tfc",
+    tfc: 88, "88": "tfc",
     /**
      * -tf
      */
-    tfn: 77, "77": "tfn",
+    tfn: 89, "89": "tfn",
     /**
-     * -os
+     * -tos (udetoH)
      */
-    tosun: 78, "78": "tosun",
+    tosun: 90, "90": "tosun",
     /**
      * -Taka (gATaka)
      */
-    Takan: 79, "79": "Takan",
+    Takan: 91, "91": "Takan",
     /**
      * -na
      */
-    naN: 80, "80": "naN",
+    naN: 92, "92": "naN",
     /**
      * -naj
      */
-    najiN: 81, "81": "najiN",
+    najiN: 93, "93": "najiN",
     /**
      * -na (svapna)
      */
-    nan: 82, "82": "nan",
+    nan: 94, "94": "nan",
+    /**
+     * -ni,
+     */
+    ni: 95, "95": "ni",
     /**
      * -man
      */
-    manin: 83, "83": "manin",
-    /**
-     * -a
-     */
-    Sa: 84, "84": "Sa",
-    /**
-     * -at (gacCat, Bavat, ...)
-     */
-    Satf: 85, "85": "Satf",
-    /**
-     * -Ana (laBamAna, sevamAna, ...)
-     */
-    SAnac: 86, "86": "SAnac",
-    /**
-     * -Ana
-     */
-    SAnan: 87, "87": "SAnan",
+    manin: 96, "96": "manin",
     /**
      * -ya
      */
-    yat: 88, "88": "yat",
+    yat: 97, "97": "yat",
     /**
      * -ana
      */
-    yuc: 89, "89": "yuc",
+    yuc: 98, "98": "yuc",
     /**
      * -na (namra, kampra, ...)
      */
-    ra: 90, "90": "ra",
+    ra: 99, "99": "ra",
     /**
      * -ru
      */
-    ru: 91, "91": "ru",
+    ru: 100, "100": "ru",
     /**
      * -ana
      */
-    lyu: 92, "92": "lyu",
+    lyu: 101, "101": "lyu",
     /**
      * -ana
      */
-    lyuw: 93, "93": "lyuw",
+    lyuw: 102, "102": "lyuw",
     /**
      * -van
      */
-    vanip: 94, "94": "vanip",
+    vanip: 103, "103": "vanip",
     /**
      * -vara
      */
-    varac: 95, "95": "varac",
+    varac: 104, "104": "varac",
     /**
      * (empty suffix)
      */
-    vic: 96, "96": "vic",
+    vic: 105, "105": "vic",
     /**
      * (none)
      */
-    viw: 97, "97": "viw",
+    viw: 106, "106": "viw",
     /**
      * -aka
      */
-    vuY: 98, "98": "vuY",
+    vuY: 107, "107": "vuY",
     /**
      * -aka
      */
-    vun: 99, "99": "vun",
+    vun: 108, "108": "vun",
     /**
      * -Aka
      */
-    zAkan: 100, "100": "zAkan",
+    zAkan: 109, "109": "zAkan",
     /**
      * -tra
      */
-    zwran: 101, "101": "zwran",
+    zwran: 110, "110": "zwran",
     /**
      * -aka
      */
-    zvun: 102, "102": "zvun",
+    zvun: 111, "111": "zvun",
+    /**
+     * -a
+     */
+    Sa: 112, "112": "Sa",
+    /**
+     * -at (gacCat, Bavat, ...)
+     */
+    Satf: 113, "113": "Satf",
+    /**
+     * -aDyE
+     */
+    SaDyE: 114, "114": "SaDyE",
+    /**
+     * -aDyE
+     */
+    SaDyEn: 115, "115": "SaDyEn",
+    /**
+     * -Ana (laBamAna, sevamAna, ...)
+     */
+    SAnac: 116, "116": "SAnac",
+    /**
+     * -Ana
+     */
+    SAnan: 117, "117": "SAnan",
+    /**
+     * -se
+     */
+    se: 118, "118": "se",
+    /**
+     * -se
+     */
+    sen: 119, "119": "sen",
 });
 /**
  * The pada of some *tiṅanta* or *kṛdanta*.
@@ -905,7 +973,7 @@ export const Taddhita = Object.freeze({
      */
     astAti: 11, "11": "astAti",
     /**
-     * -Akin,
+     * -Akin
      */
     Akinic: 12, "12": "Akinic",
     /**
@@ -945,11 +1013,11 @@ export const Taddhita = Object.freeze({
      */
     izWan: 21, "21": "izWan",
     /**
-     * -Ika,
+     * -Ika
      */
     Ikak: 22, "22": "Ikak",
     /**
-     * -Ika,
+     * -Ika
      */
     Ikan: 23, "23": "Ikan",
     /**
@@ -997,7 +1065,7 @@ export const Taddhita = Object.freeze({
      */
     kuwArac: 34, "34": "kuwArac",
     /**
-     * -kura,
+     * -kura
      */
     kuRap: 35, "35": "kuRap",
     /**
@@ -1049,11 +1117,11 @@ export const Taddhita = Object.freeze({
      */
     Ca: 47, "47": "Ca",
     /**
-     * -Iya,
+     * -Iya
      */
     CaR: 48, "48": "CaR",
     /**
-     * -Iya,
+     * -Iya
      */
     Cas: 49, "49": "Cas",
     /**
@@ -1065,7 +1133,7 @@ export const Taddhita = Object.freeze({
      */
     jAhac: 51, "51": "jAhac",
     /**
-     * -a,
+     * -a
      */
     Ya: 52, "52": "Ya",
     /**
@@ -1077,7 +1145,7 @@ export const Taddhita = Object.freeze({
      */
     Yya: 54, "54": "Yya",
     /**
-     * -ya,
+     * -ya
      */
     YyaN: 55, "55": "YyaN",
     /**
@@ -1501,7 +1569,7 @@ export const Taddhita = Object.freeze({
      */
     zkan: 160, "160": "zkan",
     /**
-     * -tra
+     * -tara
      */
     zwarac: 161, "161": "zwarac",
     /**
