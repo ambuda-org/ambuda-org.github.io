@@ -1,19 +1,8 @@
 let wasm;
 
-const heap = new Array(128).fill(undefined);
-
-heap.push(undefined, null, true, false);
-
-function getObject(idx) { return heap[idx]; }
-
-let heap_next = heap.length;
-
-function addHeapObject(obj) {
-    if (heap_next === heap.length) heap.push(heap.length + 1);
-    const idx = heap_next;
-    heap_next = heap[idx];
-
-    heap[idx] = obj;
+function addToExternrefTable0(obj) {
+    const idx = wasm.__externref_table_alloc();
+    wasm.__wbindgen_export_2.set(idx, obj);
     return idx;
 }
 
@@ -21,7 +10,8 @@ function handleError(f, args) {
     try {
         return f.apply(this, args);
     } catch (e) {
-        wasm.__wbindgen_exn_store(addHeapObject(e));
+        const idx = addToExternrefTable0(e);
+        wasm.__wbindgen_exn_store(idx);
     }
 }
 
@@ -41,18 +31,6 @@ function getUint8ArrayMemory0() {
 function getStringFromWasm0(ptr, len) {
     ptr = ptr >>> 0;
     return cachedTextDecoder.decode(getUint8ArrayMemory0().subarray(ptr, ptr + len));
-}
-
-function dropObject(idx) {
-    if (idx < 132) return;
-    heap[idx] = heap_next;
-    heap_next = idx;
-}
-
-function takeObject(idx) {
-    const ret = getObject(idx);
-    dropObject(idx);
-    return ret;
 }
 
 let WASM_VECTOR_LEN = 0;
@@ -194,7 +172,7 @@ function isLikeNone(x) {
  * Rust's naming convention is to start enum values with capital letters. However, we allow mixed
  * case explicitly here so that we can name pratyayas more concisely with SLP1. Doing so helps us
  * distinguish between pratyayas like `naN` and `nan`.
- * @enum {0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55 | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63 | 64 | 65 | 66 | 67 | 68 | 69 | 70 | 71 | 72 | 73 | 74 | 75 | 76 | 77 | 78 | 79 | 80 | 81 | 82 | 83 | 84 | 85 | 86 | 87 | 88 | 89 | 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97 | 98 | 99 | 100 | 101 | 102 | 103 | 104 | 105 | 106 | 107 | 108 | 109 | 110 | 111 | 112 | 113 | 114 | 115 | 116 | 117 | 118 | 119}
+ * @enum {0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55 | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63 | 64 | 65 | 66 | 67 | 68 | 69 | 70 | 71 | 72 | 73 | 74 | 75 | 76 | 77 | 78 | 79 | 80 | 81 | 82 | 83 | 84 | 85 | 86 | 87 | 88 | 89 | 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97 | 98 | 99 | 100 | 101 | 102 | 103 | 104 | 105 | 106 | 107 | 108 | 109 | 110 | 111 | 112 | 113 | 114 | 115 | 116 | 117 | 118 | 119 | 120 | 121}
  */
 export const BaseKrt = Object.freeze({
     /**
@@ -266,417 +244,425 @@ export const BaseKrt = Object.freeze({
      */
     ikavaka: 16, "16": "ikavaka",
     /**
+     * -i
+     */
+    iY: 17, "17": "iY",
+    /**
      * -itra
      */
-    itra: 17, "17": "itra",
+    itra: 18, "18": "itra",
     /**
      * -in. The trailing `_` is to avoid colliding with Rust's `in` keyword.
      */
-    in_: 18, "18": "in_",
+    in_: 19, "19": "in_",
     /**
      * -in
      */
-    ini: 19, "19": "ini",
+    ini: 20, "20": "ini",
     /**
      * -izRu (alaMkarizRu, prajanizRu, ...)
      */
-    izRuc: 20, "20": "izRuc",
+    izRuc: 21, "21": "izRuc",
     /**
      * -u (yuyutsu, Bikzu, ...)
      */
-    u: 21, "21": "u",
+    u: 22, "22": "u",
     /**
      * -uka
      */
-    ukaY: 22, "22": "ukaY",
+    ukaY: 23, "23": "ukaY",
     /**
      * -Uka
      */
-    Uka: 23, "23": "Uka",
+    Uka: 24, "24": "Uka",
     /**
      * -a
      */
-    ka: 24, "24": "ka",
+    ka: 25, "25": "ka",
     /**
      * -a
      */
-    kaY: 25, "25": "kaY",
+    kaY: 26, "26": "kaY",
     /**
      * -aDyE
      */
-    kaDyE: 26, "26": "kaDyE",
+    kaDyE: 27, "27": "kaDyE",
     /**
      * -aDyE
      */
-    kaDyEn: 27, "27": "kaDyEn",
+    kaDyEn: 28, "28": "kaDyEn",
     /**
      * -am
      */
-    kamul: 28, "28": "kamul",
+    kamul: 29, "29": "kamul",
     /**
      * -as (visfpaH, ...)
      */
-    kasun: 29, "29": "kasun",
+    kasun: 30, "30": "kasun",
     /**
      * -a
      */
-    kap: 30, "30": "kap",
+    kap: 31, "31": "kap",
     /**
      * -ase
      */
-    kase: 31, "31": "kase",
+    kase: 32, "32": "kase",
     /**
      * -ase
      */
-    kasen: 32, "32": "kasen",
+    kasen: 33, "33": "kasen",
     /**
      * -Ana (cakrARa, ...)
      */
-    kAnac: 33, "33": "kAnac",
+    kAnac: 34, "34": "kAnac",
     /**
      * -i (udaDi, ...)
      */
-    ki: 34, "34": "ki",
+    ki: 35, "35": "ki",
     /**
      * -i
      */
-    kin: 35, "35": "kin",
+    kin: 36, "36": "kin",
     /**
      * -ura (BaNgura, ...)
      */
-    kurac: 36, "36": "kurac",
+    kurac: 37, "37": "kurac",
     /**
      * -elima (pacelima, ...)
      */
-    kelimar: 37, "37": "kelimar",
+    kelimar: 38, "38": "kelimar",
     /**
      * -ta (gata, bhUta, ...)
      */
-    kta: 38, "38": "kta",
+    kta: 39, "39": "kta",
     /**
      * -tavat (gatavat, bhUtavat, ...)
      */
-    ktavatu: 39, "39": "ktavatu",
+    ktavatu: 40, "40": "ktavatu",
     /**
      * -ti
      */
-    ktic: 40, "40": "ktic",
+    ktic: 41, "41": "ktic",
     /**
      * -ti
      */
-    ktin: 41, "41": "ktin",
+    ktin: 42, "42": "ktin",
     /**
      * -tri
      */
-    ktri: 42, "42": "ktri",
+    ktri: 43, "43": "ktri",
     /**
      * -tvA (gatvA, bhUtva, ...)
      */
-    ktvA: 43, "43": "ktvA",
+    ktvA: 44, "44": "ktvA",
     /**
      * -nu
      */
-    knu: 44, "44": "knu",
+    knu: 45, "45": "knu",
     /**
      * -mara
      */
-    kmarac: 45, "45": "kmarac",
+    kmarac: 46, "46": "kmarac",
     /**
      * -ya
      */
-    kyap: 46, "46": "kyap",
+    kyap: 47, "47": "kyap",
     /**
      * -ru (BIru)
      */
-    kru: 47, "47": "kru",
+    kru: 48, "48": "kru",
     /**
      * -ruka (BIruka)
      */
-    krukan: 48, "48": "krukan",
+    krukan: 49, "49": "krukan",
     /**
      * -luka (BIluka)
      */
-    klukan: 49, "49": "klukan",
+    klukan: 50, "50": "klukan",
     /**
      * -van
      */
-    kvanip: 50, "50": "kvanip",
+    kvanip: 51, "51": "kvanip",
     /**
      * -vara
      */
-    kvarap: 51, "51": "kvarap",
+    kvarap: 52, "52": "kvarap",
     /**
      * -vas
      */
-    kvasu: 52, "52": "kvasu",
+    kvasu: 53, "53": "kvasu",
     /**
      * -snu (glAsnu, jizRu, ...)
      */
-    ksnu: 53, "53": "ksnu",
+    ksnu: 54, "54": "ksnu",
     /**
      * (empty suffix)
      */
-    kvin: 54, "54": "kvin",
+    kvin: 55, "55": "kvin",
     /**
      * (empty suffix)
      */
-    kvip: 55, "55": "kvip",
+    kvip: 56, "56": "kvip",
     /**
      * -a (priyaMvada, vaSaMvada)
      */
-    Kac: 56, "56": "Kac",
+    Kac: 57, "57": "Kac",
     /**
      * -a
      */
-    KaS: 57, "57": "KaS",
+    KaS: 58, "58": "KaS",
     /**
      * -a (Izatkara, duzkara, sukara, ...)
      */
-    Kal: 58, "58": "Kal",
+    Kal: 59, "59": "Kal",
     /**
      * -izRu
      */
-    KizRuc: 59, "59": "KizRuc",
+    KizRuc: 60, "60": "KizRuc",
     /**
      * -uka
      */
-    KukaY: 60, "60": "KukaY",
+    KukaY: 61, "61": "KukaY",
     /**
      * -ana
      */
-    Kyun: 61, "61": "Kyun",
+    Kyun: 62, "62": "Kyun",
     /**
      * -a
      */
-    Ga: 62, "62": "Ga",
+    Ga: 63, "63": "Ga",
     /**
      * -a
      */
-    GaY: 63, "63": "GaY",
+    GaY: 64, "64": "GaY",
     /**
      * -in
      */
-    GinuR: 64, "64": "GinuR",
+    GinuR: 65, "65": "GinuR",
     /**
      * -ura
      */
-    Gurac: 65, "65": "Gurac",
+    Gurac: 66, "66": "Gurac",
     /**
      * -van
      */
-    Nvanip: 66, "66": "Nvanip",
+    Nvanip: 67, "67": "Nvanip",
     /**
      * -Ana
      */
-    cAnaS: 67, "67": "cAnaS",
+    cAnaS: 68, "68": "cAnaS",
     /**
      * -ana
      */
-    Yyuw: 68, "68": "Yyuw",
+    Yyuw: 69, "69": "Yyuw",
     /**
      * -a
      */
-    wa: 69, "69": "wa",
+    wa: 70, "70": "wa",
     /**
      * -a
      */
-    wak: 70, "70": "wak",
+    wak: 71, "71": "wak",
     /**
      * -a
      */
-    qa: 71, "71": "qa",
+    qa: 72, "72": "qa",
     /**
      * -ara,
      */
-    qara: 72, "72": "qara",
+    qara: 73, "73": "qara",
     /**
      * -u
      */
-    qu: 73, "73": "qu",
+    qu: 74, "74": "qu",
     /**
      * -a
      */
-    Ra: 74, "74": "Ra",
+    Ra: 75, "75": "Ra",
     /**
      * -am
      */
-    Ramul: 75, "75": "Ramul",
+    Ramul: 76, "76": "Ramul",
     /**
      * -in
      */
-    Rini: 76, "76": "Rini",
+    Rini: 77, "77": "Rini",
     /**
      * -ya
      */
-    Ryat: 77, "77": "Ryat",
+    Ryat: 78, "78": "Ryat",
     /**
      * -ana
      */
-    Ryuw: 78, "78": "Ryuw",
+    Ryuw: 79, "79": "Ryuw",
     /**
      * (empty)
      */
-    Rvi: 79, "79": "Rvi",
+    Rvi: 80, "80": "Rvi",
     /**
      * -aka
      */
-    Rvuc: 80, "80": "Rvuc",
+    Rvuc: 81, "81": "Rvuc",
     /**
      * -aka
      */
-    Rvul: 81, "81": "Rvul",
+    Rvul: 82, "82": "Rvul",
     /**
      * -tave
      */
-    taveN: 82, "82": "taveN",
+    taveN: 83, "83": "taveN",
     /**
      * -tave
      */
-    taven: 83, "83": "taven",
+    taven: 84, "84": "taven",
     /**
      * -tavE
      */
-    tavE: 84, "84": "tavE",
+    tavE: 85, "85": "tavE",
     /**
      * -tavya (gantavya, bhavitavya, ...)
      */
-    tavya: 85, "85": "tavya",
+    tavya: 86, "86": "tavya",
     /**
      * -tavya
      */
-    tavyat: 86, "86": "tavyat",
+    tavyat: 87, "87": "tavyat",
     /**
      * -tum (gantum, bhavitum, ...)
      */
-    tumun: 87, "87": "tumun",
+    tumun: 88, "88": "tumun",
     /**
      * -tf (gantA, bhavitA, ...)
      */
-    tfc: 88, "88": "tfc",
+    tfc: 89, "89": "tfc",
     /**
      * -tf
      */
-    tfn: 89, "89": "tfn",
+    tfn: 90, "90": "tfn",
     /**
      * -tos (udetoH)
      */
-    tosun: 90, "90": "tosun",
+    tosun: 91, "91": "tosun",
     /**
      * -Taka (gATaka)
      */
-    Takan: 91, "91": "Takan",
+    Takan: 92, "92": "Takan",
     /**
      * -na
      */
-    naN: 92, "92": "naN",
+    naN: 93, "93": "naN",
     /**
      * -naj
      */
-    najiN: 93, "93": "najiN",
+    najiN: 94, "94": "najiN",
     /**
      * -na (svapna)
      */
-    nan: 94, "94": "nan",
+    nan: 95, "95": "nan",
     /**
      * -ni,
      */
-    ni: 95, "95": "ni",
+    ni: 96, "96": "ni",
     /**
      * -man
      */
-    manin: 96, "96": "manin",
+    manin: 97, "97": "manin",
     /**
      * -ya
      */
-    yat: 97, "97": "yat",
+    ya: 98, "98": "ya",
+    /**
+     * -ya
+     */
+    yat: 99, "99": "yat",
     /**
      * -ana
      */
-    yuc: 98, "98": "yuc",
+    yuc: 100, "100": "yuc",
     /**
      * -na (namra, kampra, ...)
      */
-    ra: 99, "99": "ra",
+    ra: 101, "101": "ra",
     /**
      * -ru
      */
-    ru: 100, "100": "ru",
+    ru: 102, "102": "ru",
     /**
      * -ana
      */
-    lyu: 101, "101": "lyu",
+    lyu: 103, "103": "lyu",
     /**
      * -ana
      */
-    lyuw: 102, "102": "lyuw",
+    lyuw: 104, "104": "lyuw",
     /**
      * -van
      */
-    vanip: 103, "103": "vanip",
+    vanip: 105, "105": "vanip",
     /**
      * -vara
      */
-    varac: 104, "104": "varac",
+    varac: 106, "106": "varac",
     /**
      * (empty suffix)
      */
-    vic: 105, "105": "vic",
+    vic: 107, "107": "vic",
     /**
      * (none)
      */
-    viw: 106, "106": "viw",
+    viw: 108, "108": "viw",
     /**
      * -aka
      */
-    vuY: 107, "107": "vuY",
+    vuY: 109, "109": "vuY",
     /**
      * -aka
      */
-    vun: 108, "108": "vun",
+    vun: 110, "110": "vun",
     /**
      * -Aka
      */
-    zAkan: 109, "109": "zAkan",
+    zAkan: 111, "111": "zAkan",
     /**
      * -tra
      */
-    zwran: 110, "110": "zwran",
+    zwran: 112, "112": "zwran",
     /**
      * -aka
      */
-    zvun: 111, "111": "zvun",
+    zvun: 113, "113": "zvun",
     /**
      * -a
      */
-    Sa: 112, "112": "Sa",
+    Sa: 114, "114": "Sa",
     /**
      * -at (gacCat, Bavat, ...)
      */
-    Satf: 113, "113": "Satf",
+    Satf: 115, "115": "Satf",
     /**
      * -aDyE
      */
-    SaDyE: 114, "114": "SaDyE",
+    SaDyE: 116, "116": "SaDyE",
     /**
      * -aDyE
      */
-    SaDyEn: 115, "115": "SaDyEn",
+    SaDyEn: 117, "117": "SaDyEn",
     /**
      * -Ana (laBamAna, sevamAna, ...)
      */
-    SAnac: 116, "116": "SAnac",
+    SAnac: 118, "118": "SAnac",
     /**
      * -Ana
      */
-    SAnan: 117, "117": "SAnan",
+    SAnan: 119, "119": "SAnan",
     /**
      * -se
      */
-    se: 118, "118": "se",
+    se: 120, "120": "se",
     /**
      * -se
      */
-    sen: 119, "119": "sen",
+    sen: 121, "121": "sen",
 });
 /**
  * The pada of some *tiṅanta* or *kṛdanta*.
@@ -686,11 +672,11 @@ export const DhatuPada = Object.freeze({
     /**
      * *Parasmaipada*.
      */
-    Parasmai: 0, "0": "Parasmai",
+    Parasmaipada: 0, "0": "Parasmaipada",
     /**
      * *Ātmanepada*.
      */
-    Atmane: 1, "1": "Atmane",
+    Atmanepada: 1, "1": "Atmanepada",
 });
 /**
  * Defines a *gaṇa*.
@@ -1139,7 +1125,7 @@ export const Taddhita = Object.freeze({
     /**
      * -ika
      */
-    YiW: 53, "53": "YiW",
+    YiWa: 53, "53": "YiWa",
     /**
      * -ya
      */
@@ -3004,8 +2990,8 @@ export class Vidyut {
      * @returns {any}
      */
     deriveTinantas(val) {
-        const ret = wasm.vidyut_deriveTinantas(this.__wbg_ptr, addHeapObject(val));
-        return takeObject(ret);
+        const ret = wasm.vidyut_deriveTinantas(this.__wbg_ptr, val);
+        return ret;
     }
     /**
      * Wrapper for `Vyakarana::derive_subantas`.
@@ -3013,8 +2999,8 @@ export class Vidyut {
      * @returns {any}
      */
     deriveSubantas(val) {
-        const ret = wasm.vidyut_deriveSubantas(this.__wbg_ptr, addHeapObject(val));
-        return takeObject(ret);
+        const ret = wasm.vidyut_deriveSubantas(this.__wbg_ptr, val);
+        return ret;
     }
     /**
      * Wrapper for `Vyakarana::derive_krdantas`.
@@ -3022,8 +3008,8 @@ export class Vidyut {
      * @returns {any}
      */
     deriveKrdantas(val) {
-        const ret = wasm.vidyut_deriveKrdantas(this.__wbg_ptr, addHeapObject(val));
-        return takeObject(ret);
+        const ret = wasm.vidyut_deriveKrdantas(this.__wbg_ptr, val);
+        return ret;
     }
     /**
      * Wrapper for `Vyakarana::derive_dhatus`.
@@ -3034,7 +3020,7 @@ export class Vidyut {
         const ptr0 = passStringToWasm0(code, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len0 = WASM_VECTOR_LEN;
         const ret = wasm.vidyut_deriveDhatus(this.__wbg_ptr, ptr0, len0);
-        return takeObject(ret);
+        return ret;
     }
 }
 
@@ -3073,22 +3059,22 @@ function __wbg_get_imports() {
     const imports = {};
     imports.wbg = {};
     imports.wbg.__wbg_buffer_61b7ce01341d7f88 = function(arg0) {
-        const ret = getObject(arg0).buffer;
-        return addHeapObject(ret);
+        const ret = arg0.buffer;
+        return ret;
     };
     imports.wbg.__wbg_call_b0d8e36992d9900d = function() { return handleError(function (arg0, arg1) {
-        const ret = getObject(arg0).call(getObject(arg1));
-        return addHeapObject(ret);
+        const ret = arg0.call(arg1);
+        return ret;
     }, arguments) };
     imports.wbg.__wbg_done_f22c1561fa919baa = function(arg0) {
-        const ret = getObject(arg0).done;
+        const ret = arg0.done;
         return ret;
     };
     imports.wbg.__wbg_entries_4f2bb9b0d701c0f6 = function(arg0) {
-        const ret = Object.entries(getObject(arg0));
-        return addHeapObject(ret);
+        const ret = Object.entries(arg0);
+        return ret;
     };
-    imports.wbg.__wbg_error_0a43379e391ce273 = function(arg0, arg1) {
+    imports.wbg.__wbg_error_31ad3319a77f040e = function(arg0, arg1) {
         console.error(getStringFromWasm0(arg0, arg1));
     };
     imports.wbg.__wbg_error_7534b8e9a36f1ab4 = function(arg0, arg1) {
@@ -3103,21 +3089,21 @@ function __wbg_get_imports() {
         }
     };
     imports.wbg.__wbg_get_9aa3dff3f0266054 = function(arg0, arg1) {
-        const ret = getObject(arg0)[arg1 >>> 0];
-        return addHeapObject(ret);
+        const ret = arg0[arg1 >>> 0];
+        return ret;
     };
     imports.wbg.__wbg_get_bbccf8970793c087 = function() { return handleError(function (arg0, arg1) {
-        const ret = Reflect.get(getObject(arg0), getObject(arg1));
-        return addHeapObject(ret);
+        const ret = Reflect.get(arg0, arg1);
+        return ret;
     }, arguments) };
     imports.wbg.__wbg_getwithrefkey_bb8f74a92cb2e784 = function(arg0, arg1) {
-        const ret = getObject(arg0)[getObject(arg1)];
-        return addHeapObject(ret);
+        const ret = arg0[arg1];
+        return ret;
     };
     imports.wbg.__wbg_instanceof_ArrayBuffer_670ddde44cdb2602 = function(arg0) {
         let result;
         try {
-            result = getObject(arg0) instanceof ArrayBuffer;
+            result = arg0 instanceof ArrayBuffer;
         } catch (_) {
             result = false;
         }
@@ -3127,7 +3113,7 @@ function __wbg_get_imports() {
     imports.wbg.__wbg_instanceof_Uint8Array_28af5bc19d6acad8 = function(arg0) {
         let result;
         try {
-            result = getObject(arg0) instanceof Uint8Array;
+            result = arg0 instanceof Uint8Array;
         } catch (_) {
             result = false;
         }
@@ -3135,72 +3121,72 @@ function __wbg_get_imports() {
         return ret;
     };
     imports.wbg.__wbg_isArray_1ba11a930108ec51 = function(arg0) {
-        const ret = Array.isArray(getObject(arg0));
+        const ret = Array.isArray(arg0);
         return ret;
     };
     imports.wbg.__wbg_iterator_23604bb983791576 = function() {
         const ret = Symbol.iterator;
-        return addHeapObject(ret);
+        return ret;
     };
     imports.wbg.__wbg_length_65d1cd11729ced11 = function(arg0) {
-        const ret = getObject(arg0).length;
+        const ret = arg0.length;
         return ret;
     };
     imports.wbg.__wbg_length_d65cf0786bfc5739 = function(arg0) {
-        const ret = getObject(arg0).length;
+        const ret = arg0.length;
         return ret;
     };
     imports.wbg.__wbg_new_254fa9eac11932ae = function() {
         const ret = new Array();
-        return addHeapObject(ret);
+        return ret;
     };
     imports.wbg.__wbg_new_3ff5b33b1ce712df = function(arg0) {
-        const ret = new Uint8Array(getObject(arg0));
-        return addHeapObject(ret);
+        const ret = new Uint8Array(arg0);
+        return ret;
     };
     imports.wbg.__wbg_new_688846f374351c92 = function() {
         const ret = new Object();
-        return addHeapObject(ret);
+        return ret;
     };
     imports.wbg.__wbg_new_8a6f238a6ece86ea = function() {
         const ret = new Error();
-        return addHeapObject(ret);
+        return ret;
     };
     imports.wbg.__wbg_next_01dd9234a5bf6d05 = function() { return handleError(function (arg0) {
-        const ret = getObject(arg0).next();
-        return addHeapObject(ret);
+        const ret = arg0.next();
+        return ret;
     }, arguments) };
     imports.wbg.__wbg_next_137428deb98342b0 = function(arg0) {
-        const ret = getObject(arg0).next;
-        return addHeapObject(ret);
+        const ret = arg0.next;
+        return ret;
     };
     imports.wbg.__wbg_set_1d80752d0d5f0b21 = function(arg0, arg1, arg2) {
-        getObject(arg0)[arg1 >>> 0] = takeObject(arg2);
+        arg0[arg1 >>> 0] = arg2;
     };
     imports.wbg.__wbg_set_23d69db4e5c66a6e = function(arg0, arg1, arg2) {
-        getObject(arg0).set(getObject(arg1), arg2 >>> 0);
+        arg0.set(arg1, arg2 >>> 0);
     };
     imports.wbg.__wbg_set_3fda3bac07393de4 = function(arg0, arg1, arg2) {
-        getObject(arg0)[takeObject(arg1)] = takeObject(arg2);
+        arg0[arg1] = arg2;
     };
     imports.wbg.__wbg_stack_0ed75d68575b0f3c = function(arg0, arg1) {
-        const ret = getObject(arg1).stack;
+        const ret = arg1.stack;
         const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len1 = WASM_VECTOR_LEN;
         getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
         getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
     };
     imports.wbg.__wbg_value_4c32fd138a88eee2 = function(arg0) {
-        const ret = getObject(arg0).value;
-        return addHeapObject(ret);
+        const ret = arg0.value;
+        return ret;
     };
     imports.wbg.__wbindgen_boolean_get = function(arg0) {
-        const v = getObject(arg0);
+        const v = arg0;
         const ret = typeof(v) === 'boolean' ? (v ? 1 : 0) : 2;
         return ret;
     };
     imports.wbg.__wbindgen_debug_string = function(arg0, arg1) {
-        const ret = debugString(getObject(arg1));
+        const ret = debugString(arg1);
         const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len1 = WASM_VECTOR_LEN;
         getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
@@ -3208,52 +3194,55 @@ function __wbg_get_imports() {
     };
     imports.wbg.__wbindgen_error_new = function(arg0, arg1) {
         const ret = new Error(getStringFromWasm0(arg0, arg1));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_in = function(arg0, arg1) {
-        const ret = getObject(arg0) in getObject(arg1);
         return ret;
     };
+    imports.wbg.__wbindgen_in = function(arg0, arg1) {
+        const ret = arg0 in arg1;
+        return ret;
+    };
+    imports.wbg.__wbindgen_init_externref_table = function() {
+        const table = wasm.__wbindgen_export_2;
+        const offset = table.grow(4);
+        table.set(0, undefined);
+        table.set(offset + 0, undefined);
+        table.set(offset + 1, null);
+        table.set(offset + 2, true);
+        table.set(offset + 3, false);
+        ;
+    };
     imports.wbg.__wbindgen_is_function = function(arg0) {
-        const ret = typeof(getObject(arg0)) === 'function';
+        const ret = typeof(arg0) === 'function';
         return ret;
     };
     imports.wbg.__wbindgen_is_object = function(arg0) {
-        const val = getObject(arg0);
+        const val = arg0;
         const ret = typeof(val) === 'object' && val !== null;
         return ret;
     };
     imports.wbg.__wbindgen_is_string = function(arg0) {
-        const ret = typeof(getObject(arg0)) === 'string';
+        const ret = typeof(arg0) === 'string';
         return ret;
     };
     imports.wbg.__wbindgen_is_undefined = function(arg0) {
-        const ret = getObject(arg0) === undefined;
+        const ret = arg0 === undefined;
         return ret;
     };
     imports.wbg.__wbindgen_jsval_loose_eq = function(arg0, arg1) {
-        const ret = getObject(arg0) == getObject(arg1);
+        const ret = arg0 == arg1;
         return ret;
     };
     imports.wbg.__wbindgen_memory = function() {
         const ret = wasm.memory;
-        return addHeapObject(ret);
+        return ret;
     };
     imports.wbg.__wbindgen_number_get = function(arg0, arg1) {
-        const obj = getObject(arg1);
+        const obj = arg1;
         const ret = typeof(obj) === 'number' ? obj : undefined;
         getDataViewMemory0().setFloat64(arg0 + 8 * 1, isLikeNone(ret) ? 0 : ret, true);
         getDataViewMemory0().setInt32(arg0 + 4 * 0, !isLikeNone(ret), true);
     };
-    imports.wbg.__wbindgen_object_clone_ref = function(arg0) {
-        const ret = getObject(arg0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_object_drop_ref = function(arg0) {
-        takeObject(arg0);
-    };
     imports.wbg.__wbindgen_string_get = function(arg0, arg1) {
-        const obj = getObject(arg1);
+        const obj = arg1;
         const ret = typeof(obj) === 'string' ? obj : undefined;
         var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         var len1 = WASM_VECTOR_LEN;
@@ -3262,7 +3251,7 @@ function __wbg_get_imports() {
     };
     imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
         const ret = getStringFromWasm0(arg0, arg1);
-        return addHeapObject(ret);
+        return ret;
     };
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));
@@ -3282,7 +3271,7 @@ function __wbg_finalize_init(instance, module) {
     cachedUint8ArrayMemory0 = null;
 
 
-
+    wasm.__wbindgen_start();
     return wasm;
 }
 
