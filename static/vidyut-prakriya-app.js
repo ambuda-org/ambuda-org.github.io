@@ -18,7 +18,7 @@
  *   hacky way if that fixes the problem.
  */
 
-import init, { BaseKrt, Vidyut as VidyutWasm, Lakara, Prayoga, Purusha, Vacana, DhatuPada, Sanadi, Linga, Vibhakti } from "/static/wasm/vidyut_prakriya.js";
+import { initWasm, Krt, Gana, Vidyut, Lakara, Prayoga, Purusha, Vacana, DhatuPada, Sanadi, Linga, Vibhakti } from "/static/vidyut-prakriya.js";
 
 // ===================================================
 // vidyut-prakriya
@@ -35,103 +35,48 @@ function parseSutras(tsv) {
 }
 const sutras = fetch("/static/data/sutrapatha.tsv").then(resp => resp.text()).then(text => parseSutras(text));
 const varttikas = fetch("/static/data/varttikas.tsv").then(resp => resp.text()).then(text => parseSutras(text));
+const kaumudi = fetch("/static/data/kaumudi.tsv").then(resp => resp.text()).then(text => parseSutras(text));
+const dhatuGanaSutras = fetch("/static/data/dhatupatha-ganasutras.tsv").then(resp => resp.text()).then(text => parseSutras(text));
+const linganushasanam = fetch("/static/data/linganushasanam.tsv").then(resp => resp.text()).then(text => parseSutras(text));
 
-class Vidyut {
-    // Call `init()` before calling this so that you initialize the WASM environment.
-    constructor(dhatupatha) {
-        this.wasm = VidyutWasm.init(dhatupatha);
-        this.dhatus = this.parseDhatus(dhatupatha);
-        console.log("Constructed Vidyut.");
+// Parse a dhatupatha string into separate objects.
+function parseDhatus(vidyut, tsvText) {
+    const ganaMap = {
+        "01": Gana.Bhvadi,
+        "02": Gana.Adadi,
+        "03": Gana.Juhotyadi,
+        "04": Gana.Divadi,
+        "05": Gana.Svadi,
+        "06": Gana.Tudadi,
+        "07": Gana.Rudhadi,
+        "08": Gana.Tanadi,
+        "09": Gana.Kryadi,
+        "10": Gana.Curadi,
     }
+    let dhatus = [];
+    tsvText.split(/\r?\n/).forEach((line) => {
+        const [code, aupadeshika, artha] = line.split(/\t/);
+        // Ignore TSV header, which is just the string "code".
+        if (!!code && code !== 'code') {
+            const [ganaCode, antargana] = code.split(".");
+            const gana = ganaMap[ganaCode];
 
-    // Parse a dhatupatha string into separate objects.
-    parseDhatus(tsvText) {
-        let dhatus = [];
-        tsvText.split(/\r?\n/).forEach((line) => {
-            const [code, upadesha, artha] = line.split(/\t/);
-            // Ignore TSV header, which is just the string "code".
-            if (!!code && code !== 'code') {
-                let normalDhatu = "";
-                if (upadesha !== "-") {
-                    // TODO: more than 1? for now, just take the first.
-                    normalDhatu = this.wasm.deriveDhatus(code)[0].text
-                }
-                dhatus.push({
-                    code,
-                    upadesha,
-                    upadeshaNoSvaras: removeSlpSvaras(upadesha),
-                    normalDhatu,
-                    artha
-                });
+            let normalDhatu = "";
+            if (aupadeshika !== "-") {
+                // TODO: more than 1? for now, just take the first.
+                normalDhatu = vidyut.deriveDhatus({ aupadeshika, gana })[0].text
             }
-        });
-        return dhatus;
-    }
-
-    /**
-     * Derives all tinantas that match the input conditions.
-     *
-     * dhatu: an object contain the key `code` pointing to an entry in `this.dhatus.`
-     * lakara: a `Lakara`
-     * purusha: a `Purusha`
-     * vacana: a `Vacana`
-     * pada: a `DhatuPada`
-     * sanadi: a list of strings. Valid values are "san", "Ric", "yaN", and "yaNluk".
-     * upasargas: a list of strings. For the upasarga "A", pass "AN".
-     */
-    deriveTinantas({ dhatu, lakara, prayoga, purusha, vacana, pada, sanadi = [], upasarga = [] }) {
-        return this.wasm.deriveTinantas({
-            code: dhatu.code,
-            lakara: Lakara[lakara],
-            prayoga: Prayoga[prayoga],
-            purusha: Purusha[purusha],
-            vacana: Vacana[vacana],
-            pada: DhatuPada[pada],
-            sanadi,
-            upasarga,
-        });
-    }
-
-    /**
-     * Derives all subantas that match the input conditions.
-     *
-     * pratipadika: an object containing the keys `text` and `linga`.
-     * linga: a `Linga`
-     * vibhakti: a `Vibhakti`
-     * vacana: a `Vacana`
-     */
-    deriveSubantas({ pratipadika, linga, vibhakti, vacana }) {
-        // For argument order, see wasm.rs.
-        return this.wasm.deriveSubantas({
-            pratipadika: pratipadika,
-            linga: Linga[linga],
-            vibhakti: Vibhakti[vibhakti],
-            vacana: Vacana[vacana],
-        });
-    }
-
-    /**
-     * Derives all krdantas that match the input conditions.
-     *
-     * dhatu: an object contain the key `code` pointing to an entry in `this.dhatus.`
-     * krt: a `Krt`
-     * sanadi: a list of strings. Valid values are "san", "Ric", "yaN", and "yaNluk".
-     * upasargas: a list of strings. For the upasarga "A", pass "AN".
-     *
-     * lakara: (for Satf and SAnac only) the lakAra to use.
-     * prayoga: (for Satf and SAnac only) the prayoga to use.
-     */
-    deriveKrdantas({ dhatu, krt, sanadi = [], upasarga = [], lakara = null, prayoga = null }) {
-        // For argument order, see wasm.rs.
-        return this.wasm.deriveKrdantas({
-            code: dhatu.code,
-            krt: BaseKrt[krt],
-            sanadi,
-            upasarga,
-            lakara: lakara ? Lakara[lakara] : null,
-            prayoga: prayoga ? Prayoga[prayoga] : null,
-        })
-    }
+            dhatus.push({
+                code,
+                aupadeshika,
+                aupadeshikaNoSvaras: removeSlpSvaras(aupadeshika),
+                normalDhatu,
+                gana,
+                artha
+            });
+        }
+    });
+    return dhatus;
 }
 
 // ===================================================
@@ -159,6 +104,30 @@ function setParam(url, key, value) {
 
 function removeSlpSvaras(s) {
     return s.replaceAll(/[\^\\]/g, '');
+}
+
+function fixSvaras(s) {
+    return s.replaceAll('^', " ̭");
+}
+
+
+function splitIfComma(str) {
+    if (str.includes(',')) {
+        return str.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    } else {
+        return [str.trim()];
+    }
+}
+function parseStepText(input) {
+    const regex = /^(.*?)@\[([^:]+):(\d+)\](.*)$/;
+    const match = input.match(regex);
+
+    if (!match) {
+        return null; // input not in expected form
+    }
+
+    const [, text, filename, line, supporting_info] = match;
+    return { text, filename, line: parseInt(line, 10), supporting_info };
 }
 
 const App = () => ({
@@ -196,22 +165,25 @@ const App = () => ({
     // data
     sutras: {},
     varttikas: {},
+    kaumudi: {},
+    dhatuGanaSutras: {},
+    linganushasanam: {},
 
     // Transliteration script (devanagari, iast, telugu, etc.)
     script: 'devanagari',
 
     async init() {
         // Initialize WASM environment.
-        await init();
+        await initWasm();
 
         const resp = await fetch("/static/data/dhatupatha.tsv");
         const dhatupatha = await resp.text();
 
         // Vidyut needs its own copy of the dhatupatha.
-        this.vidyut = new Vidyut(dhatupatha);
+        this.vidyut = new Vidyut();
         console.log("Initialized vidyut-prakriya WASM bindings.");
 
-        this.dhatus = this.vidyut.dhatus;
+        this.dhatus = parseDhatus(this.vidyut, dhatupatha);
 
         // TODO: set state earlier. But, our current implemenation needs to
         // wait for the dhatus to load so that we can set activeDhatu.
@@ -239,6 +211,9 @@ const App = () => ({
 
         this.sutras = await sutras;
         this.varttikas = await varttikas;
+        this.dhatuGanaSutras = await dhatuGanaSutras;
+        this.kaumudi = await kaumudi;
+        this.linganushasanam = await linganushasanam;
     },
 
     // Mutators
@@ -253,7 +228,7 @@ const App = () => ({
         const sanadi = params.get(Params.Sanadi);
         const activePada = params.get(Params.ActivePada);
 
-        console.log(`realUrlState, prayoga=${prayoga}, upasarga=${upasarga}, sanadi=${sanadi}`);
+        console.log(`realUrlState, prayoga=${prayoga}, upasarga=${upasarga}, sanadi=${sanadi},  dhatuCode=${dhatuCode}`);
         if (tab) {
             this.setTab(tab);
         }
@@ -300,6 +275,7 @@ const App = () => ({
     // Set the active dhatu (and show its forms)
     setActiveDhatu(s) {
         this.activeDhatu = this.dhatus.find(d => d.code === s);
+        console.log("activeDhatu:", this.activeDhatu);
         // Scroll position might be off if the user has scrolled far down the dhatu list.
         window.scrollTo({ top: 0 });
     },
@@ -311,8 +287,8 @@ const App = () => ({
             this.supPrakriya = this.createPrakriya();
         } else {
             this.dhatuPrakriya = this.createPrakriya();
+            window.scrollTo({ top: 0 });
         }
-        window.scrollTo({ top: 0 });
     },
 
     // Create the active pada (and show all forms for the dhatu)
@@ -356,10 +332,10 @@ const App = () => ({
             let hkQuery = Sanscript.t(this.dhatuFilter, 'hk', 'slp1');
             return this.dhatus.filter(d =>
                 d.code.includes(slpQuery)
-                || d.upadeshaNoSvaras.includes(slpQuery)
+                || d.aupadeshikaNoSvaras.includes(slpQuery)
                 || d.artha.includes(slpQuery)
                 || d.normalDhatu.includes(slpQuery)
-                || d.upadeshaNoSvaras.includes(hkQuery)
+                || d.aupadeshikaNoSvaras.includes(hkQuery)
                 || d.artha.includes(hkQuery)
                 || d.normalDhatu.includes(hkQuery)
             );
@@ -400,7 +376,7 @@ const App = () => ({
 
     // Render the given SLP1 text in Devanagari.
     deva(s) {
-        return Sanscript.t(s, 'slp1', this.script);
+        return Sanscript.t(fixSvaras(s), 'slp1_accented', this.script);
     },
 
     // Render the given SLP1 text in Devanagari without svara marks.
@@ -409,25 +385,38 @@ const App = () => ({
     },
 
     renderStepRule(rule) {
-        if (rule.source === "ashtadhyayi") {
-            let text = this.sutras[rule.code];
-            return text ? this.deva(text) : '';
-        } else if (rule.source === "varttika") {
-            let text = this.varttikas[rule.code];
-            text = this.deva(text || "");
-            if (text) {
-                return `<span class="text-green-500">${text}</span>`;
-            } else {
-                return '';
-            }
-        } else {
-            return "(missing)"
+        let text = '';
+        let annotated_text = 'missing';
+        switch (rule.source) {
+            case "ashtadhyayi":
+                text = this.devaNoSvara(this.sutras[rule.code] || "");
+                annotated_text = text;
+                break;
+            case "kaumudi":
+                text = this.devaNoSvara(this.kaumudi[rule.code] || "");
+                annotated_text = `<span class="text-green-500">${text}</span>`;
+                break;
+            case "varttika":
+                text = this.devaNoSvara(this.varttikas[rule.code] || "");
+                annotated_text = `<span class="text-green-500">${text}</span>`;
+                break;
+            case "dhatupatha":
+                text = this.devaNoSvara(this.dhatuGanaSutras[rule.code] || "");
+                annotated_text = `<span class="text-orange-500">${text}</span>`;
+                break;
+            case "linganushasanam":
+                text = this.devaNoSvara(this.linganushasanam[rule.code] || "");
+                annotated_text = `<span class="text-orange-500">${text}</span>`;
+                break;
         }
+        return annotated_text;
     },
 
     renderStepRuleLinkText(rule) {
         let prefix = "";
-        if (rule.source === "varttika") {
+        if (rule.code === "    ") { // For debug statements in prakriya
+            return "👀 source";
+        } else if (rule.source === "varttika") {
             prefix = "vArttika ";
         } else if (rule.source === "kaumudi") {
             prefix = "kOmudI ";
@@ -442,31 +431,50 @@ const App = () => ({
         }
 
         const text = prefix + rule.code;
-        return this.deva(text).replaceAll('।', '.')
+        return this.devaNoSvara(text).replaceAll('।', '.')
     },
 
-    renderStepRuleLink(rule) {
-        if (rule.source === "ashtadhyayi" || rule.source === "varttika") {
-            return "https://ashtadhyayi.com/sutraani/" + rule.code;
-        } else if (rule.source === "kaumudi") {
-            return "https://ashtadhyayi.com/sutraani/sk" + rule.code;
-        } else {
-            return "https://ashtadhyayi.com";
+    renderStepRuleLink(step) {
+        let rule = step.rule
+        if (rule.code === "    ") { // For debug statements in prakriya
+            let x = parseStepText(step.result[0].text);
+            if (!x) {
+                return '/vidyut-prakriya/src'
+            } else {
+                let text = x.text.split("---")
+                return `/${x.filename}#:~:text=${text[0]}`
+            }
         }
+        let linkurl = "https://ashtadhyayi.com/"
+        switch (rule.source) {
+            case "ashtadhyayi":
+            case "varttika":
+                return `${linkurl}sutraani/${rule.code}`;
+            case "kaumudi":
+                return `${linkurl}sutraani/sk${rule.code}`;
+            case "dhatupatha":
+                return `${linkurl}dhatu/${rule.code}`;
+            case "linganushasanam":
+                return `${linkurl}linganushasanam/linganushasanam-${rule.code}`;
+        }
+        return linkurl;
     },
 
     entryString(entries) {
         let str = entries.map(x => x.text).join(', ');
-        return this.deva(str);
+        return this.devaNoSvara(str);
     },
 
     stepClasses(step) {
         const code = step.rule.code;
-        let minor = new Set(["1.3.1", "1.3.2", "1.3.3", "1.3.4", "1.3.5", "1.3.6", "1.3.7", "1.3.8", "1.3.9", "1.2.45", "1.2.46", "3.4.114", "1.1.43", "1.4.14",
-            "1.4.58", "1.4.59", "1.4.60", "1.4.80", "3.1.32", "6.1.4", "6.1.5", "8.4.68", "3.4.113", "2.3.48", "1.4.17", "2.3.49", "1.4.7",
+        let minor = new Set(["1.1.51", "1.3.1", "1.3.2", "1.3.3", "1.3.4", "1.3.5", "1.3.6", "1.3.7", "1.3.8", "1.3.9", "1.2.45", "3.4.114", "1.1.43",
+            "1.4.58", "1.4.59", "1.4.60", "1.4.80", "6.1.4", "6.1.5", "8.4.68", "3.4.113", "2.3.48", "1.4.17", "2.3.49", "1.4.7",
         ]);
+        let samjna = new Set (["1.2.46", "1.4.14", "3.1.32"]);
         if (minor.has(code)) {
             return ["opacity-40"];
+        } else if (samjna.has(code)) {
+            return ["bg-lime-200"];
         } else {
             return [];
         }
@@ -482,9 +490,17 @@ const App = () => ({
             if (res.length !== 0) {
                 res += ' <span class="text-sm text-gray-400">+</span> ';
             }
-            let text = Sanscript.t(removeSlpSvaras(term.text), 'slp1', this.script);
+            let text = this.devaNoSvara(term.text);
             if (term.wasChanged) {
                 text = `<span class="text-red-700">${text}</span>`
+            }
+            if (step.rule.code === "    ") {
+                let x= parseStepText(term.text)
+                if (!x) {
+                    text = `<span class="text-blue-500">${term.text}</span>`
+                } else {
+                    text = `<span class="text-blue-800">${x.text} ${x.supporting_info}</span>`
+                }
             }
             res += text;
         })
@@ -492,9 +508,7 @@ const App = () => ({
     },
 
     /// Create all tinantas allowed by the given `args`.
-    createTinantaParadigm(args) {
-        const { dhatu, lakara, prayoga, pada, sanadi, upasarga } = args;
-
+    createTinantaParadigm({dhatu, lakara, prayoga, pada}) {
         let purushas = Object.values(Purusha).filter(Number.isInteger);
         let vacanas = Object.values(Vacana).filter(Number.isInteger);
 
@@ -509,8 +523,6 @@ const App = () => ({
                     purusha,
                     vacana,
                     pada,
-                    sanadi,
-                    upasarga,
                 };
                 let prakriyas = this.vidyut.deriveTinantas(args);
 
@@ -577,13 +589,11 @@ const App = () => ({
             { text: "sarva", linga: Linga.Pum },
             { text: "viSva", linga: Linga.Pum },
             { text: "i", linga: Linga.Pum },
-            { text: "kavi", linga: Linga.Pum },
             { text: "hari", linga: Linga.Pum },
             { text: "kavi", linga: Linga.Pum },
             { text: "hari", linga: Linga.Pum },
             { text: "saKi", linga: Linga.Pum },
             { text: "pati", linga: Linga.Pum },
-            { text: "tri", linga: Linga.Pum },
             { text: "u", linga: Linga.Pum },
             { text: "SamBu", linga: Linga.Pum },
             { text: "guru", linga: Linga.Pum },
@@ -621,7 +631,33 @@ const App = () => ({
             { text: "kim", linga: Linga.Pum },
             { text: "idam", linga: Linga.Pum },
             { text: "adas", linga: Linga.Pum },
-
+            { text: "eka", linga: Linga.Pum, vacana: Vacana.Eka },
+            { text: "dvi", linga: Linga.Pum, vacana: Vacana.Dvi },
+            { text: "tri", linga: Linga.Pum, vacana: Vacana.Bahu },
+            {
+                text: "senAnI (IkAranta)",
+                linga: Linga.Pum,
+                krdanta: {
+                    dhatu: Object.assign({},this.dhatus.find( d => d.code === "01.1049"), {prefixes: ["senA"]}),
+                    krt: Krt.kvip
+                }
+            },
+            {
+                text: "vidvas, vidat",
+                linga: Linga.Pum,
+                krdanta: {
+                    dhatu: this.dhatus.find( d => d.code === "02.0059"),
+                    krt: Krt.Satf
+                }
+            },
+            {
+                text: "sedivas",
+                linga: Linga.Pum,
+                krdanta: {
+                    dhatu: this.dhatus.find( d => d.code === "01.0990"),
+                    krt: Krt.kvasu
+                }
+            },
             { text: "u", linga: Linga.Stri },
             { text: "tad", linga: Linga.Stri },
             { text: "yad", linga: Linga.Stri },
@@ -629,6 +665,43 @@ const App = () => ({
             { text: "kim", linga: Linga.Stri },
             { text: "idam", linga: Linga.Stri },
             { text: "adas", linga: Linga.Stri },
+            { text: "eka", linga: Linga.Stri, vacana: Vacana.Eka },
+            { text: "dvi", linga: Linga.Stri, vacana: Vacana.Dvi },
+            { text: "tri", linga: Linga.Stri, vacana: Vacana.Bahu },
+            { text: "DI", linga: Linga.Stri },
+            {
+                text: "kAmaDuh",
+                linga: Linga.Stri,
+                krdanta: {
+                    dhatu: Object.assign({},this.dhatus.find( d => d.code === "02.0004"), {prefixes: ["kAma"]}),
+                    krt: Krt.kvip
+                }
+            },
+            {
+                text: "suDI (IkAranta)",
+                linga: Linga.Stri,
+                krdanta: {
+                    dhatu: Object.assign({},this.dhatus.find( d => d.code === "01.1056"), {prefixes: ["su"]}),
+                    krt: Krt.kvip
+                }
+            },
+            {
+                text: "pipAsA (AkAranta)",
+                linga: Linga.Stri,
+                krdanta: {
+                    dhatu: Object.assign({},this.dhatus.find( d => d.code === "01.1074"), {sanadi: [Sanadi.san]}),
+                    krt: Krt.a
+                }
+            },
+            {
+                text: "kurvatI (IkAranta)",
+                linga: Linga.Stri,
+                krdanta: {
+                    dhatu: this.dhatus.find( d => d.code === "08.0010"),
+                    krt: Krt.Satf
+                }
+            },
+            { text: "lakzmI (IkAranta)", linga: Linga.Stri },
             { text: "svasf", linga: Linga.Stri },
             { text: "mAtf", linga: Linga.Stri },
             { text: "duhitf", linga: Linga.Stri },
@@ -641,7 +714,9 @@ const App = () => ({
             { text: "puzpa", linga: Linga.Napumsaka },
             { text: "sarva", linga: Linga.Napumsaka },
             { text: "viSva", linga: Linga.Napumsaka },
-            { text: "eka", linga: Linga.Napumsaka },
+            { text: "eka", linga: Linga.Napumsaka, vacana: Vacana.Eka },
+            { text: "dvi", linga: Linga.Napumsaka, vacana: Vacana.Dvi },
+            { text: "tri", linga: Linga.Napumsaka, vacana: Vacana.Bahu },
             { text: "pUrva", linga: Linga.Napumsaka },
             { text: "para", linga: Linga.Napumsaka },
             { text: "avara", linga: Linga.Napumsaka },
@@ -669,6 +744,7 @@ const App = () => ({
             { text: "kim", linga: Linga.Napumsaka },
             { text: "idam", linga: Linga.Napumsaka },
             { text: "adas", linga: Linga.Napumsaka },
+            { text: "guRin", linga: Linga.Napumsaka },
         ];
     },
 
@@ -680,12 +756,12 @@ const App = () => ({
     clearSupPratipadika() {
         this.supParadigm = null;
         this.supActivePratipadika = null;
+        this.supPrakriya = null;
     },
 
     createSubantaParadigm() {
         const vibhaktis = Object.values(Vibhakti).filter(Number.isInteger);
         const vacanas = Object.values(Vacana).filter(Number.isInteger);
-        const pratipadika = this.supActivePratipadika;
 
         const vibhaktiTitles = {
             [Vibhakti.Prathama]: "praTamA",
@@ -702,12 +778,19 @@ const App = () => ({
         vibhaktis.forEach((vibhakti) => {
             let row = [];
             vacanas.forEach((vacana) => {
+                let pratipadika = {
+                    basic: this.supActivePratipadika.text,
+                }
+                if (this.supActivePratipadika.krdanta) {
+                    pratipadika = { krdanta: this.supActivePratipadika.krdanta }
+                }
                 const args = {
-                    pratipadika: pratipadika.text,
-                    linga: pratipadika.linga,
+                    pratipadika: pratipadika,
+                    linga: this.supActivePratipadika.linga,
                     vibhakti: vibhakti,
                     vacana: vacana,
                 };
+
                 const prakriyas = this.vidyut.deriveSubantas(args);
 
                 let vvPadas = [];
@@ -717,6 +800,9 @@ const App = () => ({
                     // Use `==` for int/string cast.
                     if (vibhakti == Vibhakti.Sambodhana) {
                         displayText = "he " + text;
+                    }
+                    if ( this.supActivePratipadika.vacana !== undefined && this.supActivePratipadika.vacana !== vacana) {
+                        displayText = ""; // No display if filtered by vacana. E.g. "eka"
                     }
                     vvPadas.push({
                         displayText,
@@ -744,19 +830,24 @@ const App = () => ({
             return [];
         }
 
-        const dhatu = this.activeDhatu;
-        const upasarga = this.upasarga ? [this.upasarga] : [];
-        const sanadi = this.sanadi ? [this.sanadi] : [];
+        const mula = this.activeDhatu;
+        const prefixes = this.upasarga ? splitIfComma(this.upasarga) : [];
+        const sanadi = this.sanadi ? splitIfComma(this.sanadi).map(sanadi => Sanadi[sanadi]) : [];
+        const dhatu = {
+            aupadeshika: mula.aupadeshika,
+            gana: mula.gana,
+            antargana: mula.antargana,
+            prefixes,
+            sanadi,
+        }
 
         let ret = [];
-        const krts = Object.values(BaseKrt).filter(Number.isInteger);
+        const krts = Object.values(Krt).filter(Number.isInteger);
 
         krts.forEach((krt) => {
             const args = {
                 dhatu,
                 krt,
-                upasarga,
-                sanadi,
             };
 
             const prakriyas = this.vidyut.deriveKrdantas(args)
@@ -770,7 +861,7 @@ const App = () => ({
             });
 
             // Expansion for Satf/SAnac.
-            if (krt == BaseKrt.Satf || krt == BaseKrt.SAnac) {
+            if (krt == Krt.Satf || krt == Krt.SAnac) {
                 let allArgs = [
                     { ...args, prayoga: Prayoga.Karmani, lakara: Lakara.Lat },
                     { ...args, prayoga: Prayoga.Kartari, lakara: Lakara.Lrt },
@@ -790,7 +881,7 @@ const App = () => ({
 
             if (padas.length !== 0) {
                 ret.push({
-                    title: BaseKrt[krt],
+                    title: Krt[krt],
                     padas,
                 });
             }
@@ -803,12 +894,20 @@ const App = () => ({
             return [];
         }
 
-        const dhatu = this.activeDhatu;
+        const mula = this.activeDhatu;
         const lakaras = Object.values(Lakara).filter(Number.isInteger);
         const tinPadas = Object.values(DhatuPada).filter(Number.isInteger);
         const prayoga = this.prayoga !== null ? this.prayoga : Prayoga.Kartari;
-        const upasarga = this.upasarga ? [this.upasarga] : [];
-        const sanadi = this.sanadi ? [this.sanadi] : [];
+        const prefixes = this.upasarga ? splitIfComma(this.upasarga) : [];
+        console.log(`sanadi = ${this.sanadi}`);
+        const sanadi = this.sanadi ? splitIfComma(this.sanadi).map(sanadi => Sanadi[sanadi]) : [];
+        const dhatu = {
+            aupadeshika: mula.aupadeshika,
+            gana: mula.gana,
+            antargana: mula.antargana,
+            sanadi,
+            prefixes,
+        }
 
         let results = [];
         for (const lakara in lakaras) {
@@ -823,8 +922,6 @@ const App = () => ({
                     lakara,
                     prayoga,
                     pada: tinPada,
-                    sanadi,
-                    upasarga,
                 });
 
                 if (paradigm.length !== 0) {
