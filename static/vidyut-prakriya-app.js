@@ -18,7 +18,7 @@
  *   hacky way if that fixes the problem.
  */
 
-import { initWasm, Krt, Unadi, Gana, Vidyut, Lakara, Prayoga, Purusha, Vacana, DhatuPada, Sanadi, Linga, Vibhakti } from "/static/vidyut-prakriya.js";
+import { initWasm, Krt, Unadi, Gana, Vidyut, Lakara, Prayoga, Purusha, Vacana, DhatuPada, Sanadi, Linga, Vibhakti, Antargana } from "/static/vidyut-prakriya.js";
 
 // ===================================================
 // vidyut-prakriya
@@ -59,9 +59,19 @@ function parseDhatus(vidyut, tsvText) {
         const [code, aupadeshika, artha] = line.split(/\t/);
         // Ignore TSV header, which is just the string "code".
         if (!!code && code !== 'code') {
-            const [ganaCode, antargana] = code.split(".");
+            const [ganaCode, antarganaCode] = code.split(".");
             const gana = ganaMap[ganaCode];
-
+            let antargana = null;
+            if (antarganaCode) {
+                const codeNum = parseInt(antarganaCode);
+                if (ganaCode === "01" && codeNum >= 867 && codeNum <= 932) {
+                    antargana = Antargana.Ghatadi
+                } else if (ganaCode === "10") {
+                    if (codeNum >= 279 && codeNum <= 337) antargana = Antargana.Asvadiya;
+                    else if (codeNum >= 192 && codeNum <= 236) antargana = Antargana.Akusmiya;
+                    else if (codeNum >= 338 && codeNum <= 388) antargana = Antargana.Adhrshiya;
+                }
+            }
             let normalDhatu = "";
             if (aupadeshika !== "-") {
                 // TODO: more than 1? for now, just take the first.
@@ -73,6 +83,7 @@ function parseDhatus(vidyut, tsvText) {
                 aupadeshikaNoSvaras: removeSlpSvaras(aupadeshika),
                 normalDhatu,
                 gana,
+                antargana,
                 artha
             });
         }
