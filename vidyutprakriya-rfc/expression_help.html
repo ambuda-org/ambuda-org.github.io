@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lisp expressions for vidyut_cli</title>
+  <style>
+:root {
+  --bg: #ffffff; --fg: #1e293b; --muted: #64748b; --border: #e2e8f0; --head: #f1f5f9;
+  --code-bg: #f8fafc; --link: #0369a1; --accent: #0c4a6e; --zebra: #f8fafc;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f172a; --fg: #e2e8f0; --muted: #94a3b8; --border: #334155; --head: #1e293b;
+    --code-bg: #1e293b; --link: #7dd3fc; --accent: #bae6fd; --zebra: #162033;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg); line-height: 1.6; font-size: 17px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari",
+    sans-serif;
+}
+header.bar {
+  position: sticky; top: 0; z-index: 10; background: var(--head);
+  border-bottom: 1px solid var(--border); padding: 0.6rem 1rem; font-size: 0.95rem;
+}
+header.bar a { color: var(--link); text-decoration: none; font-weight: 600; }
+main { max-width: 62rem; margin: 0 auto; padding: 1rem 1.25rem 4rem; }
+h1 { font-size: 2rem; margin: 1.2rem 0 0.8rem; color: var(--accent); }
+h2 {
+  font-size: 1.5rem; margin: 2.4rem 0 0.8rem; padding-bottom: 0.25rem;
+  border-bottom: 2px solid var(--border); color: var(--accent);
+}
+h3 { font-size: 1.2rem; margin: 1.8rem 0 0.6rem; }
+h2, h3 { scroll-margin-top: 3.5rem; }
+a { color: var(--link); }
+.headerlink { visibility: hidden; margin-left: 0.4rem; text-decoration: none; color: var(--muted); }
+h2:hover .headerlink, h3:hover .headerlink { visibility: visible; }
+p, li { max-width: 52rem; }
+code, pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Noto Sans Mono", "Noto Sans Devanagari",
+    monospace;
+}
+code {
+  background: var(--code-bg); border: 1px solid var(--border); border-radius: 4px;
+  padding: 0.05em 0.35em; font-size: 0.9em; overflow-wrap: anywhere;
+}
+pre {
+  background: var(--code-bg); border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.8rem 1rem; overflow-x: auto; font-size: 0.9rem; line-height: 1.45;
+}
+a code { color: var(--link); }
+pre code { background: none; border: 0; padding: 0; font-size: inherit; overflow-wrap: normal; }
+table {
+  border-collapse: collapse; margin: 1rem 0; display: block; overflow-x: auto; max-width: 100%;
+}
+th, td { border: 1px solid var(--border); padding: 0.4rem 0.7rem; text-align: left; vertical-align: top; }
+th { background: var(--head); }
+tbody tr:nth-child(even) { background: var(--zebra); }
+ul, ol { padding-left: 1.5rem; }
+li { margin: 0.25rem 0; }
+@media (max-width: 40rem) { body { font-size: 16px; } main { padding: 0.5rem 0.8rem 3rem; } }
+</style>
+</head>
+<body>
+<header class="bar"><a href="index.html">&larr; Back to Vidyullekha</a></header>
+<main>
+<!-- The web app shows this file as www/expression_help.html. After editing it, run
+     python3 scripts/make_expression_help.py (needs `pip install markdown`). -->
+
+<h1 id="lisp-expressions-for-vidyut_cli">Lisp expressions for <code>vidyut_cli</code><a class="headerlink" href="#lisp-expressions-for-vidyut_cli" title="Permanent link">¶</a></h1>
+<p><code>examples/vidyut_cli.rs</code> derives Sanskrit words from a short Lisp-style expression
+and prints the full <em>prakriyā</em> (step-by-step derivation) for each result.</p>
+<pre><code class="language-sh">cargo run --example vidyut_cli -- &quot;(tiN (:dhatu (BU BvAdi)) (la~w kartari Prathama eka))&quot;
+</code></pre>
+<p>All Sanskrit text is in <strong>SLP1</strong> (<code>kf</code> = कृ, <code>A</code> = ा, <code>S</code> = श, <code>zW</code> = ष्ठ).</p>
+<p>Debug builds also print debug information. Use <code>--release</code> to leave it out.</p>
+<h2 id="contents">Contents<a class="headerlink" href="#contents" title="Permanent link">¶</a></h2>
+<ol>
+<li><a href="#interactive-mode">Interactive mode</a></li>
+<li><a href="#in-the-browser">In the browser</a></li>
+<li><a href="#scripts-devanagari-and-slp1">Scripts: Devanagari and SLP1</a></li>
+<li><a href="#using-the-library">Using the library</a></li>
+<li><a href="#expression-types">Expression types</a></li>
+<li><a href="#values-and-quoting">Values and quoting</a></li>
+<li><a href="#tin-verbs"><code>tiN</code>: verbs</a></li>
+<li><a href="#krt-kṛdantas"><code>krt</code>: kṛdantas</a></li>
+<li><a href="#taddita-taddhitāntas"><code>tadDita</code>: taddhitāntas</a></li>
+<li><a href="#sup-subantas"><code>sup</code>: subantas</a></li>
+<li><a href="#samasa-compounds"><code>samasa</code>: compounds</a></li>
+<li><a href="#stri-feminine-stems"><code>stri</code>: feminine stems</a></li>
+<li><a href="#chaining">Chaining</a></li>
+<li><a href="#errors-and-limits">Errors and limits</a></li>
+</ol>
+<h2 id="interactive-mode">Interactive mode<a class="headerlink" href="#interactive-mode" title="Permanent link">¶</a></h2>
+<p>With no arguments, the tool starts a prompt with line editing and history (saved in
+<code>~/.vidyut_lisp_history</code>):</p>
+<pre><code class="language-sh">cargo run --example vidyut_cli
+</code></pre>
+<ul>
+<li><code>help</code> prints example expressions, and <code>help krt</code> (or any other head) prints only that head.</li>
+<li><code>quit</code>, <code>exit</code> and Ctrl-D leave. Ctrl-C discards the current line.</li>
+<li>An expression with unbalanced parentheses continues on the next line.</li>
+<li>Errors are reported and the prompt continues. Piped input works too, without a prompt.</li>
+</ul>
+<h2 id="in-the-browser">In the browser<a class="headerlink" href="#in-the-browser" title="Permanent link">¶</a></h2>
+<p>The web app (<code>www/index.html</code>) has an <strong>Advanced</strong> tab with a text area. <strong>Evaluate</strong> (or Ctrl-Enter)
+runs the expression, and <strong>Clear</strong> empties the text area and the results. Tables are shown as HTML
+tables, and each full derivation is shown with the same history table as the subanta tab (a base's
+derivation comes first, under a "Base:" caption). Text may be SLP1 or Devanagari, and results use
+the script selected on the page. The expression is kept in the <code>lisp</code> URL parameter, so "Copy URL"
+shares it.</p>
+<p>From JavaScript, <code>vidyut.loadDhatupatha(tsvText)</code> (optional) and <code>vidyut.evaluateLisp(input)</code> return
+<code>{ error, warnings, blocks }</code>. See <code>Vidyut.evaluateLisp</code> in <code>www/static/vidyut-prakriya.js</code>.</p>
+<h2 id="scripts-devanagari-and-slp1">Scripts: Devanagari and SLP1<a class="headerlink" href="#scripts-devanagari-and-slp1" title="Permanent link">¶</a></h2>
+<p><strong>Input</strong> can be SLP1, Devanagari, or a mix. Any atom with a Devanagari character is converted to
+SLP1 before it is read, so this works:</p>
+<pre><code class="language-text">(sup (:prAtipadika राम) puM तृतीया ३)
+(tiN (:dhatu (भू भ्वादि)) (la~w kartari))
+(krt (:dhatu (डुकृञ् तनादि)) ण्वुल्)
+</code></pre>
+<p>Devanagari digits <code>१</code>-<code>७</code> work as the numeric vibhakti and vacana aliases. Option names and Rust
+variant names (<code>sanadi</code>, <code>artha</code>, <code>la~w</code>, <code>TasyaApatyam</code>) stay ASCII.</p>
+<p>A dhatu's upadesha may leave out its svara and anunasika markers (<code>\</code>, <code>^</code>, <code>~</code>). If the text is
+not in the dhatupatha for that gana, it is compared with the markers removed, and a single match is
+used: <code>(:dhatu (ज्ञा क्र्यादि))</code> finds <code>jYA\</code>. If several dhatus match, the tool lists them and asks
+for the full upadesha. If none match, the text is used as written. Other it-markers (<code>Y</code>, <code>w</code>,
+<code>q</code>, ...) are not ignored, so write <code>डुकृञ्</code> (<code>qukfY</code>) in full.</p>
+<p><strong>Output</strong> is SLP1 by default. In the interactive prompt:</p>
+<pre><code class="language-text">vidyut&gt; output devanagari
+vidyut&gt; output slp1
+vidyut&gt; output
+output: slp1
+</code></pre>
+<p>For a single expression, set <code>VIDYUT_OUTPUT=devanagari</code> in the environment. Only forms, terms and
+table labels are converted. Rule codes, debug annotations and messages stay in ASCII. Tables are
+aligned by display width, which can still look uneven in terminals that render conjuncts as one
+cell.</p>
+<h2 id="using-the-library">Using the library<a class="headerlink" href="#using-the-library" title="Permanent link">¶</a></h2>
+<p>The grammar and the evaluation are in the library module <code>vidyut_prakriya::vyakarana_lisp_wrap</code>
+(<code>src/vyakarana_lisp_wrap.rs</code>), which returns the results as plain data (<code>Evaluation</code>) and does no
+printing. <code>examples/vidyut_cli.rs</code> is the command line front end: it reads input, transliterates,
+and prints. To use expressions from your own program:</p>
+<pre><code class="language-rust">use vidyut_prakriya::vyakarana_lisp_wrap::*;
+use vidyut_prakriya::{Dhatupatha, Vyakarana};
+
+let v = Vyakarana::new();
+let dhatupatha = Dhatupatha::from_path(&quot;data/dhatupatha.tsv&quot;)?;
+let lisp = LispEvaluator::new(&amp;v, &amp;dhatupatha);
+let result = lisp.evaluate_str(&quot;(sup (:prAtipadika rAma) puM tftIyA eka)&quot;)?;
+</code></pre>
+<h2 id="expression-types">Expression types<a class="headerlink" href="#expression-types" title="Permanent link">¶</a></h2>
+<pre><code class="language-text">(tiN DHATU (LAKARA PRAYOGA [PURUSHA] [VACANA]))
+(krt DHATU KRT KRT_OPTION*)
+(tadDita PRATIPADIKA TADDHITA TADDHITA_OPTION*)
+(sup PRATIPADIKA LINGA [VIBHAKTI] [VACANA])
+(sup PRATIPADIKA)                        ; PRATIPADIKA is an avyaya
+(samasa SAMASA_TYPE SUP SUP+ [(stri true)])
+(stri PRATIPADIKA)
+</code></pre>
+<p>Building blocks:</p>
+<pre><code class="language-text">DHATU       := (:dhatu (UPADESHA GANA) OPTION*)
+             | (:nAmaDAtu PRATIPADIKA [NAMA_SANADI] OPTION*)
+
+OPTION      := (sanadi SANADI+)        ; e.g. (sanadi Ric san)
+             | (prefix PREFIX+)        ; e.g. (prefix pra upa)
+             | (upasarga PREFIX+)      ; an alias of prefix
+             | (antargana ANTARGANA)   ; :dhatu only, e.g. (antargana Kutadi)
+
+PRATIPADIKA := (:prAtipadika TEXT)
+             | (:avyaya TEXT)
+             | (:nyAp TEXT)
+             | (:krdanta DHATU KRT KRT_OPTION*)
+             | (:taddhitanta PRATIPADIKA TADDHITA TADDHITA_OPTION*)
+
+KRT_OPTION      := (artha KRT_ARTHA)    ; e.g. (artha Karta)
+                 | (lakara LAKARA)      ; Satf and SAnac only
+                 | (prayoga PRAYOGA)    ; Satf and SAnac only
+                 | (upapada TEXT)       ; a basic pratipadika used as puM prathama ekavacana
+                 | (upapada SUP)        ; a full (:sup ...) component
+TADDHITA_OPTION := (artha TADDHITA_ARTHA)   ; e.g. (artha TasyaApatyam)
+
+SUP         := (:sup PRATIPADIKA LINGA VIBHAKTI VACANA)   ; every slot is required
+             | (:sup PRATIPADIKA)                         ; PRATIPADIKA is an avyaya
+LINGA       := puM | strI | napuMsaka
+VIBHAKTI    := praTamA | dvitIyA | tftIyA | caturTI | paYcamI | zazWI | saptamI | samboDanam
+             | 1 | 2 | 3 | 4 | 5 | 6 | 7  ; numeric aliases for praTamA ... saptamI
+SAMASA_TYPE := Avyayibhava | Tatpurusha | Karmadharaya | Dvigu | Ekadeshin | Bahuvrihi
+             | Dvandva | SamaharaDvandva
+</code></pre>
+<p>Head aliases: <code>:DAtu</code> is the same as <code>:dhatu</code>, <code>:kfdanta</code> as <code>:krdanta</code>, <code>kft</code> as <code>krt</code>, and
+<code>:tadDitAnta</code> as <code>:taddhitanta</code>, <code>taddhita</code> as <code>tadDita</code>, and <code>:namadhatu</code> (or <code>:nAmaDatu</code>) as
+<code>:nAmaDAtu</code>. The pratipadika head is
+<code>:prAtipadika</code>; the older <code>:pratipadika</code> is not accepted. For example, <code>(kft (:DAtu (BU BvAdi)) tavya)</code> is
+<code>(krt (:dhatu (BU BvAdi)) tavya)</code>. In Devanagari, <code>(कृत् (:धातु (भू भ्वादि)) तव्य)</code> works through
+the same aliases.</p>
+<p>Every option is a parenthesized list that starts with its name: <code>(name value ...)</code>. The older
+<code>name(value ...)</code> spelling is not accepted.</p>
+<h2 id="suggestions-in-the-web-app">Suggestions in the web app<a class="headerlink" href="#suggestions-in-the-web-app" title="Permanent link">¶</a></h2>
+<p>The Advanced tab suggests what can come next as you type, so you do not have to remember the
+aupadeśika form of a dhātu or the spelling of a pratyaya.</p>
+<ul>
+<li><strong>Dhātus.</strong> After <code>(:dhatu (</code>, or after <code>(:dhatu</code>, type part of a dhātu (SLP1 or Devanagari,
+  without svaras) and pick it from the list. The list matches the aupadeśika form, the form as a
+  dhātu (<code>stu</code> finds <code>zwu\Y</code>) and, for three or more letters, the artha. Picking inserts the
+  aupadeśika form with its svaras and the gana, such as <code>zwu\Y adAdi</code>, and the <code>(antargana ...)</code> that
+  a ghaṭādi or curādi dhātu needs. A word typed where a DHATU goes, such as <code>(tiN aSa</code>, offers the
+  same list and inserts a whole <code>(:dhatu (aSa~ kryAdi))</code>.</li>
+<li><strong>The grammar.</strong> Each position offers only what the grammar accepts there: the heads of a list
+  (after <code>(:nAmaDAtu</code>, only the pratipādika heads), krt and taddhita pratyayas, linga, vibhakti,
+  vacana, lakāra and prayoga, sanādis, ganas, upasargas and the <code>(artha ...)</code> values of the krt or
+  taddhita that was chosen.</li>
+<li><strong>Free text.</strong> The text of <code>(:prAtipadika TEXT)</code>, <code>(:avyaya TEXT)</code> and <code>(upapada TEXT)</code>, and a
+  stem written straight after <code>:nAmaDAtu</code>, have no list to pick from.</li>
+</ul>
+<p>Use the arrow keys to choose, Enter or Tab to insert, Esc to close, and Ctrl-Space to open the list
+again. Ctrl-Enter (or Cmd-Enter) still evaluates. The values come from the library
+(<code>vyakarana_lisp_wrap::completions</code>), so they are exactly the ones that the evaluator accepts.</p>
+<p>When the caret is next to a parenthesis, that parenthesis and its partner are highlighted. A
+parenthesis with no partner is highlighted in red.</p>
+<p>In a table of forms, each form is a link. Clicking it shows that form's prakriya in place of the
+table, under a button with the form's name and an "x". Click the button to go back to the table.</p>
+<h2 id="values-and-quoting">Values and quoting<a class="headerlink" href="#values-and-quoting" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>Enum values</strong> (gana, lakara, prayoga, purusha, vacana, sanadi, antargana, krt, taddhita) can be
+  an SLP1 label (<code>BvAdi</code>, <code>praTama</code>, <code>eka</code>) or the Rust variant name (<code>Bhvadi</code>, <code>Prathama</code>, <code>Eka</code>).
+  Variant names are case-insensitive.</li>
+<li><strong><code>LAKARA</code></strong> is written as its label with anubandhas: <code>la~w</code>, <code>li~w</code>, <code>lu~w</code>, <code>lf~w</code>, <code>le~w</code>,
+  <code>lo~w</code>, <code>laN</code>, <code>viDili~N</code>, <code>ASIrli~N</code>, <code>lu~N</code>, <code>lf~N</code>. (vidhi-liN and ASIr-liN have their own
+  labels because both are <code>li~N</code>.) The Rust variant names (<code>Lat</code>, <code>VidhiLin</code>, ...) still work as
+  aliases.</li>
+<li><strong><code>PRAYOGA</code></strong> is an SLP1 label only: <code>kartari</code>, <code>karmaRi</code> or <code>BAve</code> (the spellings <code>Kartari</code> and
+  <code>Karmani</code> are not accepted; <code>Bhave</code> still is).</li>
+<li><strong>Artha values</strong> are Rust variant names and must match exactly (<code>TasyaApatyam</code>, <code>Karta</code>).</li>
+<li><strong><code>UPADESHA</code></strong> must be the dhātu's aupadeśika form exactly as in <code>dhatupatha.tsv</code>, including the
+  accent marks: <code>jYA\</code>, not <code>jYA</code>.</li>
+<li><strong>Shell quoting.</strong> Wrap the whole expression in double quotes, as above. Inside double quotes the
+  shell keeps a <code>\</code> as it is, unless it comes before <code>$</code>, <code>`</code>, <code>"</code> or another <code>\</code>. Use single
+  quotes if your expression needs one of those.</li>
+<li><strong><code>PURUSHA</code> and <code>VACANA</code> are optional.</strong> An omitted slot expands to all of its values, and
+  they are told apart by value: <code>(la~w kartari Prathama)</code> gives 3 forms, <code>(la~w kartari dvi)</code> gives
+  the dual in every purusha, and <code>(la~w kartari)</code> gives 9.
+  Numbers work too: <code>1</code>-<code>3</code> for praTama, maDyama, uttama in the first slot and <code>1</code>-<code>3</code> for eka,
+  dvi, bahu in the second, so <code>(la~w kartari 2 3)</code> is <code>maDyama bahu</code>. A lone number is a purusha;
+  to ask for one vacana, use its name (<code>dvi</code>).</li>
+<li><strong>Result count.</strong> If an expression derives 50 or more results, the tool prints a warning on
+  stderr before the output.</li>
+<li><strong>Several results.</strong> The output lists every derivation the rules allow. Optional rules and
+  both padas give more than one result, and the same form can appear twice when two derivation
+  paths lead to it.</li>
+</ul>
+<h2 id="tin-verbs"><code>tiN</code>: verbs<a class="headerlink" href="#tin-verbs" title="Permanent link">¶</a></h2>
+<p>The examples below come from, or are checked against, the integration tests named on each line.</p>
+<p>Click an expression in any example table to open it in the Advanced tab of the web app.</p>
+<h3 id="basic-dhātu">Basic dhātu<a class="headerlink" href="#basic-dhātu" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3Adhatu%20%28BU%20BvAdi%29%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:dhatu (BU BvAdi)) (la~w kartari Prathama eka))</code></a></td>
+<td><code>Bavati</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3Adhatu%20%28BU%20BvAdi%29%29%20%28la~w%20kartari%20Prathama%29%29"><code>(tiN (:dhatu (BU BvAdi)) (la~w kartari Prathama))</code></a></td>
+<td><code>Bavati</code>, <code>BavataH</code>, <code>Bavanti</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3Adhatu%20%28BU%20BvAdi%29%29%20%28la~w%20kartari%20dvi%29%29"><code>(tiN (:dhatu (BU BvAdi)) (la~w kartari dvi))</code></a></td>
+<td><code>BavataH</code>, <code>BavaTaH</code>, <code>BavAvaH</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3Adhatu%20%28BU%20BvAdi%29%29%20%28la~w%20karmaRi%20Prathama%20eka%29%29"><code>(tiN (:dhatu (BU BvAdi)) (la~w karmaRi Prathama eka))</code></a></td>
+<td><code>BUyate</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3Adhatu%20%28BU%20BvAdi%29%20%28prefix%20pra%29%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:dhatu (BU BvAdi) (prefix pra)) (la~w kartari Prathama eka))</code></a></td>
+<td><code>praBavati</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3Adhatu%20%28qukf%5CY%20tanAdi%29%29%20%28li~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:dhatu (qukf\Y tanAdi)) (li~w kartari Prathama eka))</code></a></td>
+<td><code>cakAra</code>, <code>cakre</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="sanādi-pratyayas">Sanādi pratyayas<a class="headerlink" href="#sanādi-pratyayas" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3Adhatu%20%28qukf%5CY%20tanAdi%29%20%28sanadi%20Ric%29%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:dhatu (qukf\Y tanAdi) (sanadi Ric)) (la~w kartari Prathama eka))</code></a></td>
+<td><code>kArayati</code>, <code>kArayate</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3Adhatu%20%28jYA%5C%20kryAdi%29%20%28sanadi%20san%29%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:dhatu (jYA\ kryAdi) (sanadi san)) (la~w kartari Prathama eka))</code></a></td>
+<td><code>jijYAsate</code></td>
+</tr>
+</tbody>
+</table>
+<p>More than one sanādi can be given in order, e.g. <code>(sanadi Ric san)</code>.</p>
+<h3 id="nāma-dhātus">Nāma-dhātus<a class="headerlink" href="#nāma-dhātus" title="Permanent link">¶</a></h3>
+<p>A <code>:nAmaDAtu</code> makes a verb from a pratipādika. Give the pratyaya explicitly (<code>kyac</code>, <code>kyaN</code>,
+<code>kAmyac</code> or <code>Ric</code>), or leave it out and the rules in 3.1 choose it.
+(Tests: <code>kashika_3_1.rs</code>, <code>kashika_1_3.rs</code>, <code>kaumudi_57.rs</code>.)</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3AnAmaDAtu%20putra%20kyac%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:nAmaDAtu putra kyac) (la~w kartari Prathama eka))</code></a></td>
+<td><code>putrIyati</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3AnAmaDAtu%20putra%20kAmyac%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:nAmaDAtu putra kAmyac) (la~w kartari Prathama eka))</code></a></td>
+<td><code>putrakAmyati</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3AnAmaDAtu%20lohita%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:nAmaDAtu lohita) (la~w kartari Prathama eka))</code></a></td>
+<td><code>lohitAyati</code>, <code>lohitAyate</code> (3.1.13)</td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3AnAmaDAtu%20muRqa%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:nAmaDAtu muRqa) (la~w kartari Prathama eka))</code></a></td>
+<td><code>muRqayati</code>, <code>muRqayate</code> (3.1.21)</td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3AnAmaDAtu%20senA%20%28prefix%20aBi%29%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:nAmaDAtu senA (prefix aBi)) (la~w kartari Prathama eka))</code></a></td>
+<td><code>aBizeRayati</code>, <code>aBizeRayate</code> (3.1.25, 8.3.65)</td>
+</tr>
+</tbody>
+</table>
+<p><code>NAMA_SANADI</code> is only for the pratyaya the nāma-dhātu is made with. To add a sanādi <em>after</em> it,
+use <code>(sanadi ...)</code>. The library does not yet apply a further sanādi after a nāma-dhātu's own
+pratyaya, so such options currently have no effect on the forms.</p>
+<h3 id="ric-on-a-pratipādika-ṇāv-iṣṭhavat"><code>Ric</code> on a pratipādika (ṇāv iṣṭhavat)<a class="headerlink" href="#ric-on-a-pratipādika-ṇāv-iṣṭhavat" title="Permanent link">¶</a></h3>
+<p>With <code>Ric</code>, the pratipādika behaves as if <code>izWan</code> follows (vārttika 6.4.155.1). Selected examples
+from <code>regressions.rs</code> (<code>test_nama_dhatu_Ric</code>, <code>kaumudi_2677__test</code>) and <code>kaumudi_52.rs</code>
+(<code>sk_2573</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3AnAmaDAtu%20priya%20Ric%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:nAmaDAtu priya Ric) (la~w kartari Prathama eka))</code></a></td>
+<td><code>prApayati</code>, <code>prApayate</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3AnAmaDAtu%20yuvan%20Ric%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:nAmaDAtu yuvan Ric) (la~w kartari Prathama eka))</code></a></td>
+<td><code>yavayati</code>, <code>kanayati</code> (and <code>-te</code>)</td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3AnAmaDAtu%20bahu%20Ric%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:nAmaDAtu bahu Ric) (la~w kartari Prathama eka))</code></a></td>
+<td><code>bahayati</code>, <code>BAvayati</code> (and <code>-te</code>)</td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3AnAmaDAtu%20bahu%20Ric%20%28prefix%20pra%29%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:nAmaDAtu bahu Ric (prefix pra)) (la~w kartari Prathama eka))</code></a></td>
+<td><code>prabahayati</code>, <code>praBAvayati</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3AnAmaDAtu%20pawu%20Ric%29%20%28lu~N%20kartari%20Prathama%20eka%29%29"><code>(tiN (:nAmaDAtu pawu Ric) (lu~N kartari Prathama eka))</code></a></td>
+<td><code>apapawat</code>, <code>apIpawat</code> (and variants)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="krt-kṛdantas"><code>krt</code>: kṛdantas<a class="headerlink" href="#krt-kṛdantas" title="Permanent link">¶</a></h2>
+<pre><code class="language-text">(krt DHATU KRT [(artha ..)] [(lakara ..)] [(prayoga ..)] [(upapada TEXT)])
+</code></pre>
+<p><code>KRT</code> is the SLP1 label of a kṛt pratyaya. Base kṛts are tried first, then uṇādi pratyayas.
+(Tests: <code>kashika_1_1.rs</code>, <code>kashika_3_2.rs</code>.)</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28krt%20%28%3Adhatu%20%28BU%20BvAdi%29%29%20tavya%29"><code>(krt (:dhatu (BU BvAdi)) tavya)</code></a></td>
+<td><code>Bavitavya</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28krt%20%28%3Adhatu%20%28BU%20BvAdi%29%29%20kta%29"><code>(krt (:dhatu (BU BvAdi)) kta)</code></a></td>
+<td><code>BUta</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28krt%20%28%3Adhatu%20%28BU%20BvAdi%29%29%20lyuw%29"><code>(krt (:dhatu (BU BvAdi)) lyuw)</code></a></td>
+<td><code>Bavana</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28krt%20%28%3Adhatu%20%28qukf%5CY%20tanAdi%29%29%20tfc%29"><code>(krt (:dhatu (qukf\Y tanAdi)) tfc)</code></a></td>
+<td><code>kartf</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28krt%20%28%3Adhatu%20%28BU%20BvAdi%29%29%20Satf%20%28lakara%20la~w%29%20%28prayoga%20kartari%29%29"><code>(krt (:dhatu (BU BvAdi)) Satf (lakara la~w) (prayoga kartari))</code></a></td>
+<td><code>Bavat</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28krt%20%28%3Adhatu%20%28qukf%5CY%20tanAdi%29%29%20aR%20%28upapada%20kumBa%29%29"><code>(krt (:dhatu (qukf\Y tanAdi)) aR (upapada kumBa))</code></a></td>
+<td><code>kumBakAra</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28krt%20%28%3Adhatu%20%28qukf%5CY%20tanAdi%29%29%20wa%20%28upapada%20kumBa%29%29"><code>(krt (:dhatu (qukf\Y tanAdi)) wa (upapada kumBa))</code></a></td>
+<td><code>kumBakara</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>lakara</code> and <code>prayoga</code> apply only to <code>Satf</code> and <code>SAnac</code>; they default to <code>la~w</code> and <code>kartari</code>.</p>
+<h3 id="uṇādi-pratyayas">Uṇādi pratyayas<a class="headerlink" href="#uṇādi-pratyayas" title="Permanent link">¶</a></h3>
+<p>An uṇādi pratyaya is written in the same slot as any other <code>KRT</code>. There is no separate head. Base
+kṛts are tried first, so a label that is both a base kṛt and an uṇādi pratyaya always means the
+base kṛt.</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28krt%20%28%3Adhatu%20%28qukf%5CY%20tanAdi%29%29%20uR%29"><code>(krt (:dhatu (qukf\Y tanAdi)) uR)</code></a></td>
+<td><code>kAru</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28krt%20%28%3Adhatu%20%28jIva~%20BvAdi%29%29%20radAnuk%29"><code>(krt (:dhatu (jIva~ BvAdi)) radAnuk)</code></a></td>
+<td><code>jIradAnu</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28krt%20%28%3Adhatu%20%28ava~%20BvAdi%29%29%20wizac%29"><code>(krt (:dhatu (ava~ BvAdi)) wizac)</code></a></td>
+<td><code>aviza</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28krt%20%28%3Adhatu%20%28maha~%20BvAdi%29%29%20wizac%29"><code>(krt (:dhatu (maha~ BvAdi)) wizac)</code></a></td>
+<td><code>mahiza</code></td>
+</tr>
+</tbody>
+</table>
+<p>(Tests: <code>kashika_1_1.rs</code>, <code>kashika_1_3.rs</code>.)</p>
+<p>A valid label that does not apply to the dhatu derives nothing and prints <code>warning: no forms were
+derived.</code> For example, <code>uR</code> with <code>kf\Y</code> (rather than <code>qukf\Y</code>) gives no forms, because the dhatu is
+not the one the sutra names. A misspelled label is an error (<code>invalid krt value</code>).</p>
+<p>An <code>upapada</code> is given as plain text, which is used as a masculine, prathamā, singular subanta.
+To choose the linga, vibhakti and vacana, give a full <code>(:sup ...)</code> component instead:</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28krt%20%28%3Adhatu%20%28qukf%5CY%20tanAdi%29%29%20aR%20%28upapada%20%28%3Asup%20%28%3AprAtipadika%20kumBa%29%20puM%20dvitIyA%20eka%29%29%29"><code>(krt (:dhatu (qukf\Y tanAdi)) aR (upapada (:sup (:prAtipadika kumBa) puM dvitIyA eka)))</code></a></td>
+<td><code>kumBakAra</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="taddita-taddhitāntas"><code>tadDita</code>: taddhitāntas<a class="headerlink" href="#taddita-taddhitāntas" title="Permanent link">¶</a></h2>
+<pre><code class="language-text">(tadDita PRATIPADIKA TADDHITA [(artha ..)])
+</code></pre>
+<p>(Tests: <code>kashika_1_1.rs</code>, <code>kashika_3_4.rs</code>, <code>kashika_5_3.rs</code>, <code>kashika_6_4.rs</code>.)</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tadDita%20%28%3AprAtipadika%20upagu%29%20aR%29"><code>(tadDita (:prAtipadika upagu) aR)</code></a></td>
+<td><code>Opagava</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tadDita%20%28%3AprAtipadika%20upagu%29%20aR%20%28artha%20TasyaApatyam%29%29"><code>(tadDita (:prAtipadika upagu) aR (artha TasyaApatyam))</code></a></td>
+<td><code>Opagava</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tadDita%20%28%3AprAtipadika%20dUra%29%20izWan%29"><code>(tadDita (:prAtipadika dUra) izWan)</code></a></td>
+<td><code>davizWa</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tadDita%20%28%3AprAtipadika%20dUra%29%20Iyasun%29"><code>(tadDita (:prAtipadika dUra) Iyasun)</code></a></td>
+<td><code>davIyas</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tadDita%20%28%3AprAtipadika%20yuvan%29%20izWan%29"><code>(tadDita (:prAtipadika yuvan) izWan)</code></a></td>
+<td><code>yavizWa</code>, <code>kanizWa</code> (5.3.64)</td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tadDita%20%28%3AprAtipadika%20vfkza%29%20tva%29"><code>(tadDita (:prAtipadika vfkza) tva)</code></a></td>
+<td><code>vfkzatva</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tadDita%20%28%3AprAtipadika%20vfkza%29%20tal%29"><code>(tadDita (:prAtipadika vfkza) tal)</code></a></td>
+<td><code>vfkzatA</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>(artha ...)</code> restricts the derivation to rules that apply in that sense. Without it, every
+sense is allowed.</p>
+<h2 id="sup-subantas"><code>sup</code>: subantas<a class="headerlink" href="#sup-subantas" title="Permanent link">¶</a></h2>
+<pre><code class="language-text">(sup PRATIPADIKA LINGA [VIBHAKTI] [VACANA])
+</code></pre>
+<p><code>LINGA</code> is required. <code>VIBHAKTI</code> and <code>VACANA</code> are optional, and an omitted slot expands to all of
+its values, so you can ask for one form, one vibhakti, one vacana, or the whole paradigm. They
+are told apart by value, and the vibhakti comes first if both are given. Numbers work in both
+slots: <code>1</code>-<code>7</code> for the vibhakti and <code>1</code>, <code>2</code>, <code>3</code> for eka, dvi, bahu. A number is read by position
+(first slot vibhakti, second slot vacana), so a lone number is a vibhakti. To ask for one vacana in
+all vibhaktis, use its name (<code>dvi</code>).
+(Tests: <code>kashika_1_1.rs</code>, <code>kashika_2_3.rs</code>, <code>kashika_7_3.rs</code>.)</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AprAtipadika%20bahu%29%20puM%20praTamA%20bahu%29"><code>(sup (:prAtipadika bahu) puM praTamA bahu)</code></a></td>
+<td><code>bahavaH</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AprAtipadika%20pawu%29%20puM%20samboDanam%20eka%29"><code>(sup (:prAtipadika pawu) puM samboDanam eka)</code></a></td>
+<td><code>pawo</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AprAtipadika%20vfkza%29%20puM%20tftIyA%20dvi%29"><code>(sup (:prAtipadika vfkza) puM tftIyA dvi)</code></a></td>
+<td><code>vfkzAByAm</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AprAtipadika%20paTin%29%20puM%20praTamA%20eka%29"><code>(sup (:prAtipadika paTin) puM praTamA eka)</code></a></td>
+<td><code>panTAH</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AprAtipadika%20rAma%29%20puM%20praTamA%29"><code>(sup (:prAtipadika rAma) puM praTamA)</code></a></td>
+<td><code>rAmaH</code>, <code>rAmO</code>, <code>rAmAH</code> (the three vacanas)</td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AprAtipadika%20rAma%29%20puM%203%20eka%29"><code>(sup (:prAtipadika rAma) puM 3 eka)</code></a></td>
+<td>same as <code>tftIyA eka</code>: <code>rAmeRa</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AprAtipadika%20rAma%29%20puM%203%201%29"><code>(sup (:prAtipadika rAma) puM 3 1)</code></a></td>
+<td>the same: numbers are <code>VIBHAKTI</code> then <code>VACANA</code> (<code>1</code> eka, <code>2</code> dvi, <code>3</code> bahu)</td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AprAtipadika%20rAma%29%20puM%20dvi%29"><code>(sup (:prAtipadika rAma) puM dvi)</code></a></td>
+<td>the dual in all 8 vibhaktis</td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AprAtipadika%20rAma%29%20puM%29"><code>(sup (:prAtipadika rAma) puM)</code></a></td>
+<td>the full paradigm, as an 8 by 3 table</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output-shape">Output shape<a class="headerlink" href="#output-shape" title="Permanent link">¶</a></h3>
+<p><code>sup</code> and <code>tiN</code> print the full prakriyā history only when both the vibhakti (or purusha) and the
+vacana are given. Otherwise they print a table of just the forms, with vacanas as columns:</p>
+<pre><code class="language-text">(sup (:prAtipadika rAma) puM 3)                 (sup (:prAtipadika rAma) puM)
+          eka     dvi       bahu                              eka     dvi    bahu
+3 tftIyA  rAmeRa  rAmAByAm  rAmEH               1 praTamA     rAmaH   ...    ...
+                                                ...
+                                                8 samboDanam  rAma    ...    ...
+</code></pre>
+<ul>
+<li>No vibhakti: 8 rows, one per vibhakti. A sarvanāma (<code>tad</code>, <code>yuzmad</code>, <code>asmad</code>, <code>sarva</code>, ...) has
+  no samboDanam, so its table has 7 rows. (It is detected by rule 1.1.27 in the derivation.)</li>
+<li>A vibhakti but no vacana: one row.</li>
+<li>A vacana but no vibhakti: one column, with all rows.</li>
+<li>Several forms in one cell (variants) are joined with <code>/</code>, and an empty cell is <code>-</code>.</li>
+<li>A nested base that derives several forms (such as a <code>:taddhitanta</code>) prints one table per form,
+  under a <code>===== FORM =====</code> title.</li>
+<li>The same holds for <code>tiN</code>, with the three purushas (praTama, maDyama, uttama) as the rows.</li>
+<li><code>tiN</code> derives each pada separately. A dhatu that takes both padas gets two tables, parasmaipada
+  first, under <code>===== parasmEpadam =====</code> and <code>===== Atmanepadam =====</code>. A dhatu with one pada
+  (including every karmani and bhAve derivation, which is Atmanepada) gets one table and no
+  heading. With a single purusha and vacana, each pada's prakriya is printed under its heading.</li>
+</ul>
+<pre><code class="language-text">(tiN (:dhatu (ci\Y svAdi)) (la~w kartari))
+===== parasmEpadam =====
+         eka     dvi               bahu
+praTama  cinoti  cinutaH           cinvanti
+maDyama  cinozi  cinuTaH           cinuTa
+uttama   cinomi  cinvaH / cinuvaH  cinmaH / cinumaH
+
+===== Atmanepadam =====
+         eka     dvi                 bahu
+praTama  cinute  cinvAte             cinvate
+maDyama  cinuze  cinvATe             cinuDve
+uttama   cinve   cinvahe / cinuvahe  cinmahe / cinumahe
+</code></pre>
+<h3 id="avyayas">Avyayas<a class="headerlink" href="#avyayas" title="Permanent link">¶</a></h3>
+<p>An avyaya takes no linga, vibhakti or vacana. Mark a plain word with <code>(:avyaya TEXT)</code>. A
+krdanta whose pratyaya makes avyayas (such as <code>ktvA</code>) is detected automatically, and so is a
+taddhitanta whose pratyaya makes avyayas by 1.1.38 (such as <code>cvi~</code>, <code>tasil</code>, <code>Sas</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3Aavyaya%20ca%29%29"><code>(sup (:avyaya ca))</code></a></td>
+<td><code>ca</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3Akrdanta%20%28%3Adhatu%20%28BU%20BvAdi%29%29%20ktvA%29%29"><code>(sup (:krdanta (:dhatu (BU BvAdi)) ktvA))</code></a></td>
+<td><code>BUtvA</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AtadDitAnta%20%28%3AprAtipadika%20Sukla%29%20cvi~%29%29"><code>(sup (:tadDitAnta (:prAtipadika Sukla) cvi~))</code></a></td>
+<td><code>SuklI</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="nyāp-stems">nyāp stems<a class="headerlink" href="#nyāp-stems" title="Permanent link">¶</a></h3>
+<p>A plain <code>(:prAtipadika TEXT)</code> stem is not marked as ending in a nyāp-pratyaya (ṅī, āp, ūṅ), so
+rules that need that, such as the su-lopa of 6.1.68, do not apply. Use <code>(:nyAp TEXT)</code> for a stem
+that ends in one. This is the <code>nyap(...)</code> helper in the Kaumudi tests (<code>kaumudi_09.rs</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AnyAp%20ramA%29%20strI%20tftIyA%20eka%29"><code>(sup (:nyAp ramA) strI tftIyA eka)</code></a></td>
+<td><code>ramayA</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AnyAp%20nadI%29%20strI%20praTamA%20eka%29"><code>(sup (:nyAp nadI) strI praTamA eka)</code></a></td>
+<td><code>nadI</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AprAtipadika%20nadI%29%20strI%20praTamA%20eka%29"><code>(sup (:prAtipadika nadI) strI praTamA eka)</code></a></td>
+<td><code>nadIH</code> (compare <code>lakzmIH</code>)</td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AnyAp%20strI%29%20strI%20praTamA%20eka%29"><code>(sup (:nyAp strI) strI praTamA eka)</code></a></td>
+<td><code>strI</code></td>
+</tr>
+</tbody>
+</table>
+<p>A stem derived with <code>(:stri ...)</code> is already marked this way.</p>
+<h2 id="samasa-compounds"><code>samasa</code>: compounds<a class="headerlink" href="#samasa-compounds" title="Permanent link">¶</a></h2>
+<pre><code class="language-text">(samasa SAMASA_TYPE SUP SUP+ [(stri true)])
+</code></pre>
+<p>Each pada is a full <code>(:sup ...)</code> component. For an avyaya first member (as in an avyayībhāva),
+use <code>(:sup (:avyaya TEXT))</code>. The type is a Rust variant name, matched case-insensitively.
+(Tests: <code>kashika_1_1.rs</code>, <code>kashika_2_2.rs</code>.)</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28samasa%20Tatpurusha%20%28%3Asup%20%28%3AprAtipadika%20rAjan%29%20puM%20zazWI%20eka%29%20%28%3Asup%20%28%3AprAtipadika%20puruza%29%20puM%20praTamA%20eka%29%29"><code>(samasa Tatpurusha (:sup (:prAtipadika rAjan) puM zazWI eka) (:sup (:prAtipadika puruza) puM praTamA eka))</code></a></td>
+<td><code>rAjapuruza</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28samasa%20Tatpurusha%20%28%3Asup%20%28%3AtadDitAnta%20%28%3AprAtipadika%20Sukla%29%20cvi~%29%29%20%28%3Asup%20%28%3Akrdanta%20%28%3Adhatu%20%28qukf%5CY%20tanAdi%29%29%20ktvA%29%29%29"><code>(samasa Tatpurusha (:sup (:tadDitAnta (:prAtipadika Sukla) cvi~)) (:sup (:krdanta (:dhatu (qukf\Y tanAdi)) ktvA)))</code></a></td>
+<td><code>SuklIkftya</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28samasa%20Avyayibhava%20%28%3Asup%20%28%3Aavyaya%20upa%29%29%20%28%3Asup%20%28%3AprAtipadika%20agni%29%20puM%20praTamA%20eka%29%29"><code>(samasa Avyayibhava (:sup (:avyaya upa)) (:sup (:prAtipadika agni) puM praTamA eka))</code></a></td>
+<td><code>upAgni</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28samasa%20Bahuvrihi%20%28%3Asup%20%28%3AprAtipadika%20UQa%29%20puM%20praTamA%20eka%29%20%28%3Asup%20%28%3AprAtipadika%20raTa%29%20puM%20praTamA%20eka%29%29"><code>(samasa Bahuvrihi (:sup (:prAtipadika UQa) puM praTamA eka) (:sup (:prAtipadika raTa) puM praTamA eka))</code></a></td>
+<td><code>UQaraTa</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="stri-feminine-stems"><code>stri</code>: feminine stems<a class="headerlink" href="#stri-feminine-stems" title="Permanent link">¶</a></h2>
+<pre><code class="language-text">(stri PRATIPADIKA)
+</code></pre>
+<p>Derives the feminine stem (the strī-pratyaya step). (Tests: <code>kashika_4_1.rs</code>.)</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28stri%20%28%3AprAtipadika%20nara%29%29"><code>(stri (:prAtipadika nara))</code></a></td>
+<td><code>narA</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28stri%20%28%3AprAtipadika%20bahu%29%29"><code>(stri (:prAtipadika bahu))</code></a></td>
+<td><code>bahvI</code>, <code>bahu</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="chaining">Chaining<a class="headerlink" href="#chaining" title="Permanent link">¶</a></h2>
+<p>A kṛdanta or taddhitānta can be the base of another derivation. Use <code>(:krdanta ...)</code> or
+<code>(:taddhitanta ...)</code> where a pratipādika is expected.
+(See <code>create_krdanta</code> and <code>create_taddhitanta</code> in <code>test_utils</code>, used by <code>kashika_1_2.rs</code>.)</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tadDita%20%28%3Ataddhitanta%20%28%3AprAtipadika%20upagu%29%20aR%29%20tva%29"><code>(tadDita (:taddhitanta (:prAtipadika upagu) aR) tva)</code></a></td>
+<td><code>Opagavatva</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tadDita%20%28%3Akrdanta%20%28%3Adhatu%20%28qukf%5CY%20tanAdi%29%29%20tfc%29%20tva%29"><code>(tadDita (:krdanta (:dhatu (qukf\Y tanAdi)) tfc) tva)</code></a></td>
+<td><code>kartftva</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tiN%20%28%3AnAmaDAtu%20%28%3Akrdanta%20%28%3Adhatu%20%28aSa~%20BvAdi%29%29%20lyuw%29%20kyac%29%20%28la~w%20kartari%20Prathama%20eka%29%29"><code>(tiN (:nAmaDAtu (:krdanta (:dhatu (aSa~ BvAdi)) lyuw) kyac) (la~w kartari Prathama eka))</code></a></td>
+<td><code>aSanIyati</code>, <code>aSanAyati</code></td>
+</tr>
+</tbody>
+</table>
+<p>If a nested <code>:taddhitanta</code> derives several forms, the outer derivation is applied to <strong>each</strong> of
+them and every result is printed:</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tadDita%20%28%3Ataddhitanta%20%28%3AprAtipadika%20yuvan%29%20izWan%29%20tva%29"><code>(tadDita (:taddhitanta (:prAtipadika yuvan) izWan) tva)</code></a></td>
+<td><code>yavizWatva</code>, <code>kanizWatva</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3Ataddhitanta%20%28%3AprAtipadika%20yuvan%29%20izWan%29%20puM%20praTamA%20eka%29"><code>(sup (:taddhitanta (:prAtipadika yuvan) izWan) puM praTamA eka)</code></a></td>
+<td><code>yavizWaH</code>, <code>kanizWaH</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>(:stri PRATIPADIKA)</code> is the feminine stem derived by <code>stri</code>, usable where a pratipādika is
+expected (<code>PRATIPADIKA := ... | (:stri PRATIPADIKA)</code>). The library has no stryanta pratipādika, so
+the example derives the feminine form and passes its text as a stem that already ends in a
+nyāp-pratyaya. Each distinct feminine form becomes one base:</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3Astri%20%28%3AprAtipadika%20nara%29%29%20strI%20tftIyA%20eka%29"><code>(sup (:stri (:prAtipadika nara)) strI tftIyA eka)</code></a></td>
+<td><code>narayA</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3Astri%20%28%3AprAtipadika%20deva%29%29%20strI%20saptamI%20eka%29"><code>(sup (:stri (:prAtipadika deva)) strI saptamI eka)</code></a></td>
+<td><code>devAyAm</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3Astri%20%28%3Akrdanta%20%28%3Adhatu%20%28BU%20BvAdi%29%29%20tavya%29%29%20strI%20zazWI%20eka%29"><code>(sup (:stri (:krdanta (:dhatu (BU BvAdi)) tavya)) strI zazWI eka)</code></a></td>
+<td><code>BavitavyAyAH</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28samasa%20Karmadharaya%20%28%3Asup%20%28%3AprAtipadika%20mahat%29%20strI%20praTamA%20eka%29%20%28%3Asup%20%28%3Astri%20%28%3AprAtipadika%20nara%29%29%20strI%20praTamA%20eka%29%29"><code>(samasa Karmadharaya (:sup (:prAtipadika mahat) strI praTamA eka) (:sup (:stri (:prAtipadika nara)) strI praTamA eka))</code></a></td>
+<td><code>mahAnarA</code></td>
+</tr>
+</tbody>
+</table>
+<p>Only <code>sup</code> and <code>samasa</code> were checked with this base. Use <code>strI</code> as the linga.</p>
+<p>A subanta can be a base for a kṛdanta's upapada, and for the padas of a samasa, through the
+<code>(:sup ...)</code> component (see above). It cannot be the base of a <code>krt</code> or <code>tadDita</code>, since a subanta
+is a finished pada.</p>
+<h3 id="how-a-base-is-derived">How a base is derived<a class="headerlink" href="#how-a-base-is-derived" title="Permanent link">¶</a></h3>
+<p>A <code>(:krdanta ...)</code> or <code>(:taddhitanta ...)</code> base is derived on its own before the expression that
+uses it starts:</p>
+<ol>
+<li>The base's rules run to completion in a separate derivation that contains only the base's own
+   terms. Nothing around it can affect it. For example, in a <code>samasa</code> a member is not affected by the
+   members next to it.</li>
+<li>The base's terms are not given sandhi, the rules of 8.1, or the rules of the tripāḍī (8.2 - 8.4),
+   since those belong to a finished pada. The base also does not decide the linga of the outer
+   derivation.</li>
+<li>The outer derivation then starts from the base's terms, with all their tags and their
+   history, and adds its own pratyaya. The <code>tadDita</code>, <code>sup</code> or <code>samasa</code> expression is the
+   command, and it runs sandhi and the tripāḍī once at the end.</li>
+</ol>
+<p>So <code>(tadDita (:krdanta (:dhatu (dfha~ BvAdi)) kta) izWan)</code> first derives <code>dfh + i + ta</code>, then adds
+<code>izWan</code>, and <code>dfh</code> becomes <code>dfQ</code> only when the tripāḍī runs at the end. Rules that were already
+applied inside the base (such as guṇa) are not applied again to the same terms. Rules that the new
+pratyaya triggers, such as the ṭi-lopa for <code>izWan</code>, still apply to the base's terms.</p>
+<p>Chains that work through <code>sup</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3Akrdanta%20%28%3Adhatu%20%28qukf%5CY%20tanAdi%29%29%20tfc%29%20puM%20praTamA%20eka%29"><code>(sup (:krdanta (:dhatu (qukf\Y tanAdi)) tfc) puM praTamA eka)</code></a></td>
+<td><code>kartA</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3Ataddhitanta%20%28%3AprAtipadika%20upagu%29%20aR%29%20puM%20praTamA%20eka%29"><code>(sup (:taddhitanta (:prAtipadika upagu) aR) puM praTamA eka)</code></a></td>
+<td><code>OpagavaH</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="using-a-derived-text-as-a-plain-stem">Using a derived text as a plain stem<a class="headerlink" href="#using-a-derived-text-as-a-plain-stem" title="Permanent link">¶</a></h3>
+<p><code>(:prAtipadika EXPRESSION)</code> derives any <code>tiN</code>, <code>krt</code>, <code>tadDita</code>, <code>sup</code>, <code>samasa</code> or <code>stri</code>
+expression and uses each distinct resulting text as a basic stem. This differs from <code>:krdanta</code>
+and <code>:taddhitanta</code>, which keep the derivation history, so later rules still see a krdanta:</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Forms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tadDita%20%28%3Akrdanta%20%28%3Adhatu%20%28dfha~%20BvAdi%29%29%20kta%29%20izWan%29"><code>(tadDita (:krdanta (:dhatu (dfha~ BvAdi)) kta) izWan)</code></a></td>
+<td><code>dfhitezWa</code>, <code>dfQezWa</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28tadDita%20%28%3AprAtipadika%20%28krt%20%28%3Adhatu%20%28dfha~%20BvAdi%29%29%20kta%29%29%20izWan%29"><code>(tadDita (:prAtipadika (krt (:dhatu (dfha~ BvAdi)) kta)) izWan)</code></a></td>
+<td><code>dfhitizWa</code>, <code>draQizWa</code></td>
+</tr>
+<tr>
+<td><a href="index.html?tab=advanced&amp;lisp=%28sup%20%28%3AprAtipadika%20%28krt%20%28%3Adhatu%20%28BU%20BvAdi%29%29%20tavya%29%29%20puM%201%20eka%29"><code>(sup (:prAtipadika (krt (:dhatu (BU BvAdi)) tavya)) puM 1 eka)</code></a></td>
+<td><code>BavitavyaH</code></td>
+</tr>
+</tbody>
+</table>
+<p>An expression with several results becomes several stems, and each is derived in turn. Prefer
+<code>:krdanta</code> and <code>:taddhitanta</code> when the base's own derivation matters.</p>
+<p>When a prakriyā is printed with its history, the derivation of the stem comes first, then a marker
+line, then the derivation built on it:</p>
+<pre><code class="language-text">dfhitizWa
+---------------------------
+3.2.102    | dfh + kta
+...
+1.2.46     | dfh + i + ta
+1.2.45     | dfhita
+           | ==== base derived: dfhita ====
+1.2.45     | dfhita
+5.3.55     | dfhita + izWan
+...
+</code></pre>
+<p>The history is only expanded in the printed output, so the stem is matched by its text. Tables
+(which show only forms) are unaffected.</p>
+<h2 id="errors-and-limits">Errors and limits<a class="headerlink" href="#errors-and-limits" title="Permanent link">¶</a></h2>
+<ul>
+<li>An unknown enum value, option or head is an error and exits with status 1, e.g.
+  <code>error: invalid krt value: nosuch</code>.</li>
+<li>If a derivation produces nothing, the tool prints <code>warning: no forms were derived.</code> and exits 0.</li>
+<li>A <code>:nAmaDAtu</code> base must be a plain pratipadika or a <code>:krdanta</code>. A <code>:taddhitanta</code> base is not
+  supported by the library, and the tool reports an error instead of passing it on.</li>
+<li>There is no <code>require</code> option. Results are never filtered.</li>
+<li><code>krt</code> and <code>tadDita</code> take no <code>sanadi</code>, <code>prefix</code> or <code>upasarga</code> option. Put them on the <code>(:dhatu ...)</code> inside.</li>
+<li><code>sup</code> needs a linga unless the base is an avyaya. In <code>samasa</code> and nested <code>(:sup ...)</code>, the
+  vibhakti and vacana are required too.</li>
+<li>A <code>samasa</code> needs at least two padas. <code>(stri true)</code> marks the samasa as feminine.</li>
+<li><code>(:dhatu ...)</code> always needs a gana. <code>(antargana ...)</code> is only for <code>:dhatu</code>.</li>
+</ul>
+</main>
+</body>
+</html>
