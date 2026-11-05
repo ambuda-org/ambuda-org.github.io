@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MediaPipe Face Detection</title>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+  <style>
+    body { margin: 0; }
+    video, canvas {
+      position: absolute;
+      width: 640px;
+      height: 480px;
+    }
+  </style>
+</head>
+<body>
+  <video id="input_video" playsinline></video>
+  <canvas id="output_canvas"></canvas>
+
+  <script>
+    const videoElement = document.getElementById('input_video');
+    const canvasElement = document.getElementById('output_canvas');
+    const canvasCtx = canvasElement.getContext('2d');
+
+    const faceDetection = new FaceDetection({
+      locateFile: (file) =>
+        `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`,
+    });
+
+    faceDetection.setOptions({
+      model: 'full', // or 'full' for more accuracy
+      minDetectionConfidence: 0.5,
+    });
+
+    faceDetection.onResults((results) => {
+      canvasCtx.save();
+      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+      canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+      if (results.detections) {
+        for (const detection of results.detections) {
+          const boundingBox = detection.boundingBox;
+          canvasCtx.beginPath();
+          canvasCtx.rect(
+            boundingBox.xCenter * canvasElement.width - boundingBox.width * canvasElement.width / 2,
+            boundingBox.yCenter * canvasElement.height - boundingBox.height * canvasElement.height / 2,
+            boundingBox.width * canvasElement.width,
+            boundingBox.height * canvasElement.height
+          );
+          canvasCtx.lineWidth = 2;
+          canvasCtx.strokeStyle = 'lime';
+          canvasCtx.stroke();
+        }
+      }
+      canvasCtx.restore();
+    });
+
+    const camera = new Camera(videoElement, {
+      onFrame: async () => {
+        await faceDetection.send({ image: videoElement });
+      },
+      width: 1280,
+      height: 720,
+    });
+    camera.start();
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Full-Range Face Detection with Tracking</title>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    video, canvas {
+      position: absolute;
+      width: 50vw;
+      height: 50vh;
+      object-fit: cover;
+    }
+    #controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <button id="startBtn">Start Recording</button>
+    <button id="stopBtn" disabled>Stop Recording</button>
+    <button id="download" disabled>download</button>
+  </div>
+  <video id="input_video" playsinline style="display: none;"></video>
+  <canvas id="output_canvas"></canvas>
+
+  <script>
+    const video = document.getElementById('input_video');
+    const canvas = document.getElementById('output_canvas');
+    const ctx = canvas.getContext('2d');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const downloadBtn = document.getElementById('download');
+
+    let faceIdMap = new Map();
+    let faceCounter = 0;
+    let metadata = [];
+
+    const recordedChunks = [];
+    let mediaRecorder;
+    let recordedUrl;
+    let recordClicker;
+    let recordedBlob;
+
+    const assignUniqueId = (bbox) => {
+      const id = faceCounter++;
+      faceIdMap.set(id, bbox);
+      return id;
+    };
+
+    const faceDetection = new FaceDetection({
+      locateFile: (file) =>
+        `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`,
+    });
+
+    faceDetection.setOptions({
+      model: 'short',
+      minDetectionConfidence: 0.5,
+    });
+
+    faceDetection.onResults((results) => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+
+      const frameMetadata = [];
+
+      if (results.detections) {
+        results.detections.forEach((detection) => {
+          const bbox = detection.boundingBox;
+          const x = (bbox.xCenter - bbox.width / 2) * canvas.width;
+          const y = (bbox.yCenter - bbox.height / 2) * canvas.height;
+          const width = bbox.width * canvas.width;
+          const height = bbox.height * canvas.height;
+
+          const id = assignUniqueId(bbox);
+
+          ctx.beginPath();
+          ctx.rect(x, y, width, height);
+          ctx.strokeStyle = 'lime';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          ctx.fillStyle = 'yellow';
+          ctx.font = '16px Arial';
+          ctx.fillText(`ID: ${id}`, x, y - 10);
+
+          frameMetadata.push({ id, x, y, width, height });
+        });
+      }
+
+      metadata.push({ timestamp: Date.now(), faces: frameMetadata });
+    });
+
+    const camera = new Camera(video, {
+      onFrame: async () => {
+        await faceDetection.send({ image: video });
+      },
+      width: 640,
+      height: 480,
+    });
+
+    camera.start();
+
+    const startRecording = () => {
+      const stream = canvas.captureStream();
+      mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp8' });
+      streamsize = 0;
+      eventcount = 0;
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) { 
+          recordedChunks.push(event.data);
+          streamsize += event.data.size;
+          eventcount++;
+          console.log("Stream size = ",streamsize) ;
+        }
+        if (eventcount %50 == 0) {
+         console.log("Stream size = ", streamsize) ;
+        }
+      };
+
+      mediaRecorder.start();
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+    };
+
+    const stopRecording = () => {
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      
+      mediaRecorder.onstop = () => {
+        recordedBlob = new Blob(recordedChunks, { type: 'video/webm' });
+        recordedUrl = URL.createObjectURL(recordedBlob);
+        console.log('Blob size:', recordedChunks.size); // should be > 0
+        const a = document.createElement('a');
+        a.href = recordedUrl;
+        a.download = 'recorded_faces.webm';
+        a.click();
+        recordClicker = a;
+
+        const metadataBlob = new Blob([JSON.stringify(metadata, null, 2)], { type: 'application/json' });
+        const metadataUrl = URL.createObjectURL(metadataBlob);
+        const metadataLink = document.createElement('a');
+        metadataLink.href = metadataUrl;
+        metadataLink.download = 'face_metadata.json';
+        metadataLink.click();
+     };
+     mediaRecorder.stop();
+    }
+
+    startBtn.addEventListener('click', startRecording);
+    stopBtn.addEventListener('click', stopRecording);
+  </script>
+</body>
+</html>
